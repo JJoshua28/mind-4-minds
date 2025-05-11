@@ -1,4 +1,4 @@
-@import '../../../styles/themes';
+@import '../../../../styles/themes';
 
 .profile-picture {
   height: 125px;
@@ -80,4 +80,7 @@
   border: none;
   background-color: transparent;
   color: $primary-colour;
+  &:hover {
+    color: $tertiary-colour !important;
+  }
 }

@@ -1,14 +1,7 @@
-import {Component, signal, Signal} from '@angular/core';
+import {Component, input, signal, Signal, WritableSignal} from '@angular/core';
 import {NgClass} from "@angular/common";
+import {Mentor} from "../../types/mentor.interface";
 
-interface Mentor {
-  firstname: string;
-  surname: string;
-  occupation: string;
-  description: string;
-  mainSpeciality: string;
-  specialities: Array<string>;
-}
 
 const placeholderMentor: Mentor = {
   firstname: "vorname",
@@ -17,7 +10,8 @@ const placeholderMentor: Mentor = {
   mainSpeciality: "ADHD",
   description: "Hi, I am vorname. I have been caring for my Autistic son for 13 years now. \n" +
     "I have experience helping him self-regulate and vibe.",
-  specialities: ["ADHD", "leadership", "assessments"]
+  specialities: ["ADHD", "leadership", "assessments"],
+  profilePic: "https://cdn.britannica.com/54/252154-050-881EE55B/janelle-monae-glass-onion-knives-out-film-premiere.jpg"
 }
 
 @Component({
@@ -31,6 +25,6 @@ const placeholderMentor: Mentor = {
 })
 
 export class MentorCardComponent {
-  mentor: Signal<Mentor> = signal(placeholderMentor);
+  public readonly mentor  = input.required<Mentor>();
 
 }

@@ -1,0 +1,12 @@
+<div class="container w-100 mt-5">
+  <h3>All mentors</h3>
+  <div class="d-flex w-100 flex-wrap gap-4 mt-4" >
+    @for (mentor of placeholderMentors; track ++index;) {
+      <app-mentor-card [mentor]="mentor" />
+    }
+  </div>
+
+</div>
+
+
+
