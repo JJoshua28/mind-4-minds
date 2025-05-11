@@ -1,0 +1,16 @@
+@import "../../../../styles/themes.scss";
+
+.navigation-bar-container {
+  width: 100%;
+  color: white;
+  font-weight: normal;
+  background-color: $primary-colour;
+  border-bottom: 5px solid $tertiary-colour;
+  position: sticky;
+  top: 0;
+}
+
+.is-clickable {
+  cursor: pointer;
+
+}
