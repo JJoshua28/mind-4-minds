@@ -1,0 +1,83 @@
+@import '../../../styles/themes';
+
+.profile-picture {
+  height: 125px;
+  width: 115px;
+}
+
+.text-overflow-container{
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+}
+
+.profile-description-container {
+  @extend .text-overflow-container;
+  -webkit-line-clamp: 4;
+}
+
+.speciality-highlight-container {
+  color: $secondary-colour;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-name-container {
+  font-weight: bold;
+  color: $primary-colour;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-container {
+  height: 370px;
+  width: 325px;
+  &:hover {
+    h5, button, h6 {
+      color: white;
+      font-weight: lighter;
+    }
+    span, p {
+      color: $tertiary-colour;
+    }
+    cursor: pointer;
+    background-color: $primary-colour !important;
+  }
+}
+
+.speciality-tag-heading {
+  color: $secondary-colour;
+}
+
+.tag-container {
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  font-size: 0.75rem;
+}
+
+.adhd-tag-container {
+  @extend .tag-container;
+  background-color: hotpink;
+}
+
+.leadership-tag-container {
+   @extend .tag-container;
+   background-color: mediumpurple;
+ }
+
+.assessments-tag-container {
+  @extend .tag-container;
+  background-color: goldenrod;
+}
+
+.button-link {
+  border: none;
+  background-color: transparent;
+  color: $primary-colour;
+}
