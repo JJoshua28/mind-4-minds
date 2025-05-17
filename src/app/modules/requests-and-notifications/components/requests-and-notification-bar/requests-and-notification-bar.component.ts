@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, signal, WritableSignal} from '@angular/core';
 import {NgClass} from "@angular/common";
 
 @Component({
@@ -11,7 +11,7 @@ import {NgClass} from "@angular/common";
   styleUrl: './requests-and-notification-bar.component.scss'
 })
 export class RequestsAndNotificationBarComponent {
-  $isViewingRequests = input.required<boolean>();
-  $hasNotifications = input.required<boolean>();
-  $hasRequests = input.required<boolean>();
+  $isViewingRequests: WritableSignal<boolean> = signal<boolean>(true);
+  $hasNotifications: WritableSignal<boolean> = signal<boolean>(true);
+  $hasRequests: WritableSignal<boolean> = signal<boolean>(true);
 }
