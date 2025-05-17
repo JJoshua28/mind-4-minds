@@ -5,6 +5,7 @@
     <li
       [ngClass]="{ 'bar-text-container' : $isViewingRequests()}"
       class="w-50 text-center text-color d-flex"
+      (click)="$isViewingRequests.set(true)"
     >
       <div class="d-flex flex-row align-items-center w-100 justify-content-center">
         <i
@@ -19,6 +20,8 @@
     <li
       [ngClass]="{ 'bar-text-container' : !$isViewingRequests()}"
       class="w-50 text-center text-color d-flex"
+      (click)="$isViewingRequests.set(false)"
+
     >
       <div class="d-flex flex-row align-items-center w-100 justify-content-center">
         <i

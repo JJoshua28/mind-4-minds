@@ -2,13 +2,14 @@
 @import '../../../../../styles/shared/styles';
 
 .bar-text-container {
-  border-bottom: 3px solid $secondary-colour;
+  border-bottom: 2px solid $secondary-colour !important;
 }
 
 .text-color {
   @extend %is-clickable;
   color: $primary-colour;
   font-weight: bolder;
+  border-bottom: 2px solid white;
   &:hover {
     color: $tertiary-colour
   }
