@@ -1,0 +1,15 @@
+@import '../../../../../styles/themes.scss';
+@import '../../../../../styles/shared/styles';
+
+.bar-text-container {
+  border-bottom: 3px solid $secondary-colour;
+}
+
+.text-color {
+  @extend %is-clickable;
+  color: $primary-colour;
+  font-weight: bolder;
+  &:hover {
+    color: $tertiary-colour
+  }
+}

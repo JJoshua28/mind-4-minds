@@ -1,4 +1,6 @@
 @import "../../../../styles/themes.scss";
+@import "../../../../styles/shared/styles";
+
 
 .navigation-bar-container {
   width: 100%;
@@ -12,6 +14,9 @@
 }
 
 .is-clickable {
-  cursor: pointer;
+  @extend %is-clickable;
+  &:hover {
+    color: $tertiary-colour;
+  }
 
 }
