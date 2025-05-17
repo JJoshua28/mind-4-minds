@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {Mentor} from "../../../../shared/types/mentor.interface";
-import {MentorCardComponent} from "../../../../shared/component/mentor-card/mentor-card.component";
+import {UserCardComponent} from "../../../../shared/component/user-card/user-card.component";
 
 enum SearchType {
   ALL = "all",
@@ -11,7 +11,7 @@ enum SearchType {
   selector: 'app-mentor-search-page',
   standalone: true,
   imports: [
-    MentorCardComponent
+    UserCardComponent
   ],
   templateUrl: './mentor-search-page.component.html',
   styleUrl: './mentor-search-page.component.scss'
