@@ -35,14 +35,21 @@
 }
 
 .card-container {
+  transition: transform 0.5s ease;
+  will-change: transform;
+
+  &:hover {
+    transform: scale(1.075);
+  }
+
   height: 370px;
   width: 325px;
   &:hover {
-    h5, button, h6 {
+    h5, button, p {
       color: white;
       font-weight: lighter;
     }
-    span, p {
+    span, h6 {
       color: $tertiary-colour;
     }
     cursor: pointer;

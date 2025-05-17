@@ -7,6 +7,7 @@
   background-color: $primary-colour;
   border-bottom: 5px solid $tertiary-colour;
   position: sticky;
+  z-index: 10;
   top: 0;
 }
 
