@@ -1,0 +1,7 @@
+<div class="d-flex flex-row align-items-center gap-4 mt-4 px-1">
+  <input type="checkbox" [checked]="$tickCheckbox()" (click)="tickBoxClicked.emit()"/>
+  <i
+    class="bi bi-trash fs-2 mt-1 trash-icon"
+    [ngClass]="{'trash-icon' : $tickCheckbox() }"
+  ></i>
+</div>

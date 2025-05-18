@@ -1,0 +1,15 @@
+@import "../../../../../styles/shared/styles";
+
+input {
+  @extend %checkbox-input;
+  line-height: 1;
+}
+
+.trash-icon {
+  color: $secondary-colour;
+
+  @extend %is-clickable;
+  &:hover {
+    color: $tertiary-colour;
+  }
+}
