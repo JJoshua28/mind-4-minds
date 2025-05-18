@@ -2,7 +2,12 @@
   class="d-flex flex-row  align-items-start gap-3 py-3 text-capitalize h-auto ps-1 snippet-container"
   (click)="handleMessageClick()"
 >
-  <input type="checkbox" />
+  <input
+    type="checkbox"
+    class="checkbox"
+    (click)="handleCheckboxClick($event)"
+    [checked]="$message().isChecked"
+  />
   <div
     class="message-snippet text-capitalize"
   >
