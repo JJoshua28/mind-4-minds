@@ -1,6 +1,6 @@
 import {Component, EventEmitter, input, Output} from '@angular/core';
 import {NgClass} from "@angular/common";
-import {CommunicationsStatus} from "../../../../types/message-status.enum";
+import {CommunicationsStatus} from "../../../../types/communications-status.enum";
 
 
 export interface Snippet {
