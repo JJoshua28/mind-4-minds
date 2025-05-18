@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MessageSnippetComponent } from './message-snippet.component';
+import { CommunicationsSnippetComponent } from './communications-snippet.component';
 
 describe('MessageSnippetComponent', () => {
-  let component: MessageSnippetComponent;
-  let fixture: ComponentFixture<MessageSnippetComponent>;
+  let component: CommunicationsSnippetComponent;
+  let fixture: ComponentFixture<CommunicationsSnippetComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MessageSnippetComponent]
+      imports: [CommunicationsSnippetComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MessageSnippetComponent);
+    fixture = TestBed.createComponent(CommunicationsSnippetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

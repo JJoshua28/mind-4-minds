@@ -1,5 +1,16 @@
+@use '@angular/material' as mat;
+
 @import "../../../../../styles/shared/styles";
 @import "../../../../../styles/themes";
+
+
+
+.snippet-container {
+  @extend %is-clickable;
+  &:hover {
+    background-color: #e9ecef;
+  }
+}
 
 .message-snippet {
   @extend .fixed-text-container;
@@ -8,7 +19,7 @@
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  height: 100px;
+  height: auto;
 }
 
 .message-snippet h5 {
@@ -16,7 +27,15 @@
   font-weight: bolder;
 }
 
-.message-snippet h6 {
+.bullet-icon-colour {
+  color: $tertiary-colour;
+}
+
+.bullet-icon {
+  font-size: 3rem;
+}
+
+.snippet-subject {
   color: $secondary-colour;
   font-weight: bold;
 }
@@ -24,3 +43,17 @@
 .message-container {
   border-left: 5px solid $primary-colour;
 }
+
+.date-and-time-styling {
+  color: $secondary-colour;
+}
+
+input {
+  accent-color: $tertiary-colour;
+  width: 25px;
+  height: 25px;
+  margin-top: 4px;
+  @extend %is-clickable;
+}
+
+

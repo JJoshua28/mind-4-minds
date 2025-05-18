@@ -1,0 +1,31 @@
+<div
+  class="d-flex flex-row  align-items-start gap-3 py-3 text-capitalize h-auto ps-1 snippet-container"
+  (click)="handleMessageClick()"
+>
+  <input type="checkbox" />
+  <div
+    class="message-snippet text-capitalize"
+  >
+    <div class="w-100 d-flex justify-content-between">
+      <div class="d-flex flex-row gap-1">
+        <h5 class="fixed-text-container mb-0">{{$message().senderName}}</h5>
+        <span
+          class="bullet-icon"
+          style="line-height: 0.4;"
+          [ngClass]="{'bullet-icon-colour' : $message().status === 'new'}"
+          [style.visibility]="$message().status === 'new'? 'visible' : 'hidden'"
+        >&#8226;</span>
+      </div>
+      <span class="date-and-time-styling">{{$message().date}}</span>
+    </div>
+    <div class="w-100">
+      <h6
+        class="fixed-text-container mb-0"
+        [ngClass]="{ 'snippet-subject' : $message().status === 'new'}"
+      >{{$message().subject}}</h6>
+    </div>
+    <div class="w-100">
+      <p class="fixed-text-container mb-0">{{$message().message}}</p>
+    </div>
+  </div>
+</div>
