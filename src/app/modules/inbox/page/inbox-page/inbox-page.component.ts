@@ -5,23 +5,23 @@ import {
   RequestsAndNotificationBarComponent
 } from "../../components/requests-and-notification-bar/requests-and-notification-bar.component";
 import {CommunicationsStatus} from "../../../../types/communications-status.enum";
-import {CommunicationsSnippetComponent, Snippet} from "../../components/communications-snippet/communications-snippet.component";
+import {CommunicationsSnippetComponent, Snippet} from "../../components/inbox-snippet/communications-snippet.component";
 import {
-  EditCommunicationsSnippetBarComponent
-} from "../../components/edit-communications-snippet-bar/edit-communications-snippet-bar.component";
+  EditInboxSnippetBarComponent
+} from "../../components/edit-inbox-snippet-bar/edit-inbox-snippet-bar.component";
 
 @Component({
-  selector: 'app-requests-and-notifications-page',
+  selector: 'app-inbox-page',
   standalone: true,
   imports: [
     RequestsAndNotificationBarComponent,
     CommunicationsSnippetComponent,
-    EditCommunicationsSnippetBarComponent
+    EditInboxSnippetBarComponent
   ],
-  templateUrl: './requests-and-notifications-page.component.html',
-  styleUrl: './requests-and-notifications-page.component.scss'
+  templateUrl: './inbox-page.component.html',
+  styleUrl: './inbox-page.component.scss'
 })
-export class RequestsAndNotificationsPageComponent {
+export class InboxPageComponent {
   $checkedMessages: WritableSignal<Array<string>> = signal([])
 
   $snippets: WritableSignal<Array<Snippet>> = signal(snippets)

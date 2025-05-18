@@ -1,14 +1,14 @@
 <div class="container mb-5 overflow-visible">
   <app-requests-and-notification-bar />
 
-  <app-edit-communications-snippet-bar
+  <app-edit-inbox-snippet-bar
     [$tickCheckbox]="$checkedMessages().length > 0"
     (tickBoxClicked)="handleCheckAllClicked()"
   />
 
   <div class="mt-4">
     @for (snippet of $snippets(); track snippet.id) {
-      <app-communications-snippet
+      <app-inbox-snippet
         [$message]="snippet"
         (messageCheckboxClicked)="handleCheckMessageEvent($event)"
       />

@@ -14,7 +14,7 @@ export interface Snippet {
 }
 
 @Component({
-  selector: 'app-communications-snippet',
+  selector: 'app-inbox-snippet',
   standalone: true,
   imports: [
     NgClass

@@ -3,7 +3,7 @@ import {NgClass} from "@angular/common";
 
 enum NavigationItems {
   FIND_A_MENTOR="find a mentor",
-  REQUESTS_AND_NOTIFICATION='requests and notifications',
+  REQUESTS_AND_NOTIFICATION='inbox',
 }
 
 @Component({
@@ -17,7 +17,7 @@ enum NavigationItems {
 })
 
 export class NavigationBarComponent {
-  $hasRequestsOrNotifications: WritableSignal<boolean> = signal<boolean>(true);
+  $hasNewInboxMessage: WritableSignal<boolean> = signal<boolean>(true);
   $navigationItems: Signal<NavigationItems[]> = signal(Object.values(NavigationItems));
 
 

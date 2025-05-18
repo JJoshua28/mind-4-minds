@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditCommunicationsSnippetBarComponent } from './edit-communications-snippet-bar.component';
+import { EditInboxSnippetBarComponent } from './edit-inbox-snippet-bar.component';
 
 describe('EditCommunicationsSnippetBarComponent', () => {
-  let component: EditCommunicationsSnippetBarComponent;
-  let fixture: ComponentFixture<EditCommunicationsSnippetBarComponent>;
+  let component: EditInboxSnippetBarComponent;
+  let fixture: ComponentFixture<EditInboxSnippetBarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EditCommunicationsSnippetBarComponent]
+      imports: [EditInboxSnippetBarComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(EditCommunicationsSnippetBarComponent);
+    fixture = TestBed.createComponent(EditInboxSnippetBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

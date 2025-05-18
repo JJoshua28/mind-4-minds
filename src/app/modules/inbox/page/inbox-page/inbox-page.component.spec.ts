@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RequestsAndNotificationsPageComponent } from './requests-and-notifications-page.component';
+import { InboxPageComponent } from './inbox-page.component';
 
 describe('RequestsAndNotificationsPageComponent', () => {
-  let component: RequestsAndNotificationsPageComponent;
-  let fixture: ComponentFixture<RequestsAndNotificationsPageComponent>;
+  let component: InboxPageComponent;
+  let fixture: ComponentFixture<InboxPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RequestsAndNotificationsPageComponent]
+      imports: [InboxPageComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(RequestsAndNotificationsPageComponent);
+    fixture = TestBed.createComponent(InboxPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
