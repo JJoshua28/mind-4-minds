@@ -18,5 +18,10 @@
   &:hover {
     color: $tertiary-colour;
   }
+}
 
+.bullet-icon {
+  font-size: 3rem !important;
+  color: $tertiary-colour !important;
+  line-height: 0.35;
 }

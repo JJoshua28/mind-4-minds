@@ -14,7 +14,21 @@
   <nav class="mt-4 ms-3">
     <ul class="d-flex flex-row gap-5 ps-5 list-inline">
       @for (item of $navigationItems(); track item) {
-        <li class="is-clickable text-capitalize">{{item}}</li>
+        @if(item === 'requests and notifications') {
+          <div
+            class="d-flex flex-row justify-content-start gap-1"
+          >
+            <span
+              class="bullet-icon"
+              [style.visibility]="$hasRequestsOrNotifications()? 'visible' : 'hidden'"
+            >&#8226;</span>
+
+            <li class="is-clickable text-capitalize">{{item}}</li>
+          </div>
+
+        } @else {
+          <li class="is-clickable text-capitalize">{{item}}</li>
+        }
       }
     </ul>
   </nav>
