@@ -17,6 +17,8 @@
         @if(item === 'inbox') {
           <div
             class="d-flex flex-row justify-content-start gap-1"
+            (click)="handleNavigateTo(item)"
+            (keydown.enter)="handleNavigateTo(item)"
           >
             <span
               class="bullet-icon"
@@ -27,7 +29,11 @@
           </div>
 
         } @else {
-          <li class="is-clickable text-capitalize">{{item}}</li>
+          <li
+            class="is-clickable text-capitalize"
+            (click)="handleNavigateTo(item)"
+            (keydown.enter)="handleNavigateTo(item)"
+          >{{item}}</li>
         }
       }
     </ul>
