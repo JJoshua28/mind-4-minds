@@ -4,7 +4,13 @@ import {Router} from "@angular/router";
 
 enum NavigationItems {
   FIND_A_MENTOR="find a mentor",
-  REQUESTS_AND_NOTIFICATION='inbox',
+  inbox='inbox',
+  profile='profile',
+}
+
+enum SecondLevelNavigationItems {
+  FIND_A_MENTOR="find a mentor",
+  inbox='inbox',
 }
 
 @Component({
@@ -21,17 +27,20 @@ export class NavigationBarComponent {
   private _router = inject(Router);
 
   $hasNewInboxMessage: WritableSignal<boolean> = signal<boolean>(true);
-  $navigationItems: Signal<NavigationItems[]> = signal(Object.values(NavigationItems));
+  $navigationItems: Signal<SecondLevelNavigationItems[]> = signal(Object.values(SecondLevelNavigationItems));
 
-  private routeMapper (navigationItem: string): string {
+  private routeMapper (navigationItem: NavigationItems): string {
     let navigationRoute = '';
 
     switch(navigationItem) {
       case NavigationItems.FIND_A_MENTOR:
         navigationRoute = 'find-a-mentor';
         break;
-      case NavigationItems.REQUESTS_AND_NOTIFICATION:
+      case NavigationItems.inbox:
         navigationRoute = 'inbox';
+        break;
+      case NavigationItems.profile:
+        navigationRoute = 'profile';
         break;
     }
 
@@ -39,10 +48,11 @@ export class NavigationBarComponent {
 
   }
 
-  handleNavigateTo(navigationItem: NavigationItems) {
-    const navigationRoute = this.routeMapper(navigationItem);
+  handleNavigateTo(navigationItem: string) {
+    const navigationRoute = this.routeMapper(navigationItem as NavigationItems);
     this._router.navigate([navigationRoute]);
   }
 
 
+  protected readonly NavigationItems = NavigationItems;
 }

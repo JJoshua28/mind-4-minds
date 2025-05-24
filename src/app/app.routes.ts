@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import {MentorSearchPageComponent} from "./modules/mentor-search/page/mentor-search-page/mentor-search-page.component";
 import {InboxPageComponent} from "./modules/inbox/page/inbox-page/inbox-page.component";
+import {ProfileComponent} from "./modules/profile/page/profile/profile.component";
 
 export const routes: Routes = [
   {
@@ -17,5 +18,10 @@ export const routes: Routes = [
     path: 'inbox',
     component: InboxPageComponent,
     title: 'Inbox',
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+    title: 'Profile',
   }
 ];
