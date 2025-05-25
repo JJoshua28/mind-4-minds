@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import {MentorSearchPageComponent} from "./modules/mentor-search/page/mentor-search-page/mentor-search-page.component";
 import {InboxPageComponent} from "./modules/inbox/page/inbox-page/inbox-page.component";
 import {ProfileComponent} from "./modules/profile/page/profile/profile.component";
+import {UserDetailsComponent} from "./modules/profile/components/user-details/user-details.component";
 
 export const routes: Routes = [
   {
@@ -21,7 +22,17 @@ export const routes: Routes = [
   },
   {
     path: 'profile',
+    pathMatch: 'full',
+    redirectTo: 'profile/user-details'
+  },
+  {
+    path: 'profile',
     component: ProfileComponent,
     title: 'Profile',
+    children: [{
+      path: 'user-details',
+      title: 'User Details',
+      component: UserDetailsComponent
+    }]
   }
 ];

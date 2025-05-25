@@ -1,0 +1,62 @@
+@import '../../../../../styles/themes';
+@import "../../../../../styles/shared/styles";
+
+h1 {
+  color: $primary-colour;
+}
+
+.profile-picture {
+  height: 155px;
+  width: 135px;
+}
+
+h4 {
+  color: $primary-colour;
+}
+
+.email {
+  color: $secondary-colour;
+  font-weight: lighter;
+}
+
+.detail-container {
+  width: 700px;
+  height: auto;
+}
+
+.edit-button {
+  @extend %is-clickable;
+  color: $secondary-colour;
+  &:hover {
+    color: $tertiary-colour;
+  }
+
+}
+
+.account-activity-button {
+  @extend %is-clickable;
+  color: red;
+  width: 150px;
+  font-weight: lighter;
+  &:hover {
+    font-weight: normal;
+  }
+}
+
+@media (max-width: 1200px) {
+  .detail-container {
+    width: 500px;
+  }
+}
+
+@media (max-width: 850px) {
+  .detail-container {
+    width: 400px;
+  }
+}
+
+@media (max-width: 650px) {
+  .detail-container {
+    width: 100%;
+  }
+}
