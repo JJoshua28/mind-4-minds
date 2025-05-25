@@ -1,0 +1,11 @@
+@import "../../../../../styles/shared/styles";
+
+
+.list-item {
+  color: $primary-colour;
+  @extend %is-clickable;
+  &:hover {
+    color: $tertiary-colour;
+  }
+
+}

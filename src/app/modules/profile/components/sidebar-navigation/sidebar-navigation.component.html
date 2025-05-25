@@ -1,0 +1,7 @@
+<nav>
+  <ul class="list-unstyled is-clickable d-flex justify-content-around flex-column gap-3 me-5 mt ">
+    @for (item of items(); track item) {
+      <li class="list-item text-capitalize"><h5>{{item}}</h5></li>
+    }
+  </ul>
+</nav>
