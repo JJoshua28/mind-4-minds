@@ -1,0 +1,41 @@
+.profile-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 75px;
+}
+
+.sidebar-layout {
+  font-size: 2rem;
+  position: absolute;
+  right: 5px;
+  top: 160px;
+}
+
+.sidebar-navigation {}
+
+@media only screen and (min-width: 1000px) {
+  .sidebar-layout {
+    display: none;
+  }
+
+  }
+
+@media only screen and (max-width: 1000px) {
+  .sidebar-navigation {
+    display: none;
+  }
+  .profile-container {
+    gap: 0;
+    padding-left: 0;
+    justify-content: space-around;
+  }
+}
+
+
+@media only screen and (max-width: 600px) {
+  .profile-container {
+    display: block;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}

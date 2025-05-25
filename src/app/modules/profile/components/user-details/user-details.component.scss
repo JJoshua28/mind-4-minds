@@ -5,6 +5,12 @@ h1 {
   color: $primary-colour;
 }
 
+.personal-details-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
 .profile-picture {
   height: 155px;
   width: 135px;
@@ -22,6 +28,8 @@ h4 {
 .detail-container {
   width: 700px;
   height: auto;
+  margin-top: 1.5rem;
+
 }
 
 .edit-button {
@@ -58,5 +66,17 @@ h4 {
 @media (max-width: 650px) {
   .detail-container {
     width: 100%;
+    margin-top: 0;
+  }
+}
+
+
+@media (max-width: 455px) {
+  .personal-details-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .detail-container {
+    width: 300px;
   }
 }

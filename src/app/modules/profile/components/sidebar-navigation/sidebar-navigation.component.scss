@@ -1,11 +1,16 @@
 @import "../../../../../styles/shared/styles";
 
 
+.nav-container {
+  position: absolute;
+  top: 220px;
+  right: 35px;
+}
+
 .list-item {
   color: $primary-colour;
   @extend %is-clickable;
   &:hover {
     color: $tertiary-colour;
   }
-
 }
