@@ -3,6 +3,7 @@ import {MentorSearchPageComponent} from "./modules/mentor-search/page/mentor-sea
 import {InboxPageComponent} from "./modules/inbox/page/inbox-page/inbox-page.component";
 import {ProfileComponent} from "./modules/profile/page/profile/profile.component";
 import {UserDetailsComponent} from "./modules/profile/components/user-details/user-details.component";
+import {EditUserDetailsComponent} from "./modules/profile/page/edit-user-details/edit-user-details.component";
 
 export const routes: Routes = [
   {
@@ -34,5 +35,10 @@ export const routes: Routes = [
       title: 'User Details',
       component: UserDetailsComponent
     }]
+  },
+  {
+    path: 'profile/user-details/edit',
+    component:EditUserDetailsComponent,
+    title: "Edit: User Details",
   }
 ];

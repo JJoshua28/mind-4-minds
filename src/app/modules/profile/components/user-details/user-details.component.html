@@ -4,11 +4,15 @@
     <div
       class="personal-details-container"
     >
-      <img
-        alt="Janelle Monae"
-        [src]="user().profilePic"
-        class="profile-picture rounded"
-      />
+       <div class="d-flex flex-column gap-2 align-items-center">
+        <img
+          alt="Janelle Monae"
+          [src]="user().profilePic"
+          class="profile-picture rounded"
+        />
+        <h6 class="text-capitalize">{{user().occupation}}</h6>
+
+      </div>
       <div class="text-truncate d-inline-block">
         <h4>{{user().firstname}} {{user().surname}}</h4>
         <h6 class="email mt-2 mb-2">{{user().email}}</h6>
@@ -16,7 +20,10 @@
       </div>
     </div>
     <div class="w-100 mt-5 d-flex justify-content-between align-items-end pb-2">
-      <div class="d-flex align-items-center gap-2 edit-button">
+      <div
+        class="d-flex align-items-center gap-2 edit-button"
+        (click)="editDetails()"
+      >
         <i class="bi bi-pencil-square"></i>
         <h6 class="mb-0">Edit Details</h6>
       </div>
