@@ -114,6 +114,16 @@ p, li {
     color: $tertiary-colour;
 
   }
+}
+
+.edit-button {
+  width: 115px;
+  color: $secondary-colour;
+  &:hover{
+    font-weight: bolder;
+    color: $tertiary-colour;
+
+  }
 
 }
 
