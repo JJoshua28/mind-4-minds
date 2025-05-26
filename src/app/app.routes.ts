@@ -4,6 +4,7 @@ import {InboxPageComponent} from "./modules/inbox/page/inbox-page/inbox-page.com
 import {ProfileComponent} from "./modules/profile/page/profile/profile.component";
 import {UserDetailsComponent} from "./modules/profile/components/user-details/user-details.component";
 import {EditUserDetailsComponent} from "./modules/profile/page/edit-user-details/edit-user-details.component";
+import {MentorComponent} from "./modules/profile/page/mentor/mentor.component";
 
 export const routes: Routes = [
   {
@@ -30,11 +31,18 @@ export const routes: Routes = [
     path: 'profile',
     component: ProfileComponent,
     title: 'Profile',
-    children: [{
+    children: [
+    {
       path: 'user-details',
       title: 'User Details',
       component: UserDetailsComponent
-    }]
+    },
+      {
+        path: 'mentor-details',
+        title: 'Mentor Details',
+        component: MentorComponent
+      }
+    ]
   },
   {
     path: 'profile/user-details/edit',

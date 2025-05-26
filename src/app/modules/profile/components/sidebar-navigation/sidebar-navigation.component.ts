@@ -2,7 +2,8 @@ import {Component, inject } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 
 enum NavigationItems {
-  USER_DETAILS = "user-details"
+  USER_DETAILS = "user-details",
+  MENTOR_DETAILS = "mentor-details"
 }
 
 @Component({
