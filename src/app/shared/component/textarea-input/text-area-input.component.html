@@ -1,0 +1,16 @@
+<div
+  class="box-container"
+>
+  <textarea
+    #inputRef
+    type="text"
+    [value]="value()"
+    (input)="onInput(inputRef.value)"
+    (blur)="onTouched()"
+    class="textarea-input w-100 rounded py-4"
+    placeholder=" "
+  ></textarea>
+  <label
+    class="textarea-input-label text-capitalize"
+  >{{label()}}</label>
+</div>
