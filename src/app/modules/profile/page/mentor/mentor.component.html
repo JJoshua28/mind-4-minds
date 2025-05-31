@@ -20,8 +20,12 @@
       <p>{{mentorDetails().description}}</p>
     </div>
     <div class="page-item">
-      <h5>Qualifications and or Experience</h5>
-      <p>{{mentorDetails().description}}</p>
+      <h5>Qualifications</h5>
+      <p>{{mentorDetails().qualifications}}</p>
+    </div>
+    <div class="page-item">
+      <h5>Experience</h5>
+      <p>{{mentorDetails().experience}}</p>
     </div>
     <div
       class="list-container page-item"
@@ -57,6 +61,7 @@
     </div>
     <button
       class="d-flex align-items-center gap-2  pb-2 availability-button edit-button px-0"
+      (click)="navigateTo()"
     >
       <i class="bi bi-pencil-square"></i>
       <h6 class="mb-0">Edit Details</h6>

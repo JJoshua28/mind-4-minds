@@ -5,6 +5,7 @@ import {ProfileComponent} from "./modules/profile/page/profile/profile.component
 import {UserDetailsComponent} from "./modules/profile/components/user-details/user-details.component";
 import {EditUserDetailsComponent} from "./modules/profile/page/edit-user-details/edit-user-details.component";
 import {MentorComponent} from "./modules/profile/page/mentor/mentor.component";
+import {EditMentorComponent} from "./modules/profile/page/edit-mentor/edit-mentor.component";
 
 export const routes: Routes = [
   {
@@ -48,5 +49,10 @@ export const routes: Routes = [
     path: 'profile/user-details/edit',
     component:EditUserDetailsComponent,
     title: "Edit: User Details",
+  },
+  {
+    path: 'profile/mentor-details/edit',
+    component:EditMentorComponent,
+    title: "Edit: Mentor Details",
   }
 ];

@@ -1,0 +1,87 @@
+<main
+  class="m-auto w-75"
+>
+  <h1>Edit Mentor Details</h1>
+  <form
+    [formGroup]="$mentorDetails()"
+    class="mt-4 border border-light rounded px-4 pt-4 pb-5 d-flex flex-column gap-5"
+  >
+    <app-textarea-input
+      label="description"
+      formControlName="description"
+    />
+    <app-textarea-input
+      label="qualifications"
+      formControlName="qualifications"
+    />
+
+    <app-textarea-input
+      label="experience"
+      formControlName="experience"
+    />
+    <div>
+      <div class="speciality-heading-container">
+        <h5>Specialities</h5>
+        <div class="d-flex flex-column">
+          <label class="text-capitalize">favourite speciality</label>
+          <select formControlName="mainSpeciality">
+            <option
+              [ngValue]=null
+              disabled
+              selected
+            >Select your main speciality</option>
+            @for (option of $mentorDetails().get("specialities")?.value ; track option) {
+              <option
+                [ngValue]="option"
+              >{{option | titlecase }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      <ul class="mt-4 list-unstyled d-flex flex-wrap gap-3 h-auto">
+        @for (specialty of specialities ; track specialty) {
+          <li class="d-flex gap-2 text-capitalize align-items-center">
+            <input
+              type="checkbox"
+              [value]="specialty"
+              [id]="specialty"
+              (change)="onUpdateSpeciality(specialty)"
+              [checked]="($mentorDetails().get('specialities')?.value ?? []).includes(specialty)"
+            />
+            {{specialty}}
+          </li>
+        }
+      </ul>
+    </div>
+    <div class="speciality-heading-container">
+      <h5>Meeting Preferences</h5>
+      <ul class="list-unstyled d-flex flex-column gap-1">
+        @for (preference of meetingPreferences ; track preference) {
+          <li class="d-flex gap-2 text-capitalize align-items-center">
+            <input
+              type="checkbox"
+              [value]="preference"
+              [id]="preference"
+              (change)="onUpdateMeetingPreferences(preference)"
+              [checked]="($mentorDetails().get('meetingPreferences')?.value ?? []).includes(preference)"
+            />
+            {{preference}}
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <button
+        class="cancel-button text-capitalize"
+        (click)="navigateTo()"
+      >Cancel</button>
+      <button
+        type="submit"
+        class="save-button"
+        (click)="navigateTo()"
+      >Save</button>
+    </div>
+
+  </form>
+</main>
