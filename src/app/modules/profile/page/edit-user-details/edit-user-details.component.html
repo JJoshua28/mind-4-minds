@@ -12,10 +12,18 @@
               class="profile-picture rounded"
             />
 
-            <app-text-input
-              label="occupation"
-              formControlName="occupation"
-            />
+            <div class="d-flex flex-column gap-4">
+              <app-text-input
+                label="occupation"
+                formControlName="occupation"
+              />
+              <app-date-input
+                [$label]="'occupation start date'"
+                [$initialInput]='userDetails.get("occupationStartDate")?.value ?? ""'
+                formControlName="occupationStartDate"
+              />
+            </div>
+
           </div>
           <input
             type="file"

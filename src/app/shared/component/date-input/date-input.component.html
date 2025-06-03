@@ -1,0 +1,16 @@
+<div
+  class="box-container"
+>
+  <input
+    #inputRef
+    type="date"
+    [value]="value()"
+    (input)="onInput(inputRef.value)"
+    (blur)="onTouched()"
+    class="text-input w-100 rounded py-4"
+    placeholder=" "
+  />
+  <label
+    class="text-input-label text-capitalize"
+  >{{$label()}}</label>
+</div>

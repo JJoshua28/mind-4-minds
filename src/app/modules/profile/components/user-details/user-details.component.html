@@ -10,7 +10,10 @@
           [src]="user().profilePic"
           class="profile-picture rounded"
         />
-        <h6 class="text-capitalize">{{user().occupation}}</h6>
+         <div class="d-flex flex-column align-items-center">
+          <h6 class="text-capitalize pb-0 lh-1" >{{user().occupation}}</h6>
+          <h6 class="text-capitalize email lh-1">{{ experienceDuration(user().occupationStartDate) }}</h6>
+         </div>
 
       </div>
       <div class="text-truncate d-inline-block">
