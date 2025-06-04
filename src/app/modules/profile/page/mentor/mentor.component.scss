@@ -98,10 +98,14 @@ p, li {
 
 .unavailable-button {
   @extend .availability-button;
-  color: red;
-  font-weight: lighter;
   &:hover {
-    font-weight: normal;
+    h6{
+      font-weight: normal;
+    }
+  }
+  h6 {
+    color: red;
+    font-weight: lighter;
   }
 }
 
@@ -124,7 +128,6 @@ p, li {
     color: $tertiary-colour;
 
   }
-
 }
 
 //@include media-breakpoint-down(xs) {

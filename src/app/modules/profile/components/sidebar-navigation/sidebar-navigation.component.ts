@@ -3,7 +3,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 
 enum NavigationItems {
   USER_DETAILS = "user-details",
-  MENTOR_DETAILS = "mentor-details"
+  MENTOR_DETAILS = "mentor-details",
+  MENTEE_DETAILS = "mentee-details"
 }
 
 @Component({

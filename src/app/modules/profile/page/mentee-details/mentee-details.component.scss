@@ -1,0 +1,72 @@
+@import 'bootstrap/scss/bootstrap';
+
+@import '../../../../../styles/themes';
+
+main {
+  color: $primary-colour;
+}
+
+.page-item {
+  margin-bottom: 2rem;
+}
+
+.list-container {
+
+}
+@include media-breakpoint-up(lg) {
+  main {
+    width: 50%;
+  }
+}
+
+@include media-breakpoint-down(lg) {
+  main {
+    margin: 0 auto !important;
+  }
+}
+@include media-breakpoint-only(md) {
+  main {
+    width: 75%;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .list-container {
+    text-align: right;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding-right: 12px;
+  }
+}
+
+.shared-button-styling {
+  background-color: white;
+  font-size: 1.2rem;
+  border:none;
+}
+
+.unavailable-button {
+  @extend .shared-button-styling;
+  &:hover {
+    h6{
+      font-weight: normal;
+    }
+  }
+  h6 {
+    color: red;
+    font-weight: lighter;
+  }
+}
+
+.edit-button {
+  @extend .shared-button-styling;
+  width: 115px;
+  color: $secondary-colour;
+  &:hover{
+    font-weight: bolder;
+    color: $tertiary-colour;
+
+  }
+}

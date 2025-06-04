@@ -67,14 +67,21 @@
       <h6 class="mb-0">Edit Details</h6>
     </button>
   </div>
-  <button
-    [class]="mentorDetails().isAvailable ? 'unavailable-button' : 'available-button'"
-    class="mt-4"
-  >
-    @if (mentorDetails().isAvailable) {
-      <h6>Unavailable</h6>
-    } @else {
-      <h6>Available</h6>
-    }
-  </button>
+  <div class="d-flex justify-content-between">
+    <button
+      class="mt-4 unavailable-button"
+    >
+      <h6>Relinquish Mentor Duties</h6>
+    </button>
+    <button
+      [class]="mentorDetails().isAvailable ? 'unavailable-button' : 'available-button'"
+      class="mt-4"
+    >
+      @if (mentorDetails().isAvailable) {
+        <h6>Unavailable</h6>
+      } @else {
+        <h6>Available</h6>
+      }
+    </button>
+  </div>
 </main>
