@@ -1,17 +1,10 @@
-import {Component, input} from '@angular/core';
+import {Component, inject, input} from '@angular/core';
 import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
 import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
 import {LearningPreferences} from "../../../../types/user details/learning-preferences.enum";
+import {Router} from "@angular/router";
+import {Mentee} from "../../../../types/user details/mentee.interface";
 
-interface mentee {
-  description: string;
-  goals: Array<string>;
-  learningPreference: Array<LearningPreferences>;
-  expectations: string;
-  meetingPreference: Array<MeetingPreferences>
-  neurodivergentConditions: Array<NeurodivergenceConditions>;
-  commitment: string;
-}
 
 const mentee = {
   description: "Hi, I am vorname. I have been caring for my Autistic son for 13 years now. \n" +
@@ -33,7 +26,12 @@ const mentee = {
   styleUrl: './mentee-details.component.scss'
 })
 export class MenteeDetailsComponent {
-  $mentee = input<mentee>(mentee);
+  private readonly _router = inject(Router);
 
-  protected readonly mentee = mentee;
+  $mentee = input<Mentee>(mentee);
+
+  navigateTo() {
+    this._router.navigate(['/profile/mentee-details/edit']);
+  }
+
 }
