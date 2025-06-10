@@ -1,4 +1,4 @@
-import {Component, forwardRef, input, signal, WritableSignal} from '@angular/core';
+import {Component, computed, forwardRef, input, signal, WritableSignal} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -16,9 +16,15 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   styleUrl: './text-input.component.scss'
 })
 export class TextInputComponent implements ControlValueAccessor {
+
   label = input.required<string>();
 
-  value: WritableSignal<string> = signal("");
+  $value = input<string>()
+
+  $inputValue = computed(() => this.$value() || this.value());
+
+  value: WritableSignal<string> = signal(this.$value() || "");
+
 
   private onChange = (value: string) => {};
   onTouched = () => {};
@@ -43,6 +49,4 @@ export class TextInputComponent implements ControlValueAccessor {
     this.value.set(value);
     this.onChange(value);
   }
-
-  protected readonly HTMLInputElement = HTMLInputElement;
 }

@@ -1,0 +1,121 @@
+<main class="container">
+  <h1>Edit Mentee Details</h1>
+  <div class="mt-2 border border-light rounded px-4 pt-4 pb-2 mb-5">
+    <form
+      [formGroup]="menteeDetails"
+    >
+      <div>
+        <h5 class="text-capitalize mb-3">Description</h5>
+        <app-textarea-input
+          label="introduce yourself to mentors"
+          formControlName="description"
+        />
+      </div>
+      <div class="mt-4">
+        <h5>Goals</h5>
+        <div class="w-100 mt-3 mb-4" formArrayName="goals">
+          @for (goal of goals.controls; track goal; let index = $index) {
+            <div class="d-flex gap-2 align-items-center mb-4">
+              <app-text-input
+                class="w-100"
+                formControlName="{{index}}"
+
+                [label]="'Goal ' + (index + 1)"
+              />
+              <i
+                class="bi bi-trash trash-icon"
+              ></i>
+            </div>
+          }
+          <div class="d-flex gap-2 align-items-center mt-5">
+            <app-text-input
+              class="w-100"
+              [label]="'Goal ' + (1 + goals.controls.length)"
+            />
+            <i class="bi bi-plus-circle add-icon"></i>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h5 class="mb-3">Expectations</h5>
+        <app-textarea-input
+          label="what you expect from your mentor"
+          formControlName="expectations"
+        />
+      </div>
+      <div class="mt-4">
+        <h5 class="mb-3">Commitment</h5>
+        <app-text-input
+          label="Your commitment e.g. 1 day for 6 weeks"
+          formControlName="commitment"
+        />
+      </div>
+      <div class="list-container mt-4">
+        <h5>Learning Preferences</h5>
+        <ul
+          class="list-unstyled d-flex flex-column gap-1"
+          formArrayName="learningPreferences"
+        >
+          @for (preference of learningPreferences.controls; track preference; let index=$index) {
+            <li class="d-flex gap-2 text-capitalize align-items-center">
+              {{learningPreferenceOptions[index]}}
+              <input
+                type="checkbox"
+                [formControlName]="index"
+                [id]="preference"
+              />
+            </li>
+          }
+        </ul>
+      </div>
+      <div class="list-container mt-4">
+        <h5>Meeting Preferences</h5>
+        <ul
+          class="list-unstyled d-flex flex-column gap-1 "
+          formArrayName="meetingPreferences"
+        >
+          @for (preference of meetingPreferences.controls; track index; let index=$index) {
+            <li class="d-flex gap-2 text-capitalize align-items-center">
+              {{meetingPreferenceOptions[index]}}
+              <input
+                type="checkbox"
+                [formControlName]="index"
+                [id]="preference"
+              />
+            </li>
+          }
+        </ul>
+      </div>
+      <div class="list-container mt-4">
+        <h5>Neurodivergent Conditions</h5>
+        <ul
+          class="list-unstyled d-flex flex-column gap-1 "
+          formArrayName="neurodivergentConditions"
+        >
+          @for (condition of neurodivergentConditions.controls; track index; let index=$index) {
+            <li class="d-flex gap-2 text-capitalize align-items-center">
+              {{neurodivergentConditionOptions[index]}}
+              <input
+                type="checkbox"
+                [formControlName]="index"
+                [id]="condition"
+              />
+            </li>
+          }
+        </ul>
+      </div>
+      <div class="d-flex justify-content-between mt-5">
+        <button
+          class="cancel-button text-capitalize"
+          (click)="cancelEdit()"
+        >Cancel</button>
+        <button
+          type="submit"
+          class="save-button"
+        >Save</button>
+      </div>
+    </form>
+  </div>
+
+
+</main>

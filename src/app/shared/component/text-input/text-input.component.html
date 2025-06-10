@@ -4,7 +4,7 @@
   <input
     #inputRef
     type="text"
-    [value]="value()"
+    [value]="$inputValue()"
     (input)="onInput(inputRef.value)"
     (blur)="onTouched()"
     class="text-input w-100 rounded py-4"

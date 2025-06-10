@@ -7,6 +7,7 @@ import {EditUserDetailsComponent} from "./modules/profile/page/edit-user-details
 import {MentorComponent} from "./modules/profile/page/mentor/mentor.component";
 import {EditMentorComponent} from "./modules/profile/page/edit-mentor/edit-mentor.component";
 import {MenteeDetailsComponent} from "./modules/profile/page/mentee-details/mentee-details.component";
+import {EditMenteeComponent} from "./modules/profile/page/edit-mentee/edit-mentee.component";
 
 export const routes: Routes = [
   {
@@ -60,5 +61,11 @@ export const routes: Routes = [
     path: 'profile/mentor-details/edit',
     component:EditMentorComponent,
     title: "Edit: Mentor Details",
+  },
+  {
+    path: 'profile/mentee-details/edit',
+    component: EditMenteeComponent,
+    title: "Edit: Mentee Details",
   }
+
 ];
