@@ -46,6 +46,8 @@ export class EditMenteeComponent {
     Validators.required
   )
 
+  newGoalControl = this._formBuilder.control('', Validators.required);
+
   learningPreferences = this._formBuilder.array(
     this.learningPreferenceOptions.map(preference => {
       const defaultValue = this.mentee.learningPreference.includes(preference);
@@ -86,5 +88,19 @@ export class EditMenteeComponent {
   cancelEdit() {
     this._router.navigate(['/profile/mentee-details']);
   }
+
+  addGoal() {
+    const value = this.newGoalControl.value?.trim();
+    if (value) {
+      this.goals.push(this._formBuilder.control(value, Validators.required));
+      this.newGoalControl.reset(); // clear input after adding
+    }
+
+  }
+
+  removeGoal(index: number) {
+    this.goals.removeAt(index);
+  }
+
 
 }

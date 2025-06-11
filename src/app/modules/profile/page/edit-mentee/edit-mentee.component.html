@@ -24,6 +24,7 @@
               />
               <i
                 class="bi bi-trash trash-icon"
+                (click)="removeGoal(index)"
               ></i>
             </div>
           }
@@ -31,8 +32,13 @@
             <app-text-input
               class="w-100"
               [label]="'Goal ' + (1 + goals.controls.length)"
+              [formControl]="newGoalControl"
+
             />
-            <i class="bi bi-plus-circle add-icon"></i>
+            <i
+              class="bi bi-plus-circle add-icon"
+              (click)="addGoal()"
+            ></i>
           </div>
         </div>
       </div>
