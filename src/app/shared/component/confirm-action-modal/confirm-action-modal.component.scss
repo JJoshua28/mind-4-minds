@@ -1,0 +1,51 @@
+@import '../../../../styles/themes';
+
+h4 {
+  color: $primary-colour;
+}
+
+.shared-button-styling {
+  background-color: white;
+  font-size: 1.2rem;
+  border:none;
+}
+
+.delete-button {
+  @extend .shared-button-styling;
+  &:hover {
+    h6{
+      font-weight: normal;
+    }
+  }
+  h6 {
+    color: red;
+    font-weight: lighter;
+  }
+}
+
+
+.cancel-button {
+  @extend .shared-button-styling;
+  width: 115px;
+  color: $secondary-colour;
+  &:hover{
+    font-weight: bolder;
+    color: $tertiary-colour;
+
+  }
+}
+
+.confirm-button {
+  @extend .cancel-button;
+  color: $primary-colour;
+}
+
+.test {
+  display: none;
+}
+dialog:not([open]) {
+  display: none;
+  :host {
+    display: none;
+  }
+}

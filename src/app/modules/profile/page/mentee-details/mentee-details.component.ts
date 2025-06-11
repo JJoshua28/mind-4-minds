@@ -1,9 +1,13 @@
-import {Component, inject, input} from '@angular/core';
+import {Component, inject, input, ViewChild} from '@angular/core';
 import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
 import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
 import {LearningPreferences} from "../../../../types/user details/learning-preferences.enum";
 import {Router} from "@angular/router";
 import {Mentee} from "../../../../types/user details/mentee.interface";
+import {
+  ActionTypes,
+  ConfirmActionModalComponent
+} from "../../../../shared/component/confirm-action-modal/confirm-action-modal.component";
 
 
 const mentee = {
@@ -21,14 +25,19 @@ const mentee = {
 @Component({
   selector: 'app-mentee-details',
   standalone: true,
-  imports: [],
+  imports: [
+    ConfirmActionModalComponent
+  ],
   templateUrl: './mentee-details.component.html',
   styleUrl: './mentee-details.component.scss'
 })
 export class MenteeDetailsComponent {
   private readonly _router = inject(Router);
 
-  $mentee = input<Mentee>(mentee);
+  $mentee = input<Mentee>(mentee)
+
+  @ViewChild(ConfirmActionModalComponent) relinquishMentorDutiesModal!: ConfirmActionModalComponent;
+  protected readonly modalActionType = ActionTypes.DELETE;
 
   navigateTo() {
     this._router.navigate(['/profile/mentee-details/edit']);

@@ -55,8 +55,15 @@
     </button>
   </div>
   <button
+    (click)="relinquishMentorDutiesModal.show()"
     class="mt-4 unavailable-button"
   >
-    <h6>Leave Mentorship</h6>
+    <h6
+    >Leave Mentorship</h6>
   </button>
+    <app-confirm-action-modal
+      messageTopic="leave your mentorship programme"
+      [type]="modalActionType"
+    />
 </main>
+
