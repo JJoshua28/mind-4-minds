@@ -8,9 +8,11 @@ import {
   ActionTypes,
   ConfirmActionModalComponent
 } from "../../../../shared/component/confirm-action-modal/confirm-action-modal.component";
+import {MenteeDetailsComponent} from "../../../../shared/component/mentee-details/mentee-details.component";
 
 
 const mentee = {
+  id: "1",
   description: "Hi, I am vorname. I have been caring for my Autistic son for 13 years now. \n" +
     "I have experience helping him self-regulate and vibe.",
   goals: ["Win, win, win win", "become a better person"],
@@ -23,15 +25,16 @@ const mentee = {
 }
 
 @Component({
-  selector: 'app-mentee-details',
+  selector: 'app-mentee-details-page',
   standalone: true,
   imports: [
-    ConfirmActionModalComponent
+    ConfirmActionModalComponent,
+    MenteeDetailsComponent
   ],
-  templateUrl: './mentee-details.component.html',
-  styleUrl: './mentee-details.component.scss'
+  templateUrl: './mentee-details-page.component.html',
+  styleUrl: './mentee-details-page.component.scss'
 })
-export class MenteeDetailsComponent {
+export class MenteeDetailsPageComponent {
   private readonly _router = inject(Router);
 
   $mentee = input<Mentee>(mentee)

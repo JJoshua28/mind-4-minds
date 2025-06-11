@@ -6,7 +6,7 @@ import {UserDetailsComponent} from "./modules/profile/components/user-details/us
 import {EditUserDetailsComponent} from "./modules/profile/page/edit-user-details/edit-user-details.component";
 import {MentorComponent} from "./modules/profile/page/mentor/mentor.component";
 import {EditMentorComponent} from "./modules/profile/page/edit-mentor/edit-mentor.component";
-import {MenteeDetailsComponent} from "./modules/profile/page/mentee-details/mentee-details.component";
+import {MenteeDetailsPageComponent} from "./modules/profile/page/mentee-details/mentee-details-page.component";
 import {EditMenteeComponent} from "./modules/profile/page/edit-mentee/edit-mentee.component";
 
 export const routes: Routes = [
@@ -48,7 +48,7 @@ export const routes: Routes = [
       {
         path: 'mentee-details',
         title: 'Mentor Details',
-        component: MenteeDetailsComponent
+        component: MenteeDetailsPageComponent
       }
     ]
   },

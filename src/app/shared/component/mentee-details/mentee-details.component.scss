@@ -1,0 +1,42 @@
+@import 'bootstrap/scss/bootstrap';
+
+@import '../../../../styles/themes';
+
+main {
+  color: $primary-colour;
+}
+
+.page-item {
+  margin-bottom: 2rem;
+}
+
+.list-container {
+
+}
+@include media-breakpoint-up(lg) {
+  main {
+    width: 50%;
+  }
+}
+
+@include media-breakpoint-down(lg) {
+  main {
+    margin: 0 auto !important;
+  }
+}
+@include media-breakpoint-only(md) {
+  main {
+    width: 75%;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .list-container {
+    text-align: right;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding-right: 12px;
+  }
+}

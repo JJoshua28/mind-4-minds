@@ -30,6 +30,7 @@ export class EditMenteeComponent {
   neurodivergentConditionOptions = Object.values(NeurodivergenceConditions);
 
   mentee: Mentee = {
+    id: "1",
     description: "Hi, I am vorname. I have been caring for my Autistic son for 13 years now. \n" +
       "I have experience helping him self-regulate and vibe.",
     goals: ["Win, win, win win", "become a better person"],

@@ -1,6 +1,4 @@
-<main class="m-auto"
->
-  <h1>Mentee details</h1>
+<div>
   <div class="mt-2 border border-light rounded px-4 pt-4 pb-2 w-100">
     <div class="page-item">
       <h5>Description</h5>
@@ -46,24 +44,6 @@
         }
       </ul>
     </div>
-    <button
-      class="d-flex align-items-center gap-2  pb-2 availability-button edit-button px-0"
-      (click)="navigateTo()"
-    >
-      <i class="bi bi-pencil-square"></i>
-      <h6 class="mb-0">Edit Details</h6>
-    </button>
-  </div>
-  <button
-    (click)="relinquishMentorDutiesModal.show()"
-    class="mt-4 unavailable-button"
-  >
-    <h6
-    >Leave Mentorship</h6>
-  </button>
-    <app-confirm-action-modal
-      messageTopic="leave your mentorship programme"
-      [type]="modalActionType"
-    />
-</main>
 
+  </div>
+</div>
