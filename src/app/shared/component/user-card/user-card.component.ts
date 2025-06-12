@@ -14,6 +14,7 @@ export class UserCardComponent implements OnInit{
   @Output() cardContainerClicked = new EventEmitter<void>();
   public readonly $user = input.required<User>();
   $mentorDetails!: WritableSignal<Mentor>;
+  $isHovered: WritableSignal<boolean>= signal(false);
 
   ngOnInit(): void {
     this.$mentorDetails = signal(this.$user().mentorDetails as Mentor);

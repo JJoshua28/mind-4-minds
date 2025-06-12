@@ -1,10 +1,11 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, signal, ViewChild, WritableSignal} from '@angular/core';
 
 import {UserCardComponent} from "../../../../shared/component/user-card/user-card.component";
 import {ViewMentorModalComponent} from "../../components/view-mentor-modal/view-mentor-modal.component";
 import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
 import {User} from "../../../../types/user.interface";
 import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
+import {NgClass} from "@angular/common";
 
 enum SearchType {
   ALL = "all",
@@ -16,13 +17,19 @@ enum SearchType {
   standalone: true,
   imports: [
     UserCardComponent,
-    ViewMentorModalComponent
+    ViewMentorModalComponent,
+    NgClass
   ],
   templateUrl: './mentor-search-page.component.html',
   styleUrl: './mentor-search-page.component.scss'
 })
 export class MentorSearchPageComponent {
   @ViewChild(ViewMentorModalComponent) modal!: ViewMentorModalComponent;
+
+  updateSelection(user: User) {
+    if(!this.$selectedUser) this.$selectedUser = signal(user)
+    else this.$selectedUser.set(user);
+  }
 
   searchType: SearchType = SearchType.ALL;
 
@@ -47,4 +54,6 @@ export class MentorSearchPageComponent {
   }
 
   placeholderMentors: User[] = [this.user, this.user, this.user,this.user,this.user,this.user,this.user,this.user];
+
+  $selectedUser: WritableSignal<User> = signal(this.placeholderMentors[0]);
 }

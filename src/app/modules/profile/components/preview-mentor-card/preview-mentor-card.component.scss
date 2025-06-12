@@ -1,0 +1,10 @@
+@import '../../../../../styles/themes';
+@import '../../../../../styles/shared/styles';
+
+.close-icon {
+  color: $primary-colour;
+  @extend %is-clickable;
+  &:hover {
+    color: $tertiary-colour;
+  }
+}

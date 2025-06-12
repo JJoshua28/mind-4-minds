@@ -1,0 +1,24 @@
+<main
+  [ngClass]="{ 'hidden-modal-container': isHidden()}"
+>
+  <dialog
+    #modal
+    class="border rounded"
+    (keydown.escape)="close()"
+  >
+      <div
+        class="d-flex justify-content-end w-100 mb-2"
+      >
+        <i
+          class="bi bi-x-lg fs-2 d-block close-icon"
+          (click)="close()"
+        ></i>
+      </div>
+      <div class="px-4 pb-2">
+        <app-user-card
+          class="mx-auto"
+          [$user]="$user()"
+        />
+      </div>
+  </dialog>
+</main>

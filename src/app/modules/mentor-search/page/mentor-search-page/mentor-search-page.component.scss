@@ -1,5 +1,23 @@
+@import '../../../../../styles/themes';
+
 .main-content-padding {
   margin:auto;
   display: grid;
   padding-bottom: 100px;
+}
+
+.container-hovered {
+
+    color: white !important;
+    font-weight: bolder !important;
+}
+
+.button-link {
+  border: none;
+  background-color: transparent;
+  color: $primary-colour;
+
+  &:hover {
+    color: $tertiary-colour !important;
+  }
 }

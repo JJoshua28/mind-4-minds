@@ -8,5 +8,5 @@ export interface Mentor {
   experience: string;
   meetingPreferences: Array<MeetingPreferences>
   neurodivergentConditions: Array<NeurodivergenceConditions>;
-  isAvailable?: boolean;
+  isAvailable: boolean;
 }

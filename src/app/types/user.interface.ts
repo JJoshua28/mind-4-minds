@@ -13,3 +13,16 @@ export interface User {
   menteeDetails?: Mentee
   mentorDetails?: Mentor
 }
+
+export interface MentorUser {
+  id: string;
+  firstname: string;
+  surname: string;
+  occupation: string;
+  profilePic: string;
+  occupationStartDate: Date;
+  email: string;
+  menteeDetails?: Mentee
+  mentorDetails: Mentor
+}
+

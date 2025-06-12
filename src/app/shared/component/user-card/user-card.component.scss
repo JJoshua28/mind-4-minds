@@ -55,6 +55,10 @@
     li {
       color: white;
     }
+    ng-content.button-container {
+      color: white;
+      font-weight: bolder;
+    }
     cursor: pointer;
     background-color: $primary-colour !important;
   }

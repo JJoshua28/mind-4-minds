@@ -5,12 +5,28 @@
   <div class="d-flex w-100 flex-wrap mt-4 justify-content-start gap-3" >
     @for (user of placeholderMentors; track index; let index = $index) {
       <app-user-card
+        #card
         [$user]="user"
-        (cardContainerClicked)="modal.show()"
-      />
+        (cardContainerClicked)="$selectedUser.set(user); modal.show()"
+      >
+        <div
+          class="w-100 d-flex justify-content-end mt-3"
+        >
+          <button
+            [ngClass]="{'container-hovered': card.$isHovered()}"
+            class="button-link text-capitalize fw-bold"
+          >connect</button>
+        </div>
+      </app-user-card>
+    } @empty {
+      <h3>No Mentors found, please speak to an admin</h3>
     }
   </div>
 </div>
-
-<app-view-mentor-modal />
+@if (placeholderMentors.length > 1) {
+  @let user = $selectedUser();
+  <app-view-mentor-modal
+    [$user]="user"
+  />
+}
 
