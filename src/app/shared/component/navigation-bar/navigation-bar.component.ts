@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 
 enum NavigationItems {
   FIND_A_MENTOR="find a mentor",
+  MY_MENTEES = "my mentees",
   inbox='inbox',
   MY_MENTORS = "my mentors",
   profile='profile',
@@ -11,6 +12,7 @@ enum NavigationItems {
 
 enum SecondLevelNavigationItems {
   MY_MENTORS = "my mentors",
+  MY_MENTEES = "my mentees",
   FIND_A_MENTOR="find a mentor",
   inbox='inbox',
 }
@@ -46,6 +48,10 @@ export class NavigationBarComponent {
         break;
       case NavigationItems.MY_MENTORS:
         navigationRoute = 'my-mentors';
+        break;
+      case NavigationItems.MY_MENTEES:
+        navigationRoute = 'my-mentees';
+        break;
     }
 
     return navigationRoute

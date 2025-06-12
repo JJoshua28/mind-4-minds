@@ -16,6 +16,8 @@ import {
 import {User} from "../../../types/user.interface";
 
 import {NgClass} from "@angular/common";
+import {UserType} from "../../../types/user-type.enum";
+import {ActionTypes, ConfirmActionModalComponent} from "../confirm-action-modal/confirm-action-modal.component";
 
 @Component({
   selector: 'app-list-users',
@@ -23,7 +25,8 @@ import {NgClass} from "@angular/common";
   imports: [
     UserCardComponent,
     ViewMentorModalComponent,
-    NgClass
+    NgClass,
+    ConfirmActionModalComponent
   ],
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.scss'
@@ -31,14 +34,21 @@ import {NgClass} from "@angular/common";
 export class ListUsersComponent implements OnInit {
   @Output() isHoveringOnUserCard = new EventEmitter<boolean>();
 
-  @ViewChild(ViewMentorModalComponent) modal!: ViewMentorModalComponent;
+  @ViewChild(ViewMentorModalComponent) viewUserModal!: ViewMentorModalComponent;
+  @ViewChild(ConfirmActionModalComponent) confirmActionModal!: ConfirmActionModalComponent;
+
 
   $heading = input.required<string>();
   $users = input.required<User[]>();
+  $userType = input.required<UserType>();
+
 
   $noConnectionsMessage = input.required<string>();
 
   $selectedUser!: WritableSignal<User>;
+
+  protected readonly actionType =  ActionTypes.DELETE
+  protected readonly modalMessageTopic = "end the mentorship"
 
   ngOnInit() {
     this.$selectedUser = signal(this.$users()[0]);

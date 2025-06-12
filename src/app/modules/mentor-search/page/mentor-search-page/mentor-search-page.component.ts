@@ -6,6 +6,7 @@ import {NeurodivergenceConditions} from "../../../../types/user details/neurodiv
 import {User} from "../../../../types/user.interface";
 import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
 import {NgClass} from "@angular/common";
+import {UserType} from "../../../../types/user-type.enum";
 
 enum SearchType {
   ALL = "all",
@@ -56,4 +57,6 @@ export class MentorSearchPageComponent {
   placeholderMentors: User[] = [this.user, this.user, this.user,this.user,this.user,this.user,this.user,this.user];
 
   $selectedUser: WritableSignal<User> = signal(this.placeholderMentors[0]);
+
+  protected readonly UserType = UserType;
 }

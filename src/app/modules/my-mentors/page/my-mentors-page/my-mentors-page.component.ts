@@ -4,6 +4,7 @@ import {User} from "../../../../types/user.interface";
 import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
 import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
 import {NgClass} from "@angular/common";
+import {UserType} from "../../../../types/user-type.enum";
 
 @Component({
   selector: 'app-my-mentors-page',
@@ -19,6 +20,8 @@ export class MyMentorsPageComponent {
   protected readonly noMentorsMessage = "Reflect on what you want from a mentorship and find a mentor"
   protected readonly heading = "My mentors"
   protected isHoveringOnUserCard = false
+  protected userType = UserType.MENTOR
+
 
   user: User = {
     id: "1",

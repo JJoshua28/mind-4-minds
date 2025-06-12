@@ -5,14 +5,16 @@
   <div class="d-flex w-100 flex-wrap mt-4 justify-content-start gap-3" >
     @for (user of $users(); track index; let index = $index) {
       <app-user-card
+        [$userType]="$userType()"
         #card
         [$user]="user"
-        (cardContainerClicked)="$selectedUser.set(user); modal.show()"
+        (cardContainerClicked)="$selectedUser.set(user); viewUserModal.show()"
       >
         <div
           class="w-100 d-flex justify-content-end mt-3"
         >
           <button
+            (click)="$event.stopPropagation(); confirmActionModal.show()"
             [ngClass]="{'container-hovered': card.$isHovering()}"
             class="leave-mentor-button text-capitalize fw-bold"
           >End Mentorship</button>
@@ -31,3 +33,7 @@
   />
 }
 
+<app-confirm-action-modal
+  [$type]="actionType"
+  [$messageTopic]="modalMessageTopic"
+/>

@@ -4,6 +4,7 @@ import {MentorUser} from "../../../../types/user.interface";
 
 import {UserCardComponent} from "../../../../shared/component/user-card/user-card.component";
 import {NgClass} from "@angular/common";
+import {UserType} from "../../../../types/user-type.enum";
 
 @Component({
   selector: 'app-preview-mentor-card',
@@ -34,4 +35,5 @@ export class PreviewMentorCardComponent {
     this.modal.nativeElement.close();
   }
 
+  protected readonly UserType = UserType;
 }

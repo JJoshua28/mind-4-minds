@@ -9,6 +9,7 @@ import {EditMentorComponent} from "./modules/profile/page/edit-mentor/edit-mento
 import {MenteeDetailsPageComponent} from "./modules/profile/page/mentee-details/mentee-details-page.component";
 import {EditMenteeComponent} from "./modules/profile/page/edit-mentee/edit-mentee.component";
 import {MyMentorsPageComponent} from "./modules/my-mentors/page/my-mentors-page/my-mentors-page.component";
+import {MyMenteesPageComponent} from "./modules/my-mentees/page/my-mentees-page/my-mentees-page.component";
 
 export const routes: Routes = [
   {
@@ -33,8 +34,13 @@ export const routes: Routes = [
   },
   {
     path: 'my-mentors',
-    title: 'My mentors',
+    title: 'My Mentors',
     component: MyMentorsPageComponent
+  },
+  {
+    path: 'my-mentees',
+    title: 'My Mentees',
+    component: MyMenteesPageComponent
   },
   {
     path: 'profile',

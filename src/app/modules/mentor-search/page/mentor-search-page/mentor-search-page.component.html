@@ -5,6 +5,7 @@
   <div class="d-flex w-100 flex-wrap mt-4 justify-content-start gap-3" >
     @for (user of placeholderMentors; track index; let index = $index) {
       <app-user-card
+        [$userType]="UserType.MENTOR"
         #card
         [$user]="user"
         (cardContainerClicked)="$selectedUser.set(user); modal.show()"

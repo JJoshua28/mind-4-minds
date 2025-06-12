@@ -17,8 +17,8 @@ export enum ActionTypes {
 })
 export class ConfirmActionModalComponent {
   @ViewChild('relinquishMentorDutiesModal') modal!: ElementRef<HTMLDialogElement>;
-  type = input.required<ActionTypes>()
-  messageTopic = input.required<string>()
+  $type = input.required<ActionTypes>()
+  $messageTopic = input.required<string>()
 
   isHidden: WritableSignal<boolean>= signal(true);
 

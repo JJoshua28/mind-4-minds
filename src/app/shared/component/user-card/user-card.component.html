@@ -26,14 +26,21 @@
     </div>
     <div class="mt-2">
       <p class="profile-description-container mb-0">
-        {{$mentorDetails().description}}
+        {{$roleDetails().description}}
     </div>
   </div>
-  @if ($mentorDetails().neurodivergentConditions.length > 1) {
+  @if ($roleDetails().neurodivergentConditions.length > 1) {
     <div class="mt-2">
-      <h6 class="fw-light text-uppercase mt-3 speciality-tag-heading">I can help with</h6>
+      <h6 class="fw-light mt-3 speciality-tag-heading">
+        @if($userType() === userType.MENTOR) {
+          I can support you with:
+        }
+        @if ($userType() === userType.MENTEE) {
+          I may need support with:
+        }
+      </h6>
       <ul class="d-flex flex-row justify-content-center gap-2 list-unstyled mb-0">
-        @let conditions = $mentorDetails().neurodivergentConditions.slice(0,3);
+        @let conditions = $roleDetails().neurodivergentConditions.slice(0,3);
         @for (condition of conditions; track condition) {
           <li
             class="text-capitalize fw-bolder rounded-pill px-2 neurodivergent-condition"
@@ -41,8 +48,8 @@
             {{condition}}
           </li>
         }
-        @if($mentorDetails().neurodivergentConditions.length > conditions.length) {
-          <li>+{{$mentorDetails().neurodivergentConditions.length - conditions.length}}</li>
+        @if($roleDetails().neurodivergentConditions.length > conditions.length) {
+          <li>+{{$roleDetails().neurodivergentConditions.length - conditions.length}}</li>
         }
       </ul>
     </div>
