@@ -21,7 +21,7 @@
     >Leave Mentorship</h6>
   </button>
   <app-confirm-action-modal
-    $messageTopic="leave your mentorship programme"
+    [$messageTopic]="modalMessageTopic"
     [$type]="modalActionType"
   />
 </main>

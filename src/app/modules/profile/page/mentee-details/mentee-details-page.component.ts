@@ -41,6 +41,8 @@ export class MenteeDetailsPageComponent {
 
   @ViewChild(ConfirmActionModalComponent) relinquishMentorDutiesModal!: ConfirmActionModalComponent;
   protected readonly modalActionType = ActionTypes.DELETE;
+  protected readonly modalMessageTopic = "leave your mentorship programme"
+
 
   navigateTo() {
     this._router.navigate(['/profile/mentee-details/edit']);
