@@ -1,5 +1,6 @@
 import {Mentee} from "./user details/mentee.interface";
-import {Mentor} from "../shared/types/mentor.interface";
+import {Mentor} from "./user details/mentor/mentor.interface";
+
 
 export interface User {
   id: string;

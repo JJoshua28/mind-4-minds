@@ -1,32 +1,30 @@
-import {Component, ViewChild} from '@angular/core';
-
-import {UserCardComponent} from "../../../../shared/component/user-card/user-card.component";
-import {ViewMentorModalComponent} from "../../components/view-mentor-modal/view-mentor-modal.component";
-import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
+import {Component, ElementRef, signal, ViewChild, WritableSignal} from '@angular/core';
+import {NgClass} from "@angular/common";
 import {User} from "../../../../types/user.interface";
 import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
-
-enum SearchType {
-  ALL = "all",
-  RELATED = "related",
-}
+import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
+import {MenteeDetailsComponent} from "../../../../shared/component/mentee-details/mentee-details.component";
+import {MentorDetailsComponent} from "../../../../shared/component/mentor-details/mentor-details.component";
+import { experienceDuration } from '../../../../shared/helpers/experienceDurations';
 
 @Component({
-  selector: 'app-mentor-search-page',
+  selector: 'app-view-mentor-modal',
   standalone: true,
   imports: [
-    UserCardComponent,
-    ViewMentorModalComponent
+    NgClass,
+    MenteeDetailsComponent,
+    MentorDetailsComponent
   ],
-  templateUrl: './mentor-search-page.component.html',
-  styleUrl: './mentor-search-page.component.scss'
+  templateUrl: './view-mentor-modal.component.html',
+  styleUrl: './view-mentor-modal.component.scss'
 })
-export class MentorSearchPageComponent {
-  @ViewChild(ViewMentorModalComponent) modal!: ViewMentorModalComponent;
+export class ViewMentorModalComponent {
+  @ViewChild('modal') modal!: ElementRef<HTMLDialogElement>;
 
-  searchType: SearchType = SearchType.ALL;
+  isHidden: WritableSignal<boolean>= signal(true);
 
-  user: User = {
+
+  $user: WritableSignal<User> = signal({
     id: "1",
     firstname: "vorname",
     email: "vorname@gmail.com",
@@ -39,12 +37,24 @@ export class MentorSearchPageComponent {
       meetingPreferences: [MeetingPreferences.ONLINE_MESSAGING, MeetingPreferences.VIDEO_CALLS],
       qualifications: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       experience: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      neurodivergentConditions: [NeurodivergenceConditions.ADHD, NeurodivergenceConditions.TOURETTES, NeurodivergenceConditions.AUTISM, NeurodivergenceConditions.DYSLEXIA, NeurodivergenceConditions.DYSCALCULIA],
+      neurodivergentConditions: [NeurodivergenceConditions.ADHD, NeurodivergenceConditions.TOURETTES, NeurodivergenceConditions.AUTISM],
       description: "Hi, I am vorname. I have been caring for my Autistic son for 13 years now. \n" +
         "I have experience helping him self-regulate and vibe.",
       isAvailable: false,
     }
+  })
+
+  protected readonly experienceDuration = experienceDuration;
+
+  show () {
+    this.isHidden.set(!this.isHidden());
+    this.modal.nativeElement.showModal()
   }
 
-  placeholderMentors: User[] = [this.user, this.user, this.user,this.user,this.user,this.user,this.user,this.user];
+  close () {
+    this.isHidden.set(!this.isHidden());
+
+    this.modal.nativeElement.close();
+  }
+
 }

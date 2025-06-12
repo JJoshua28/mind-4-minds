@@ -1,0 +1,70 @@
+<main class="w-100">
+  <div class="mt-2 border border-light rounded px-4 pt-4 pb-2">
+
+    <div class="page-item">
+      <h5>Description</h5>
+      <p>{{$mentorDetails().description}}</p>
+    </div>
+    <div class="page-item">
+      <div
+        class="mb-2"
+      >
+        <h5
+          class="pb-0 mb-0"
+        >Expertise</h5>
+        <span
+          class="support-text"
+        >My experience, skills and knowledge</span>
+
+      </div>
+      <p>{{$mentorDetails().qualifications}}</p>
+    </div>
+    @if($mentorDetails().experience) {
+      <div class="page-item">
+        <div
+          class="mb-2"
+        >
+          <h5
+            class="pb-0 mb-0"
+          >Experience</h5>
+          <span
+            class="support-text"
+          >My experience mentoring</span>
+
+        </div>
+        <p>{{$mentorDetails().experience}}</p>
+      </div>
+    }
+    @if($mentorDetails().neurodivergentConditions.length > 1) {
+      <div
+        class="list-container page-item"
+      >
+        <div>
+          <h5
+            class="pb-0 mb-0"
+          >Neurodivergent conditions</h5>
+          <span
+            class="support-text"
+          >I can support with:</span>
+        </div>
+        <ul
+          class="list-unstyled"
+        >
+          @for (speciality of $mentorDetails().neurodivergentConditions; track speciality) {
+            <li class="text-capitalize">{{speciality}}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <div class="list-container page-item">
+      <h5>Meeting preferences</h5>
+      <ul class="list-unstyled">
+        @for (preference of $mentorDetails().meetingPreferences; track preference) {
+          <li class="text-capitalize">{{preference}}</li>
+        }
+      </ul>
+    </div>
+    <ng-content></ng-content>
+  </div>
+</main>

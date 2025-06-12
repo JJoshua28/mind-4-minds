@@ -3,11 +3,14 @@
     <h3>All mentors</h3>
   </div>
   <div class="d-flex w-100 flex-wrap mt-4 justify-content-start gap-3" >
-    @for (mentor of placeholderMentors; track ++index;) {
-      <app-user-card [mentor]="mentor" />
+    @for (user of placeholderMentors; track index; let index = $index) {
+      <app-user-card
+        [$user]="user"
+        (cardContainerClicked)="modal.show()"
+      />
     }
   </div>
 </div>
 
-
+<app-view-mentor-modal />
 

@@ -3,62 +3,19 @@
   <div
     class="d-flex gap-1">
     <span
-      [class]="mentorDetails().isAvailable ? 'is-available-dot-icon' : 'is-unavailable-dot-icon'"
+      [class]="$mentorDetails().isAvailable ? 'is-available-dot-icon' : 'is-unavailable-dot-icon'"
     >&#8226;</span>
     <h5
       class="availibility-text"
-    >@if (mentorDetails().isAvailable) {
+    >@if ($mentorDetails().isAvailable) {
       Available
     } @else {
       Unavailable
     }</h5>
   </div>
-  <div class="mt-2 border border-light rounded px-4 pt-4 pb-2">
-
-    <div class="page-item">
-      <h5>Description</h5>
-      <p>{{mentorDetails().description}}</p>
-    </div>
-    <div class="page-item">
-      <h5>Qualifications</h5>
-      <p>{{mentorDetails().qualifications}}</p>
-    </div>
-    <div class="page-item">
-      <h5>Experience</h5>
-      <p>{{mentorDetails().experience}}</p>
-    </div>
-    <div
-      class="list-container page-item"
-    >
-      <h5>Specialities</h5>
-      <ul
-        class="list-unstyled"
-      >
-        @for (speciality of mentorDetails().specialities; track speciality) {
-          @if (speciality === mentorDetails().mainSpeciality) {
-            <li class="d-flex favourite-speciality gap-2">
-              <i
-                class="bi bi-star-fill favourite-icon"
-              ></i>
-              <span
-                class="text-capitalize"
-              >{{mentorDetails().mainSpeciality}}</span>
-            </li>
-          } @else {
-            <li class="text-capitalize">{{speciality}}</li>
-          }
-        }
-      </ul>
-    </div>
-
-    <div class="list-container page-item">
-      <h5>Meeting preferences</h5>
-      <ul class="list-unstyled">
-        @for (preference of mentorDetails().meetingPreference; track preference) {
-          <li class="text-capitalize">{{preference}}</li>
-        }
-      </ul>
-    </div>
+  <app-mentor-details
+    [$mentorDetails]="$mentorDetails()"
+  >
     <button
       class="d-flex align-items-center gap-2  pb-2 availability-button edit-button px-0"
       (click)="navigateTo()"
@@ -66,7 +23,7 @@
       <i class="bi bi-pencil-square"></i>
       <h6 class="mb-0">Edit Details</h6>
     </button>
-  </div>
+  </app-mentor-details>
   <div class="d-flex justify-content-between">
     <button
       class="mt-4 unavailable-button"
@@ -74,10 +31,10 @@
       <h6>Relinquish Mentor Duties</h6>
     </button>
     <button
-      [class]="mentorDetails().isAvailable ? 'unavailable-button' : 'available-button'"
+      [class]="$mentorDetails().isAvailable ? 'unavailable-button' : 'available-button'"
       class="mt-4"
     >
-      @if (mentorDetails().isAvailable) {
+      @if ($mentorDetails().isAvailable) {
         <h6>Unavailable</h6>
       } @else {
         <h6>Available</h6>

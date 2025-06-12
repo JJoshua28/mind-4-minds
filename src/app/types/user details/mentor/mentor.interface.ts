@@ -1,11 +1,12 @@
-import {MeetingPreferences, Specialities} from "./mentor.enum";
+import {MeetingPreferences} from "./mentor.enum";
+import {NeurodivergenceConditions} from "../neurodivergence.enum";
 
-export interface MentorDetails {
-  meetingPreference: Array<MeetingPreferences>
-  mainSpeciality: Specialities;
-  specialities: Array<Specialities>;
-  description: string;
+export interface Mentor {
+  id: string
   qualifications: string;
+  description: string;
   experience: string;
-  isAvailable: boolean;
+  meetingPreferences: Array<MeetingPreferences>
+  neurodivergentConditions: Array<NeurodivergenceConditions>;
+  isAvailable?: boolean;
 }

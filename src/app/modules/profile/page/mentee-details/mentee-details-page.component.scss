@@ -1,6 +1,7 @@
 @import 'bootstrap/scss/bootstrap';
 
 @import '../../../../../styles/themes';
+@import '../../../../../styles/shared/styles';
 
 main {
   color: $primary-colour;
@@ -41,14 +42,9 @@ main {
   }
 }
 
-.shared-button-styling {
-  background-color: white;
-  font-size: 1.2rem;
-  border:none;
-}
 
 .unavailable-button {
-  @extend .shared-button-styling;
+  @extend %shared-button-styling;
   &:hover {
     h6{
       font-weight: normal;
@@ -61,7 +57,7 @@ main {
 }
 
 .edit-button {
-  @extend .shared-button-styling;
+  @extend %shared-button-styling;
   width: 115px;
   color: $secondary-colour;
   &:hover{

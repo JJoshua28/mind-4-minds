@@ -1,8 +1,9 @@
 import {Component, inject, signal, WritableSignal} from '@angular/core';
 import {Router} from "@angular/router";
-import {formatDistance} from "date-fns";
+import {experienceDuration} from "../../../../shared/helpers/experienceDurations";
 
-export interface User {
+export interface UserDetails {
+  id: number;
   firstname: string;
   surname: string;
   occupation: string;
@@ -22,7 +23,8 @@ export interface User {
 export class UserDetailsComponent {
   private _router = inject(Router);
 
-  user: WritableSignal<User> = signal({
+  user: WritableSignal<UserDetails> = signal({
+    id: 1,
     firstname: "vorname",
     email: "vorname@gmail.com",
     surname: "nachname",
@@ -35,12 +37,6 @@ export class UserDetailsComponent {
     this._router.navigate(['/profile/user-details/edit']);
   }
 
-  experienceDuration(occupationStartDate: Date) {
-    const currentDate = new Date();
-    return formatDistance(
-      occupationStartDate,
-      currentDate
-    );
-  }
 
+  protected readonly experienceDuration = experienceDuration;
 }

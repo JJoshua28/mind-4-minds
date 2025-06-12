@@ -18,7 +18,7 @@
   -webkit-line-clamp: 4;
 }
 
-.speciality-highlight-container {
+.neurodivergent-condition-highlight-container {
   color: $secondary-colour;
   font-weight: bold;
   white-space: nowrap;
@@ -43,7 +43,7 @@
   }
 
   height: 370px;
-  width: 325px;
+  width: 312px;
   &:hover {
     h5, button, p {
       color: white;
@@ -51,6 +51,9 @@
     }
     span, h6 {
       color: $tertiary-colour;
+    }
+    li {
+      color: white;
     }
     cursor: pointer;
     background-color: $primary-colour !important;
@@ -68,19 +71,8 @@
   font-size: 0.75rem;
 }
 
-.adhd-tag-container {
-  @extend .tag-container;
-  background-color: hotpink;
-}
-
-.leadership-tag-container {
-   @extend .tag-container;
-   background-color: mediumpurple;
- }
-
-.assessments-tag-container {
-  @extend .tag-container;
-  background-color: goldenrod;
+.neurodivergent-condition {
+  border: 1px solid $tertiary-colour;
 }
 
 .button-link {
@@ -91,3 +83,5 @@
     color: $tertiary-colour !important;
   }
 }
+
+

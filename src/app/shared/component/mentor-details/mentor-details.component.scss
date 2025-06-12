@@ -1,0 +1,55 @@
+@import 'bootstrap/scss/bootstrap';
+
+@import '../../../../styles/themes';
+
+h1 {
+  color: $primary-colour;
+}
+
+.dot {
+  font-size: 3rem;
+  line-height: 0.35;
+}
+
+p, li {
+  color: $primary-colour;
+}
+
+.page-item {
+  margin-bottom: 2rem;
+}
+
+.list-container {}
+.favourite-icon {
+  color: $tertiary-colour;
+}
+
+.favourite-speciality {
+  justify-content: start;
+}
+
+.support-text {
+  color: $secondary-colour;
+}
+
+@include media-breakpoint-up(md) {
+  .list-container {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding-right:12px;
+  }
+  .favourite-speciality {
+    text-align: end;
+    justify-content: end;
+  }
+  li {
+    text-align: end;
+    justify-content: end;
+  }
+}
+
+
+
+

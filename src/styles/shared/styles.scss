@@ -10,6 +10,12 @@
   cursor: pointer;
 }
 
+%shared-button-styling {
+  background-color: white;
+  font-size: 1.2rem;
+  border:none;
+}
+
 
 %checkbox-input {
   accent-color: $tertiary-colour;
