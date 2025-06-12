@@ -46,14 +46,16 @@
           />
         </div>
       }
-      <div class="d-flex justify-content-end mt-5 pb-3">
-        <button
-          class="button"
-          (click)="close()"
-        >
-          <h6>Connect with the mentor</h6>
-        </button>
-      </div>
+      @if ($canConnectToMentor()) {
+        <div class="d-flex justify-content-end mt-5 pb-3">
+          <button
+            class="button"
+            (click)="close()"
+          >
+            <h6>Connect with the mentor</h6>
+          </button>
+        </div>
+      }
     </div>
   </dialog>
 </main>

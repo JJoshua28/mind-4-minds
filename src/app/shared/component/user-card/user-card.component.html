@@ -1,7 +1,7 @@
 <div
   class="card-container rounded border border-1 p-3"
-  (mouseover)="$isHovered.set(true)"
-  (mouseout)="$isHovered.set(false)"
+  (mouseover)="$isHovering.set(true); isHovering.emit(true)"
+  (mouseout)="$isHovering.set(false); isHovering.emit(false)"
   (click)="cardContainerClicked.emit()"
 >
   <div>
@@ -48,7 +48,7 @@
     </div>
   }
   <div
-    [class.hovered]="$isHovered()"
+    [class.hovered]="$isHovering()"
   >
     <ng-content>
     </ng-content>

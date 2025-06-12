@@ -8,6 +8,7 @@ import {MentorComponent} from "./modules/profile/page/mentor/mentor.component";
 import {EditMentorComponent} from "./modules/profile/page/edit-mentor/edit-mentor.component";
 import {MenteeDetailsPageComponent} from "./modules/profile/page/mentee-details/mentee-details-page.component";
 import {EditMenteeComponent} from "./modules/profile/page/edit-mentee/edit-mentee.component";
+import {MyMentorsPageComponent} from "./modules/my-mentors/page/my-mentors-page/my-mentors-page.component";
 
 export const routes: Routes = [
   {
@@ -29,6 +30,11 @@ export const routes: Routes = [
     path: 'profile',
     pathMatch: 'full',
     redirectTo: 'profile/user-details'
+  },
+  {
+    path: 'my-mentors',
+    title: 'My mentors',
+    component: MyMentorsPageComponent
   },
   {
     path: 'profile',

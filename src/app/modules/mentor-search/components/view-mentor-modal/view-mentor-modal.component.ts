@@ -17,10 +17,12 @@ import { experienceDuration } from '../../../../shared/helpers/experienceDuratio
   templateUrl: './view-mentor-modal.component.html',
   styleUrl: './view-mentor-modal.component.scss'
 })
+
 export class ViewMentorModalComponent {
   @ViewChild('modal') modal!: ElementRef<HTMLDialogElement>;
 
   isHidden: WritableSignal<boolean>= signal(true);
+  $canConnectToMentor = input<boolean>(false)
 
   $user = input.required<User>()
 
