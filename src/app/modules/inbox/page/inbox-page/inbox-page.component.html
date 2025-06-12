@@ -10,10 +10,16 @@
     @for (snippet of $snippets(); track snippet.id) {
       <app-inbox-snippet
         [$message]="snippet"
+        (messageClicked)="selectedMessage = snippet; viewSnippetModal.show()"
         (messageCheckboxClicked)="handleCheckMessageEvent($event)"
       />
     }
   </div>
 
-
+  @if (selectedMessage) {
+    <app-view-message-modal
+      [$hasActions]="false"
+      [$message]="selectedMessage"
+    />
+  }
 </div>

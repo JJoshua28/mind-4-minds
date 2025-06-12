@@ -1,0 +1,107 @@
+@import 'bootstrap/scss/bootstrap';
+
+@import '../../../../../styles/themes';
+@import '../../../../../styles/shared/styles';
+
+dialog {
+  color: $primary-colour;
+}
+
+.sub-text {
+  color: $secondary-colour;
+}
+
+.hidden-modal-container {
+  display: none;
+}
+
+.profile-picture {
+  height: 155px;
+  width: 135px;
+}
+
+.message-action-container {
+  height: 95%;
+}
+
+.decline-button {
+  @extend %shared-button-styling;
+  &:hover {
+    h5{
+      font-weight: normal;
+    }
+  }
+  h5 {
+    color: red;
+    font-weight: lighter;
+  }
+}
+
+.accept-button {
+  @extend %shared-button-styling;
+  color: $secondary-colour;
+  &:hover{
+    font-weight: bolder;
+    color: $tertiary-colour;
+
+  }
+}
+
+.personal-details-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+@include media-breakpoint-up(sm) {
+
+  dialog {
+    height: 75%;
+    width: 75%;
+  }
+  .close-icon {
+    line-height: 0.25;
+    margin-right: 1rem;
+    margin-top: .25rem;
+
+  }
+  .details-container {
+    width: 75%;
+  }
+}
+
+.close-icon {
+  color: $primary-colour;
+  @extend %is-clickable;
+  &:hover {
+    color: $tertiary-colour;
+  }
+}
+
+.details-container {
+}
+
+@include media-breakpoint-down(sm) {
+  .personal-details-container {
+    width: 90%;
+  }
+  dialog {
+    width: 90%;
+  }
+  .personal-details-container {
+    flex-direction: column;
+    align-items: center;
+    div {
+      gap: 1rem !important;
+    }
+  }
+  .close-icon {
+    line-height: 0.25;
+    margin-right: 1rem;
+    margin-top: .25rem;
+  }
+  .details-container {
+    width: 95%;
+  }
+
+
+}

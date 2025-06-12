@@ -1,4 +1,4 @@
-import {Component, signal, WritableSignal} from '@angular/core';
+import {Component, signal, ViewChild, WritableSignal} from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
@@ -9,6 +9,7 @@ import {CommunicationsSnippetComponent, Snippet} from "../../components/inbox-sn
 import {
   EditInboxSnippetBarComponent
 } from "../../components/edit-inbox-snippet-bar/edit-inbox-snippet-bar.component";
+import {ViewMessageModalComponent} from "../../components/view-message-modal/view-message-modal.component";
 
 @Component({
   selector: 'app-inbox-page',
@@ -16,15 +17,19 @@ import {
   imports: [
     RequestsAndNotificationBarComponent,
     CommunicationsSnippetComponent,
-    EditInboxSnippetBarComponent
+    EditInboxSnippetBarComponent,
+    ViewMessageModalComponent
   ],
   templateUrl: './inbox-page.component.html',
   styleUrl: './inbox-page.component.scss'
 })
 export class InboxPageComponent {
+  @ViewChild(ViewMessageModalComponent) viewSnippetModal!: ViewMessageModalComponent;
   $checkedMessages: WritableSignal<Array<string>> = signal([])
 
   $snippets: WritableSignal<Array<Snippet>> = signal(snippets)
+
+  selectedMessage!: Snippet;
 
   handleCheckMessageEvent (messageId: string): void {
     this.$checkedMessages.set(
