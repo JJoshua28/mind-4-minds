@@ -10,74 +10,87 @@ import {MenteeDetailsPageComponent} from "./modules/profile/page/mentee-details/
 import {EditMenteeComponent} from "./modules/profile/page/edit-mentee/edit-mentee.component";
 import {MyMentorsPageComponent} from "./modules/my-mentors/page/my-mentors-page/my-mentors-page.component";
 import {MyMenteesPageComponent} from "./modules/my-mentees/page/my-mentees-page/my-mentees-page.component";
+import {LoginPageComponent} from "./modules/login/page/login-page/login-page.component";
+import {MainLayoutComponent} from "./modules/main-layout/main-layout/main-layout.component";
 
 export const routes: Routes = [
   {
-    path: ``,
-    redirectTo: '/find-a-mentor',
-    pathMatch: 'full',
+    path: "login",
+    title: "Login",
+    component: LoginPageComponent
   },
   {
-    path: 'find-a-mentor',
-    component: MentorSearchPageComponent,
-    title: 'Find a mentor',
+    path: "",
+    redirectTo: "login",
+    pathMatch: "full",
   },
   {
-    path: 'inbox',
-    component: InboxPageComponent,
-    title: 'Inbox',
-  },
-  {
-    path: 'profile',
-    pathMatch: 'full',
-    redirectTo: 'profile/user-details'
-  },
-  {
-    path: 'my-mentors',
-    title: 'My Mentors',
-    component: MyMentorsPageComponent
-  },
-  {
-    path: 'my-mentees',
-    title: 'My Mentees',
-    component: MyMenteesPageComponent
-  },
-  {
-    path: 'profile',
-    component: ProfileComponent,
-    title: 'Profile',
+    path: "",
+    component: MainLayoutComponent,
     children: [
-    {
-      path: 'user-details',
-      title: 'User Details',
-      component: UserDetailsComponent
-    },
       {
-        path: 'mentor-details',
-        title: 'Mentor Details',
-        component: MentorComponent
+        path: 'find-a-mentor',
+        component: MentorSearchPageComponent,
+        title: 'Find a mentor',
       },
       {
-        path: 'mentee-details',
-        title: 'Mentor Details',
-        component: MenteeDetailsPageComponent
+        path: 'inbox',
+        component: InboxPageComponent,
+        title: 'Inbox',
+      },
+      {
+        path: 'profile',
+        pathMatch: 'full',
+        redirectTo: 'profile/user-details'
+      },
+      {
+        path: 'my-mentors',
+        title: 'My Mentors',
+        component: MyMentorsPageComponent
+      },
+      {
+        path: 'my-mentees',
+        title: 'My Mentees',
+        component: MyMenteesPageComponent
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+        title: 'Profile',
+        children: [
+          {
+            path: 'user-details',
+            title: 'User Details',
+            component: UserDetailsComponent
+          },
+          {
+            path: 'mentor-details',
+            title: 'Mentor Details',
+            component: MentorComponent
+          },
+          {
+            path: 'mentee-details',
+            title: 'Mentor Details',
+            component: MenteeDetailsPageComponent
+          }
+        ]
+      },
+      {
+        path: 'profile/user-details/edit',
+        component:EditUserDetailsComponent,
+        title: "Edit: User Details",
+      },
+      {
+        path: 'profile/mentor-details/edit',
+        component:EditMentorComponent,
+        title: "Edit: Mentor Details",
+      },
+      {
+        path: 'profile/mentee-details/edit',
+        component: EditMenteeComponent,
+        title: "Edit: Mentee Details",
       }
     ]
-  },
-  {
-    path: 'profile/user-details/edit',
-    component:EditUserDetailsComponent,
-    title: "Edit: User Details",
-  },
-  {
-    path: 'profile/mentor-details/edit',
-    component:EditMentorComponent,
-    title: "Edit: Mentor Details",
-  },
-  {
-    path: 'profile/mentee-details/edit',
-    component: EditMenteeComponent,
-    title: "Edit: Mentee Details",
   }
 
 ];

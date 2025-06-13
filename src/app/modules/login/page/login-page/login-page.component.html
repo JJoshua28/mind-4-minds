@@ -1,0 +1,57 @@
+<main
+  class="w-100 h-100 d-flex flex-column"
+>
+  <div>
+    <div
+      class="d-flex flex-column gap-1 align-items-center mb-3 w-100"
+    >
+      <img
+        src="../../../../assets/images/mind4minds%20logo.png"
+        alt="mind for minds logo"
+        class="is-clickable"
+        height="auto"
+        width="75%"
+      />
+      <h1
+        class="heading"
+      >Your journey starts here</h1>
+
+    </div>
+    <form
+      [formGroup]="loginCredentials"
+      class="rounded px-1 py-5 login-container gap-5"
+    >
+      <div
+        class="w-75 d-flex flex-column gap-0"
+      >
+        <h3>Sign in</h3>
+        <h6
+          class="guidance-line"
+        >Contact an admin if you can't remember your login credentials</h6>
+
+      </div>
+
+      <app-text-input
+        class="w-75"
+        label="Email address"
+        formControlName="email"
+      />
+      <app-text-input
+        class="w-75"
+        label="password"
+        formControlName="password"
+      />
+      <div class="d-flex flex-column align-items-center w-100 gap-3 mt-0">
+        <button
+          type="submit"
+          (click)="navigateTo()"
+          class="rounded-pill fs-4 login-button py-2 px-4"
+        >Log in</button>
+        <button
+          class="register-button"
+        >New here? Register</button>
+      </div>
+
+    </form>
+  </div>
+</main>

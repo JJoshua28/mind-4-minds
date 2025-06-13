@@ -17,6 +17,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 export class TextInputComponent implements ControlValueAccessor {
 
+  $hasConflictingColours = input<boolean>(false);
+
   label = input.required<string>();
 
   $value = input<string>()

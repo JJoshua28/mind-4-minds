@@ -1,0 +1,79 @@
+@import 'bootstrap/scss/bootstrap';
+
+@import '../../../../../styles/themes';
+@import '../../../../../styles/shared/styles';
+
+main {
+  width: 100%;
+  min-height: 100vh;
+  background: $primary-colour;
+}
+
+main div {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.heading {
+  color: white;
+}
+
+h3 {
+  color: $primary-colour;
+}
+
+.guidance-line {
+  color: $secondary-colour;
+}
+
+.login-button {
+  width: 60%;
+  background-color: $primary-colour;
+  color: white;
+  border: 1px solid $tertiary-colour;
+  &:hover {
+    color: $tertiary-colour;
+  }
+}
+
+.login-container {
+  background-color: white;
+  border: 1px solid $tertiary-colour;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+@include media-breakpoint-up(xl) {
+  main div {
+    width: 45%;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  main div {
+    margin: auto;
+  }
+  main {
+    justify-content: center;
+  }
+}
+
+.register-button {
+  @extend %shared-button-styling;
+  color: $primary-colour;
+  font-weight: bold;
+  &:hover {
+    color: $tertiary-colour;
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  main div {
+    margin-top: 4%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
+  }
+}

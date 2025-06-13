@@ -11,6 +11,7 @@
     placeholder=" "
   />
   <label
+    [class]="$hasConflictingColours()? 'conflicting-text-input-label' : 'text-input-label'"
     class="text-input-label text-capitalize"
   >{{label()}}</label>
 </div>
