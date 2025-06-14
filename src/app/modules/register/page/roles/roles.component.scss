@@ -1,0 +1,27 @@
+@import '../../../../../styles/themes';
+@import '../../../../../styles/shared/styles';
+
+.guidance-line {
+  color: $secondary-colour;
+}
+
+input {
+  @extend %checkbox-input;
+  margin-top: 0;
+  margin-bottom: .25rem;
+}
+
+.continue-button-container {
+  width: 100%;
+  position: relative;
+  bottom: .1%;
+}
+.continue-button {
+  position: relative;
+  right: 1%;
+  @extend %shared-button-styling;
+  color: $primary-colour;
+  &:hover {
+    color: $tertiary-colour;
+  }
+}

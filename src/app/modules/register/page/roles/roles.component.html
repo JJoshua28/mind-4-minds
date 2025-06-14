@@ -1,0 +1,52 @@
+<div class="w-100 h-100">
+  <form
+    [formGroup]="roleForm"
+    (ngSubmit)="submitRoles()"
+  >
+    <div
+      class="w-75 h-100 m-auto mt-4"
+    >
+      <div
+        class="w-100 h-100 d-flex flex-column gap-0 align-items-start pt-5"
+      >
+        <h3>Roles</h3>
+        <h6
+          class="guidance-line"
+        >Select the roles you would like to have in the system</h6>
+      </div>
+      <div
+        class="d-flex justify-content-between gap-4"
+        formArrayName="roles"
+      >
+        @for(role of rolesControl.controls; track index; let index= $index) {
+          <div
+            class="rounded border-light d-flex flex-column align-items-center w-100 mt-5 mb-5"
+          >
+            <div
+              class="d-flex gap-2 align-items-center"
+            >
+              <label><h3>{{ roles[index].name | titlecase }}</h3></label>
+              <input
+                type="checkbox"
+                [formControlName]="index"
+              >
+            </div>
+            <p>{{roles[index].description}}</p>
+          </div>
+        }
+      </div>
+
+    </div>
+
+
+    <div class="d-flex justify-content-end w-100 mt-5 continue-button-container">
+      <button
+        type="submit"
+        [style.visibility]="roleForm.invalid? 'hidden' : 'visible'"
+        class="continue-button "
+      ><h4
+      >Continue</h4></button>
+
+    </div>
+  </form>
+</div>

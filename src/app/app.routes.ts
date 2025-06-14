@@ -12,6 +12,10 @@ import {MyMentorsPageComponent} from "./modules/my-mentors/page/my-mentors-page/
 import {MyMenteesPageComponent} from "./modules/my-mentees/page/my-mentees-page/my-mentees-page.component";
 import {LoginPageComponent} from "./modules/login/page/login-page/login-page.component";
 import {MainLayoutComponent} from "./modules/main-layout/main-layout/main-layout.component";
+import {
+  RegistrationLayoutPageComponent
+} from "./modules/register/page/registeration-layout-page/registration-layout-page.component";
+import {RolesComponent} from "./modules/register/page/roles/roles.component";
 
 export const routes: Routes = [
   {
@@ -23,6 +27,22 @@ export const routes: Routes = [
     path: "",
     redirectTo: "login",
     pathMatch: "full",
+  },
+  {
+    path: "register",
+    redirectTo: "register/roles",
+    pathMatch: "full",
+  },
+  {
+    path: "register",
+    component: RegistrationLayoutPageComponent,
+    children: [
+      {
+        path: "roles",
+        title: "Roles",
+        component: RolesComponent
+      }
+    ]
   },
   {
     path: "",

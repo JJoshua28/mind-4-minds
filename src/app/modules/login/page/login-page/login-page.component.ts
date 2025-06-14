@@ -26,4 +26,8 @@ export class LoginPageComponent {
     this._router.navigate(['my-mentees']);
   }
 
+  navigateToRegistration () {
+    this._router.navigate(['register']);
+  }
+
 }
