@@ -73,7 +73,6 @@ export class RolesComponent {
       return rolesResults[index]
     })
     const roleTypes = selectedRoles.map(role => role.name)
-    console.log("hmmmmm")
 
     this.registrationService.addRoles(roleTypes);
     this.navigateToUserDetails()
