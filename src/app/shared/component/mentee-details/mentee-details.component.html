@@ -36,14 +36,16 @@
         }
       </ul>
     </div>
-    <div class="list-container page-item">
-      <h5>Neurodivergent Conditions</h5>
-      <ul class="list-unstyled">
-        @for (condition of $mentee().neurodivergentConditions; track condition) {
-          <li class="text-capitalize">{{condition}}</li>
-        }
-      </ul>
-    </div>
+    @if($mentee().neurodivergentConditions.length > 0) {
+      <div class="list-container page-item">
+        <h5>Neurodivergent Conditions</h5>
+        <ul class="list-unstyled">
+          @for (condition of $mentee().neurodivergentConditions; track condition) {
+            <li class="text-capitalize">{{condition}}</li>
+          }
+        </ul>
+      </div>
+    }
     <ng-content></ng-content>
 
   </div>
