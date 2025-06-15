@@ -1,27 +1,11 @@
 import { Routes } from '@angular/router';
-import {MentorSearchPageComponent} from "./modules/mentor-search/page/mentor-search-page/mentor-search-page.component";
-import {InboxPageComponent} from "./modules/inbox/page/inbox-page/inbox-page.component";
-import {ProfileComponent} from "./modules/profile/page/profile/profile.component";
-import {UserDetailsComponent} from "./modules/profile/components/user-details/user-details.component";
-import {EditUserDetailsComponent} from "./modules/profile/page/edit-user-details/edit-user-details.component";
-import {MentorComponent} from "./modules/profile/page/mentor/mentor.component";
-import {EditMentorComponent} from "./modules/profile/page/edit-mentor/edit-mentor.component";
-import {MenteeDetailsPageComponent} from "./modules/profile/page/mentee-details/mentee-details-page.component";
-import {EditMenteeComponent} from "./modules/profile/page/edit-mentee/edit-mentee.component";
-import {MyMentorsPageComponent} from "./modules/my-mentors/page/my-mentors-page/my-mentors-page.component";
-import {MyMenteesPageComponent} from "./modules/my-mentees/page/my-mentees-page/my-mentees-page.component";
-import {LoginPageComponent} from "./modules/login/page/login-page/login-page.component";
-import {MainLayoutComponent} from "./modules/main-layout/main-layout/main-layout.component";
-import {
-  RegistrationLayoutPageComponent
-} from "./modules/register/page/registeration-layout-page/registration-layout-page.component";
-import {RolesComponent} from "./modules/register/page/roles/roles.component";
 
+// Lazy load the profile children routes as a module (exported separately)
 export const routes: Routes = [
   {
     path: "login",
     title: "Login",
-    component: LoginPageComponent
+    loadComponent: () => import('./modules/login/page/login-page/login-page.component').then(m => m.LoginPageComponent),
   },
   {
     path: "",
@@ -35,28 +19,28 @@ export const routes: Routes = [
   },
   {
     path: "register",
-    component: RegistrationLayoutPageComponent,
+    loadComponent: () => import('./modules/register/page/registeration-layout-page/registration-layout-page.component').then(m => m.RegistrationLayoutPageComponent),
     children: [
       {
         path: "roles",
         title: "Roles",
-        component: RolesComponent
+        loadComponent: () => import('./modules/register/page/roles/roles.component').then(m => m.RolesComponent),
       }
     ]
   },
   {
     path: "",
-    component: MainLayoutComponent,
+    loadComponent: () => import('./modules/main-layout/main-layout/main-layout.component').then(m => m.MainLayoutComponent),
     children: [
       {
         path: 'find-a-mentor',
-        component: MentorSearchPageComponent,
         title: 'Find a mentor',
+        loadComponent: () => import('./modules/mentor-search/page/mentor-search-page/mentor-search-page.component').then(m => m.MentorSearchPageComponent),
       },
       {
         path: 'inbox',
-        component: InboxPageComponent,
         title: 'Inbox',
+        loadComponent: () => import('./modules/inbox/page/inbox-page/inbox-page.component').then(m => m.InboxPageComponent),
       },
       {
         path: 'profile',
@@ -66,51 +50,34 @@ export const routes: Routes = [
       {
         path: 'my-mentors',
         title: 'My Mentors',
-        component: MyMentorsPageComponent
+        loadComponent: () => import('./modules/my-mentors/page/my-mentors-page/my-mentors-page.component').then(m => m.MyMentorsPageComponent)
       },
       {
         path: 'my-mentees',
         title: 'My Mentees',
-        component: MyMenteesPageComponent
+        loadComponent: () => import('./modules/my-mentees/page/my-mentees-page/my-mentees-page.component').then(m => m.MyMenteesPageComponent)
       },
       {
         path: 'profile',
-        component: ProfileComponent,
         title: 'Profile',
-        children: [
-          {
-            path: 'user-details',
-            title: 'User Details',
-            component: UserDetailsComponent
-          },
-          {
-            path: 'mentor-details',
-            title: 'Mentor Details',
-            component: MentorComponent
-          },
-          {
-            path: 'mentee-details',
-            title: 'Mentor Details',
-            component: MenteeDetailsPageComponent
-          }
-        ]
+        loadComponent: () => import('./modules/profile/page/profile/profile.component').then(m => m.ProfileComponent),
+        loadChildren: () => import('./modules/profile/profile.routes').then(m => m.profileRoutes)
       },
       {
         path: 'profile/user-details/edit',
-        component:EditUserDetailsComponent,
         title: "Edit: User Details",
+        loadComponent: () => import('./modules/profile/page/edit-user-details/edit-user-details.component').then(m => m.EditUserDetailsComponent),
       },
       {
         path: 'profile/mentor-details/edit',
-        component:EditMentorComponent,
         title: "Edit: Mentor Details",
+        loadComponent: () => import('./modules/profile/page/edit-mentor/edit-mentor.component').then(m => m.EditMentorComponent),
       },
       {
         path: 'profile/mentee-details/edit',
-        component: EditMenteeComponent,
         title: "Edit: Mentee Details",
+        loadComponent: () => import('./modules/profile/page/edit-mentee/edit-mentee.component').then(m => m.EditMenteeComponent),
       }
     ]
   }
-
 ];
