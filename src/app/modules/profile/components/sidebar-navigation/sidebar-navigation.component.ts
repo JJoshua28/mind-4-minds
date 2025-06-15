@@ -1,7 +1,7 @@
 import {Component, inject } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 
-enum NavigationItems {
+export enum NavigationItems {
   USER_DETAILS = "user-details",
   MENTOR_DETAILS = "mentor-details",
   MENTEE_DETAILS = "mentee-details"

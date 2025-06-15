@@ -8,11 +8,6 @@ import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.e
 import {NgClass} from "@angular/common";
 import {UserType} from "../../../../types/user-type.enum";
 
-enum SearchType {
-  ALL = "all",
-  RELATED = "related",
-}
-
 @Component({
   selector: 'app-mentor-search-page',
   standalone: true,
@@ -26,13 +21,6 @@ enum SearchType {
 })
 export class MentorSearchPageComponent {
   @ViewChild(ViewMentorModalComponent) modal!: ViewMentorModalComponent;
-
-  updateSelection(user: User) {
-    if(!this.$selectedUser) this.$selectedUser = signal(user)
-    else this.$selectedUser.set(user);
-  }
-
-  searchType: SearchType = SearchType.ALL;
 
   user: User = {
     id: "1",

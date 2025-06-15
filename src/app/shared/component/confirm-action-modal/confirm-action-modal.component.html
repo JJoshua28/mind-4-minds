@@ -1,5 +1,5 @@
 <div
-  [ngClass]="{'test': isHidden()}"
+  [ngClass]="{'isHidden': isHidden()}"
 >
   <dialog
     #relinquishMentorDutiesModal
@@ -12,6 +12,7 @@
         class="cancel-button"
       ><h6>Cancel</h6></button>
       <button
+        (click)="close()"
         [class]="$type() === ActionTypes.CONFIRM ? 'confirm-button' : 'delete-button'"
       ><h6>Confirm</h6></button>
     </div>
