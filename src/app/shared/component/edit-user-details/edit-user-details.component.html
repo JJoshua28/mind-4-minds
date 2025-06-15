@@ -1,0 +1,153 @@
+<div>
+  @let form = $userDetailsForm();
+  <form
+    [formGroup]="form"
+    class="d-flex gap-5 flex-column"
+  >
+
+    <div class="d-flex gap-3 flex-column mt-5">
+      <div class="d-flex gap-4">
+        <img
+          alt="Your profile picture"
+          [src]="filePreviewUrl()"
+          class="profile-picture rounded"
+        />
+        <div class="d-flex flex-column gap-4">
+          @let occupationControl = form.get("occupation");
+
+          <div>
+              <app-text-input
+                label="occupation"
+                formControlName="occupation"
+              />
+
+              @if (occupationControl?.touched && occupationControl?.errors?.["minlength"]) {
+                <span
+                  class="error-text"
+                >It must be at least 2 characters!</span>
+              }
+          </div>
+
+          <app-date-input
+            [$label]="'occupation start date'"
+            [$initialInput]='form.get("occupationStartDate")?.value ?? ""'
+            formControlName="occupationStartDate"
+          />
+        </div>
+
+      </div>
+      <div
+        class="d-flex flex-column gap-2"
+      >
+        @let profilePicControl = form.get("profilePic");
+
+        <input
+          type="file"
+          (change)="onFileChange($event)"
+          formControlName="profilePic"
+        />
+        <span
+          class="guidance-line"
+        >Add a profile pic! This is required as a mentor</span>
+        @if (profilePicControl?.touched && profilePicControl?.errors?.["required"]) {
+          <span
+            class="error-text"
+          >Required as a mentor!</span>
+        }
+      </div>
+    </div>
+    <div>
+      @let firstNameControl = form.get("firstName");
+
+      <app-text-input
+        label="First name"
+        formControlName="firstName"
+      />
+      @if (firstNameControl?.touched && firstNameControl?.errors?.["required"]) {
+        <span
+          class="error-text"
+        >Required!</span>
+      }
+      @if (firstNameControl?.touched && firstNameControl?.errors?.["minlength"]) {
+        <span
+          class="error-text"
+        >It must be at least 2 characters!</span>
+      }
+    </div>
+
+    <div>
+      @let lastNameControl = form.get("lastName");
+
+      <app-text-input
+        label="last name"
+        formControlName="lastName"
+      />
+      @if (lastNameControl?.touched && lastNameControl?.errors?.["required"]) {
+        <span
+          class="error-text"
+        >Required!</span>
+      }
+      @if (lastNameControl?.touched && lastNameControl?.errors?.["minlength"]) {
+        <span
+          class="error-text"
+        >It must be at least 2 characters!</span>
+      }
+    </div>
+
+    @let emailControl = form.get("email");
+    <div>
+
+      <app-text-input
+        label="email"
+        formControlName="email"
+      />
+      @if(emailControl?.touched && emailControl?.errors?.["email"]) {
+        <span
+          class="error-text"
+        >Valid email required!</span>
+      } @else if (emailControl?.touched && emailControl?.errors?.["required"]) {
+        <span
+          class="error-text"
+        >Required!</span>
+      }
+    </div>
+
+
+      @if($shouldDisplayCurrentPassword()) {
+      <div>
+        <app-text-input
+          label="current password"
+          formControlName="currentPassword"
+        />
+
+        @if ($userDetailsForm().errors?.["currentPasswordRequired"]) {
+          <span class="error-text">Current password is required when changing your password.</span>
+        }
+      </div>
+    }
+
+    @let newPasswordLabel = $changeType() === 'register' ? "password" : "new password";
+    <div>
+      @let passwordControl = form.get("newPassword");
+      <app-text-input
+        [label]="newPasswordLabel"
+        formControlName="newPassword"
+      />
+      @if (passwordControl?.touched && passwordControl?.errors?.["required"]) {
+        <span
+          class="error-text"
+        >Required!</span>
+      }
+      @else if (passwordControl?.touched && passwordControl?.errors?.["minlength"]) {
+        <span
+          class="error-text"
+        >Password must be at least 6 characters!</span>
+      }
+      @else if (passwordControl?.touched && passwordControl?.errors?.["pattern"]) {
+        <span
+          class="error-text"
+        >Password must include letters, numbers, and special characters</span>
+      }
+    </div>
+  </form>
+</div>

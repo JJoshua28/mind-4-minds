@@ -1,0 +1,16 @@
+@import '../../../../styles/themes';
+
+.profile-picture {
+  height: 155px;
+  width: 135px;
+}
+
+.error-text {
+  color: red;
+  font-weight: lighter;
+}
+
+.guidance-line {
+  color: $secondary-colour;
+}
+

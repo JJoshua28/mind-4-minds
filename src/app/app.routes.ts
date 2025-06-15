@@ -20,13 +20,8 @@ export const routes: Routes = [
   {
     path: "register",
     loadComponent: () => import('./modules/register/page/registeration-layout-page/registration-layout-page.component').then(m => m.RegistrationLayoutPageComponent),
-    children: [
-      {
-        path: "roles",
-        title: "Roles",
-        loadComponent: () => import('./modules/register/page/roles/roles.component').then(m => m.RolesComponent),
-      }
-    ]
+    loadChildren: () => import('./modules/register/register.routes').then(m => m.registerRoutes)
+
   },
   {
     path: "",
@@ -66,7 +61,7 @@ export const routes: Routes = [
       {
         path: 'profile/user-details/edit',
         title: "Edit: User Details",
-        loadComponent: () => import('./modules/profile/page/edit-user-details/edit-user-details.component').then(m => m.EditUserDetailsComponent),
+        loadComponent: () => import('./modules/profile/page/edit-user-details/edit-user-details-page.component').then(m => m.EditUserDetailsPageComponent),
       },
       {
         path: 'profile/mentor-details/edit',

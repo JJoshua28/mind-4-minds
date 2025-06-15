@@ -1,0 +1,33 @@
+<main>
+  <div
+    class="w-75 h-100 my-5 mx-auto"
+
+  >
+    <div
+      class="w-100 h-100 d-flex flex-column gap-0 align-items-start pt-5"
+    >
+      <h3>User Details</h3>
+      <h6
+        class="guidance-line"
+      >Your personal info that and login credentials to be used in the system</h6>
+    </div>
+
+    @let editType = "register";
+    <app-edit-user-details
+      [$changeType]="editType"
+
+      [$userDetailsForm]="userDetailsForm"
+    />
+  </div>
+
+  <div class="d-flex justify-content-end w-100 mt-5 continue-button-container">
+    <button
+      type="submit"
+      [style.visibility]="userDetailsForm.invalid? 'hidden' : 'visible'"
+      class="continue-button"
+      (click)="navigateToMenteeDetails(); submitUserDetails()"
+    ><h4
+    >Continue</h4></button>
+
+  </div>
+</main>

@@ -63,7 +63,7 @@ export class RolesComponent {
   }
 
   navigateToUserDetails () {
-    const userDetailsLink = "profile/user-details/edit";
+    const userDetailsLink = "register/user-details";
     this._router.navigate([userDetailsLink]);
   }
 
@@ -73,7 +73,6 @@ export class RolesComponent {
       return rolesResults[index]
     })
     const roleTypes = selectedRoles.map(role => role.name)
-    console.log("hmmmmm")
 
     this.registrationService.addRoles(roleTypes);
     this.navigateToUserDetails()
