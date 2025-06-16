@@ -1,8 +1,14 @@
+@import 'bootstrap/scss/bootstrap';
+
 @import '../../../../../styles/themes';
 @import '../../../../../styles/shared/styles';
 
 .guidance-line {
   color: $secondary-colour;
+}
+
+.user-details-form-container{
+  width: 85%;
 }
 
 .continue-button-container {
@@ -18,4 +24,11 @@
   &:hover {
     color: $tertiary-colour;
   }
+}
+
+@include media-breakpoint-down(sm) {
+  .user-details-form-container{
+    width: 90%;
+  }
+
 }

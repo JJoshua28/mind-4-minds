@@ -1,0 +1,104 @@
+@import 'bootstrap/scss/bootstrap';
+
+@import '../../../../styles/themes';
+@import '../../../../styles/shared/styles';
+
+.icon {
+  font-size: 2rem !important;
+  line-height: 0.5;
+}
+h5 {
+  color: $primary-colour;
+}
+
+li {
+  color: $secondary-colour;
+}
+.trash-icon {
+  color: $secondary-colour;
+  @extend .icon;
+  @extend %is-clickable;
+  &:hover {
+    color: $tertiary-colour;
+  }
+}
+
+.add-icon {
+  @extend .icon;
+}
+
+.add-icon:not(:placeholder-shown) {
+  color: $secondary-colour;
+  @extend %is-clickable;
+  &:hover {
+    color: $tertiary-colour;
+  }
+}
+
+.action-button {
+  background-color: white;
+  font-size: 1.2rem;
+  border:none;
+}
+
+.cancel-button {
+  color: red;
+  @extend .action-button;
+  font-weight: lighter;
+  &:hover {
+    font-weight: normal;
+  }
+}
+
+.save-button {
+  color: $primary-colour;
+  @extend .action-button;
+  &:hover {
+    color: $tertiary-colour;
+  }
+}
+
+.guidance-line {
+  color: $secondary-colour !important;
+  font-weight: lighter;
+}
+
+input[type="checkbox"] {
+
+  @extend %checkbox-input;
+  margin-top: 0;
+}
+
+.list-container {
+
+}
+
+ul {
+  flex-direction: column;
+}
+
+.error-text {
+  color: red;
+  font-weight: lighter;
+}
+@include media-breakpoint-down(sm) {
+  ul li {
+    flex-direction: row-reverse;
+    text-align: left;
+    justify-content: start;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .list-container {
+    justify-content: space-between;
+    display: flex;
+  }
+  ul {
+    li {
+      justify-content: end;
+
+    }
+  }
+}
+

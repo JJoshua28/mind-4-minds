@@ -1,10 +1,13 @@
 import {Component, inject} from '@angular/core';
-import {EditUserDetailsComponent} from "../../../../shared/component/edit-user-details/edit-user-details.component";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {RegistrationService, RegistrationUserDetails} from "../../registration.service";
-import {UserType} from "../../../../types/user-type.enum";
-import { UserFormControls} from "../../../../types/user details/userForm.interface";
 import {Router} from "@angular/router";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+
+import { UserFormControls} from "../../../../types/user details/user-form.interface";
+import {UserType} from "../../../../types/user-type.enum";
+
+import {RegistrationService, RegistrationUserDetails} from "../../registration.service";
+
+import {EditUserDetailsComponent} from "../../../../shared/component/edit-user-details/edit-user-details.component";
 
 @Component({
   selector: 'app-register-user-details-page',
@@ -63,7 +66,7 @@ export class RegisterUserDetailsPageComponent {
   }
 
   navigateToMenteeDetails() {
-    const menteeDetailsRegistrationUrl = "login"
+    const menteeDetailsRegistrationUrl = "register/mentee-details";
     this.userDetailsForm.valid && this._router.navigate([menteeDetailsRegistrationUrl]);
   }
 }

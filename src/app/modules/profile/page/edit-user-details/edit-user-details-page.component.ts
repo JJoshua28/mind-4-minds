@@ -16,7 +16,7 @@ import {DateInputComponent} from "../../../../shared/component/date-input/date-i
 import {EditUserDetailsComponent} from "../../../../shared/component/edit-user-details/edit-user-details.component";
 import {
   UserFormControls
-} from "../../../../types/user details/userForm.interface";
+} from "../../../../types/user details/user-form.interface";
 
 import {RegistrationService} from "../../../register/registration.service";
 

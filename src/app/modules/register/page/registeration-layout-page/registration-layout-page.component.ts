@@ -22,16 +22,17 @@ export class RegistrationLayoutPageComponent implements OnInit {
   registrationOrder: string[] =  [
     "login",
     "/register/roles",
-    "/register/user-details"
+    "/register/user-details",
+    "/register/mentee-details",
   ]
 
   ngOnInit() {
-    const rolesURI = "/register/roles";
-    const canSelectARole = this._router.url === rolesURI;
-    if (!canSelectARole && this.registrationService.roles.length < 1 ) {
-      this._router.navigate([rolesURI]);
+    // const rolesURI = "/register/roles";
+    // const canSelectARole = this._router.url === rolesURI;
+    // if (!canSelectARole && this.registrationService.roles.length < 1 ) {
+    //   this._router.navigate([rolesURI]);
 
-    }
+//    }
   }
 
   navigateBack() {

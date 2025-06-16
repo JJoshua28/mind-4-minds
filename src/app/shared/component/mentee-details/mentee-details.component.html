@@ -23,7 +23,7 @@
     <div class="list-container page-item">
       <h5>Learning Preferences</h5>
       <ul class="list-unstyled">
-        @for (preference of $mentee().learningPreference; track preference) {
+        @for (preference of $mentee().learningPreferences; track preference) {
           <li class="text-capitalize">{{preference}}</li>
         }
       </ul>
@@ -31,7 +31,7 @@
     <div class="list-container page-item">
       <h5>Meeting Preferences</h5>
       <ul class="list-unstyled">
-        @for (preference of $mentee().meetingPreference; track preference) {
+        @for (preference of $mentee().meetingPreferences; track preference) {
           <li class="text-capitalize">{{preference}}</li>
         }
       </ul>

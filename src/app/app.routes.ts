@@ -71,7 +71,7 @@ export const routes: Routes = [
       {
         path: 'profile/mentee-details/edit',
         title: "Edit: Mentee Details",
-        loadComponent: () => import('./modules/profile/page/edit-mentee/edit-mentee.component').then(m => m.EditMenteeComponent),
+        loadComponent: () => import('./modules/profile/page/edit-mentee/edit-mentee-details-page.component').then(m => m.EditMenteeDetailsPageComponent),
       }
     ]
   }

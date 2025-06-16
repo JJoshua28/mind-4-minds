@@ -2,7 +2,7 @@ import {Component, input, OnInit, signal, WritableSignal} from '@angular/core';
 import {TextInputComponent} from "../text-input/text-input.component";
 import {DateInputComponent} from "../date-input/date-input.component";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
-import {UserFormControls} from "../../../types/user details/userForm.interface";
+import {UserFormControls} from "../../../types/user details/user-form.interface";
 
 const editType = {
   EDIT: 'edit',

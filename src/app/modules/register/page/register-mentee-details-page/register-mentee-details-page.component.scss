@@ -3,18 +3,12 @@
 @import '../../../../../styles/themes';
 @import '../../../../../styles/shared/styles';
 
-.guidance-line {
-  color: $secondary-colour;
-}
-
-.roles-form-container {
+.mentee-details-form-container {
   width: 85%;
 }
 
-input {
-  @extend %checkbox-input;
-  margin-top: 0;
-  margin-bottom: .25rem;
+.guidance-line {
+  color: $secondary-colour;
 }
 
 .continue-button-container {
@@ -22,6 +16,7 @@ input {
   position: relative;
   bottom: .1%;
 }
+
 .continue-button {
   position: relative;
   right: 1%;
@@ -32,23 +27,8 @@ input {
   }
 }
 
-.roles-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 2rem;
-  margin-top: 4rem;
-  margin-bottom: 4rem;
-}
-
-
 @include media-breakpoint-down(sm) {
-  .roles-container{
-    flex-direction: column;
-    gap: 1.5rem;
-
-  }
-
-  .roles-form-container {
+  .mentee-details-form-container {
     width: 90%;
   }
 

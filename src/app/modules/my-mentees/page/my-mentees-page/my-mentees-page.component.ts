@@ -34,9 +34,9 @@ export class MyMenteesPageComponent {
       description: "Hi, I am vorname. I have been caring for my Autistic son for 13 years now. \n" +
         "I have experience helping him self-regulate and vibe.",
       goals: ["Win, win, win win", "become a better person"],
-      learningPreference: [LearningPreferences.KINESTHETIC, LearningPreferences.READING],
+      learningPreferences: [LearningPreferences.KINESTHETIC, LearningPreferences.READING],
       expectations: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      meetingPreference: [MeetingPreferences.VIDEO_CALLS, MeetingPreferences.ONLINE_MESSAGING],
+      meetingPreferences: [MeetingPreferences.VIDEO_CALLS, MeetingPreferences.ONLINE_MESSAGING],
       neurodivergentConditions: [NeurodivergenceConditions.ADHD, NeurodivergenceConditions.AUTISM],
       commitment: "I would like a programme for 6 weeks meeting twice a week"
 

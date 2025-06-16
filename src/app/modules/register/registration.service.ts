@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {UserType} from "../../types/user-type.enum";
+import {MenteeDetails} from "../../types/user details/mentee.interface";
 
 export interface RegistrationUserDetails {
   firstName: string
@@ -18,7 +19,8 @@ export interface RegistrationUserDetails {
 })
 export class RegistrationService {
   private _userDetails!: RegistrationUserDetails;
-  _roles: Array<UserType> = [];
+  private _roles: Array<UserType> = [];
+  private _menteeDetails!: MenteeDetails;
 
   get roles () {
     return this._roles;
@@ -28,6 +30,10 @@ export class RegistrationService {
     return this._userDetails;
   }
 
+  get menteeDetails () {
+    return this._menteeDetails;
+  }
+
   addRoles(
     roles: UserType[]) {
     this._roles = roles;
@@ -35,5 +41,9 @@ export class RegistrationService {
 
   addUserDetails(details: RegistrationUserDetails) {
     this._userDetails = details;
+  }
+
+  addMenteeDetails(menteeDetails: MenteeDetails) {
+    this._menteeDetails = menteeDetails;
   }
 }

@@ -2,13 +2,16 @@ import {LearningPreferences} from "./learning-preferences.enum";
 import {MeetingPreferences} from "./mentor/mentor.enum";
 import {NeurodivergenceConditions} from "./neurodivergence.enum";
 
-export interface Mentee {
-  id: string;
+export interface MenteeDetails {
   description: string;
   goals: Array<string>;
-  learningPreference: Array<LearningPreferences>;
+  learningPreferences: Array<LearningPreferences>;
   expectations: string;
-  meetingPreference: Array<MeetingPreferences>
+  meetingPreferences: Array<MeetingPreferences>
   neurodivergentConditions: Array<NeurodivergenceConditions>;
   commitment: string;
+}
+
+export interface Mentee extends MenteeDetails {
+  id: string;
 }
