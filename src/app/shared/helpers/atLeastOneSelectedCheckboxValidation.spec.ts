@@ -16,7 +16,7 @@ describe('atLeastOneTrueValidator', () => {
       new FormControl(false),
     ], { validators: [atLeastOneTrueValidator] });
 
-    expect(array.valid).toBeFalse();
+    expect(array.valid).toBeFalsy();
     expect(array.errors).toEqual({ atLeastOneRequired: true });
   });
 
@@ -27,7 +27,7 @@ describe('atLeastOneTrueValidator', () => {
       new FormControl(false),
     ], { validators: [atLeastOneTrueValidator] });
 
-    expect(array.valid).toBeTrue();
+    expect(array.valid).toBeTruthy();
     expect(array.errors).toBeNull();
   });
 
@@ -38,7 +38,7 @@ describe('atLeastOneTrueValidator', () => {
       new FormControl(true),
     ], { validators: [atLeastOneTrueValidator] });
 
-    expect(array.valid).toBeTrue();
+    expect(array.valid).toBeTruthy();
     expect(array.errors).toBeNull();
   });
 });

@@ -52,7 +52,7 @@ describe('RegisterMenteeDetailsPageComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    const saveButton = fixture.debugElement.query(By.css('continue-button')).nativeElement;
+    const saveButton = fixture.debugElement.query(By.css('.continue-button')).nativeElement;
     expect(saveButton.style.visibility).toBe('hidden');
   });
 
