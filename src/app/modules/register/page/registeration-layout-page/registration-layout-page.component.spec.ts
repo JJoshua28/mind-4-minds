@@ -1,42 +1,82 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';
 import { RegistrationLayoutPageComponent } from './registration-layout-page.component';
-import {RouterTestingModule} from "@angular/router/testing";
-import {Router} from "@angular/router";
-import {LoginPageComponent} from "../../../login/page/login-page/login-page.component";
-import {RolesComponent} from "../roles/roles.component";
-import {ReactiveFormsModule} from "@angular/forms";
+import { UserType } from '../../../../types/user-type.enum';
 
 describe('RegistrationLayoutPageComponent', () => {
-  let fixture: ComponentFixture<RegistrationLayoutPageComponent>;
   let component: RegistrationLayoutPageComponent;
-  let router: Router;
+  let fixture: ComponentFixture<RegistrationLayoutPageComponent>;
+  let mockRouter: any;
+  let mockRegistrationService: any;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        RegistrationLayoutPageComponent,
-        LoginPageComponent,
-        RolesComponent,
-        ReactiveFormsModule,
-        RouterTestingModule.withRoutes([
-          { path: 'login', component: LoginPageComponent },
-          { path: 'register/roles', component: RolesComponent }
-        ])
+  beforeEach(() => {
+    mockRouter = {
+      url: '/register/user-details',
+      navigate: jest.fn()
+    };
+
+    mockRegistrationService = {
+      roles: [UserType.MENTEE],
+      sectionNavigationObserver: jest.fn(() => of(null))
+    };
+
+    TestBed.configureTestingModule({
+      imports: [RegistrationLayoutPageComponent],
+      providers: [
+        { provide: Router, useValue: mockRouter },
+        { provide: 'RegistrationService', useValue: mockRegistrationService }
       ]
-    }).compileComponents();
+    });
 
-    router = TestBed.inject(Router);
     fixture = TestBed.createComponent(RegistrationLayoutPageComponent);
     component = fixture.componentInstance;
-
-    await router.navigateByUrl('/register/roles'); // Set current route
-    fixture.detectChanges();
   });
 
-  it('should navigate back to /login from /register/roles', async () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+
+  it('should map MENTEE role correctly', () => {
+    expect(component.mapUserTypeToRegistrationRoute(UserType.MENTEE)).toBe('/register/mentee-details');
+  });
+
+  it('should map MENTOR role correctly', () => {
+    expect(component.mapUserTypeToRegistrationRoute(UserType.MENTOR)).toBe('/register/mentor-details');
+  });
+
+  it('should return empty string for admin user type', () => {
+    expect(component.mapUserTypeToRegistrationRoute('' as UserType)).toBe('');
+  });
+
+  it('should create correct userRegistrationOrder', () => {
+    component.createRegistrationSteps([UserType.MENTEE, UserType.MENTOR]);
+    expect(component.userRegistrationOrder).toContain('/register/mentee-details');
+    expect(component.userRegistrationOrder).toContain('/register/mentor-details');
+    expect(component.userRegistrationOrder[0]).toBe('login');
+    expect(component.userRegistrationOrder.at(-1)).toBe('/register/review-registration');
+  });
+
+  it('should navigate to the next section', () => {
+    component.userRegistrationOrder = [
+      'login',
+      '/register/roles',
+      '/register/user-details',
+    ];
+    mockRouter.url = '/register/roles';
+    component.navigateToNextSection();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/register/user-details']);
+  });
+
+  it('should navigate back to previous section', () => {
+    component.userRegistrationOrder = [
+      'login',
+      '/register/roles',
+      '/register/user-details',
+    ];
+    mockRouter.url = '/register/user-details';
     component.navigateBack();
-    await fixture.whenStable();
-    expect(router.url).toBe('/login');
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/register/roles']);
   });
 });

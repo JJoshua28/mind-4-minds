@@ -8,7 +8,7 @@ import {
 import {TextInputComponent} from "../../../../shared/component/text-input/text-input.component";
 import {UserType} from "../../../../types/user-type.enum";
 import {TitleCasePipe, UpperCasePipe} from "@angular/common";
-import {Router} from "@angular/router";
+
 import {RegistrationService} from "../../registration.service";
 
 interface Role {
@@ -30,7 +30,6 @@ interface Role {
 })
 export class RolesComponent {
   private readonly registrationService = inject(RegistrationService)
-  private readonly _router = inject(Router);
   private readonly _formBuilder = inject(FormBuilder);
 
   protected readonly roles: Array<Role> = [
@@ -62,10 +61,6 @@ export class RolesComponent {
     return atLeastOneChecked ? null : { required: true };
   }
 
-  navigateToUserDetails () {
-    const userDetailsLink = "register/user-details";
-    this._router.navigate([userDetailsLink]);
-  }
 
   submitRoles () {
     const selectedRoles =  this.roles.filter((roleType, index) => {
@@ -75,6 +70,6 @@ export class RolesComponent {
     const roleTypes = selectedRoles.map(role => role.name)
 
     this.registrationService.addRoles(roleTypes);
-    this.navigateToUserDetails()
+    this.registrationService.navigateToNextSection()
   }
 }

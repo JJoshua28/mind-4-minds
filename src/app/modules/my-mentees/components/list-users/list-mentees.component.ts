@@ -72,7 +72,6 @@ export class ListMenteesComponent implements OnChanges {
     const {
       firstName,
       lastName,
-      email,
       profilePic,
       description,
       occupation,
@@ -84,7 +83,6 @@ export class ListMenteesComponent implements OnChanges {
     return {
       firstName,
       lastName,
-      email,
       profilePic,
       description,
       occupation,

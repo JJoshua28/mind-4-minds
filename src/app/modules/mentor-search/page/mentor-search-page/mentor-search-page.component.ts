@@ -53,7 +53,7 @@ export class MentorSearchPageComponent {
   placeholderMentors: MentorUser[] = [this.$user(), this.$user(), this.$user(),this.$user(),this.$user(),this.$user(),this.$user(),this.$user()];
 
   mentorUserMapInfo(user: MentorUser) {
-    const { mentorDetails, menteeDetails, isArchived, id, ...userInfo } = user;
+    const { mentorDetails, menteeDetails, isArchived, id, email, ...userInfo } = user;
 
     return {
       ...userInfo,

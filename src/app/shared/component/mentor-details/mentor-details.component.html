@@ -49,7 +49,7 @@
       </div>
       <p>{{$mentorDetails().commitment}}</p>
     </div>
-    @if($mentorDetails().neurodivergentConditions.length > 1) {
+    @if($mentorDetails().neurodivergentConditions && $mentorDetails().neurodivergentConditions.length > 0) {
       <div
         class="list-container page-item"
       >

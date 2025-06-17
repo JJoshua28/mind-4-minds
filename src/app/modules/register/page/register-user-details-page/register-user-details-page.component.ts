@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal, Signal} from '@angular/core';
+import {Component, inject, signal } from '@angular/core';
 
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
@@ -18,12 +18,13 @@ import {EditUserDetailsComponent} from "../../../../shared/component/edit-user-d
   templateUrl: './register-user-details-page.component.html',
   styleUrl: './register-user-details-page.component.scss'
 })
-export class RegisterUserDetailsPageComponent implements OnInit {
+export class RegisterUserDetailsPageComponent {
   private readonly _formBuilder = inject(FormBuilder);
 
   registrationService: RegistrationService =inject(RegistrationService);
 
-  protected $profilePicToPreview!: Signal<string>;
+  $profilePicToPreview = signal(this.registrationService.userDetails.storageProfilePic as string);
+
 
   passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/;
 
@@ -41,7 +42,7 @@ export class RegisterUserDetailsPageComponent implements OnInit {
       this.registrationService?.userDetails?.occupationStartDate || ''
     ),
     profilePic: this._formBuilder.control<File | null>(null,
-      this.registrationService?.roles.includes(UserType.MENTOR)
+      this.registrationService?.roles.includes(UserType.MENTOR) && !this.$profilePicToPreview()
         ? Validators.required
         : []
     ),
@@ -57,10 +58,6 @@ export class RegisterUserDetailsPageComponent implements OnInit {
       ]
     )
   });
-
-  ngOnInit() {
-    this.$profilePicToPreview = signal(this.registrationService.userDetails.storageProfilePic as string);
-  }
 
   submitUserDetails() {
     if(this.userDetailsForm.valid) {

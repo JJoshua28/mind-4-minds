@@ -5,7 +5,7 @@ import {experienceDuration} from '../../helpers/experienceDurations';
 import { UserType } from "../../../types/user-type.enum";
 import {UserInfo} from "../../../types/user details/user-info.interface";
 
-export interface CardInfo extends UserInfo {
+export interface CardInfo extends Omit<UserInfo, 'email'> {
   description: string;
   neurodivergentConditions: string[];
 }

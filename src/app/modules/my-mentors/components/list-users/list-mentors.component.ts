@@ -50,7 +50,6 @@ export class ListMentorsComponent implements OnChanges {
     const {
       firstName,
       lastName,
-      email,
       profilePic,
       description,
       occupation,
@@ -62,7 +61,6 @@ export class ListMentorsComponent implements OnChanges {
     return {
       firstName,
       lastName,
-      email,
       profilePic,
       description,
       occupation,

@@ -4,7 +4,7 @@
       <h5>Description</h5>
       <p>{{$mentee().description}}</p>
     </div>
-    <div class="list-container page-item">
+    <div class="page-item">
       <h5>Goals</h5>
       <ul class="list-unstyled">
         @for (goal of $mentee().goals; track goal) {
@@ -38,7 +38,7 @@
         }
       </ul>
     </div>
-    @if($mentee().neurodivergentConditions.length > 0) {
+    @if($mentee().neurodivergentConditions && $mentee().neurodivergentConditions.length > 0) {
       <div class="list-container page-item">
         <h5>Neurodivergent Conditions</h5>
         <ul class="list-unstyled">

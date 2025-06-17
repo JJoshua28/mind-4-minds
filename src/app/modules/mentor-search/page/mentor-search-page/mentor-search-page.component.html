@@ -24,7 +24,7 @@
     }
   </div>
 </div>
-@if (placeholderMentors.length > 1) {
+@if (placeholderMentors.length > 0) {
   @let user = $selectedUser();
   <app-view-mentor-modal
     [$userInfo]="user"
