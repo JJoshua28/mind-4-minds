@@ -1,8 +1,8 @@
-<app-list-users
+<app-list-mentors
   [$userType]="userType"
   [$heading]="heading"
   [$noConnectionsMessage]="noMentorsMessage"
-  [$users]="users"
+  [$users]="mapUserCardInfo(users)"
   (isHoveringOnUserCard)="isHoveringOnUserCard=$event"
 >
-</app-list-users>
+</app-list-mentors>

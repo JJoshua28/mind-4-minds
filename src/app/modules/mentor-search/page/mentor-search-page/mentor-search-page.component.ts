@@ -1,12 +1,13 @@
-import {Component, signal, ViewChild, WritableSignal} from '@angular/core';
+import {Component, computed, Signal, signal, ViewChild, WritableSignal} from '@angular/core';
 
 import {UserCardComponent} from "../../../../shared/component/user-card/user-card.component";
 import {ViewMentorModalComponent} from "../../components/view-mentor-modal/view-mentor-modal.component";
 import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
-import {MentorUser, User} from "../../../../types/user.interface";
+import {MentorUser } from "../../../../types/user.interface";
 import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
 import {NgClass} from "@angular/common";
 import {UserType} from "../../../../types/user-type.enum";
+import {MentorInfo} from "../../../../types/user details/user-info.interface";
 
 @Component({
   selector: 'app-mentor-search-page',
@@ -22,7 +23,7 @@ import {UserType} from "../../../../types/user-type.enum";
 export class MentorSearchPageComponent {
   @ViewChild(ViewMentorModalComponent) modal!: ViewMentorModalComponent;
 
-  user: MentorUser = {
+  $user: WritableSignal<MentorUser> = signal({
     id: "1",
     firstName: "vorname",
     email: "vorname@gmail.com",
@@ -42,21 +43,26 @@ export class MentorSearchPageComponent {
         "I have experience helping him self-regulate and vibe.",
       isAvailable: false,
     }
-  }
+  })
 
-  placeholderMentors: MentorUser[] = [this.user, this.user, this.user,this.user,this.user,this.user,this.user,this.user];
+  $mentorInfo: Signal<MentorInfo>  = computed(() => {
+    const {id, isAvailable, ...mentorInfo} = this.$selectedUser().mentorDetails;
+    return mentorInfo;
+  })
+
+  placeholderMentors: MentorUser[] = [this.$user(), this.$user(), this.$user(),this.$user(),this.$user(),this.$user(),this.$user(),this.$user()];
 
   mentorUserMapInfo(user: MentorUser) {
     const { mentorDetails, menteeDetails, isArchived, id, ...userInfo } = user;
-    const { id: mentorId, isAvailable, ...mentorInfo } = mentorDetails;
 
     return {
       ...userInfo,
-      ...mentorInfo
+      description: mentorDetails.description,
+      neurodivergentConditions: mentorDetails.neurodivergentConditions,
     };
   }
 
-  $selectedUser: WritableSignal<User> = signal(this.placeholderMentors[0]);
+  $selectedUser: WritableSignal<MentorUser> = signal(this.placeholderMentors[0]);
 
   protected readonly UserType = UserType;
 }

@@ -19,30 +19,30 @@
       <div class="personal-details-container mb-5 mx-auto">
         <img
           alt="Janelle Monae"
-          [src]="$user().profilePic"
+          [src]="$userInfo().profilePic"
           class="profile-picture rounded"
         />
         <div class="d-flex flex-column">
           <div class="text-truncate d-inline-block">
             <h4
               class="text-truncate text-capitalize"
-            >{{$user().firstname}} {{$user().surname}}</h4>
+            >{{$userInfo().firstName}} {{$userInfo().lastName}}</h4>
           </div>
           <div>
-            <h6 class="text-capitalize pb-0 lh-1" >{{$user().occupation}}</h6>
-            <h6 class="text-capitalize email lh-1">{{ experienceDuration($user().occupationStartDate) }}</h6>
+            @if ($userInfo().occupation) {<h6 class="text-capitalize pb-0 lh-1" >{{$userInfo().occupation}}</h6>}
+            @if ($userInfo().occupationStartDate) {<h6 class="text-capitalize email lh-1">{{ experienceDuration($occupationStartDate()) }}</h6>}
           </div>
 
         </div>
       </div>
-      @let mentor = $user().mentorDetails;
-      @if(mentor) {
+
+      @if($mentorInfo()) {
         <div
           class="details-container mx-auto"
         >
           <app-mentor-details
             class="w-100"
-            [$mentorDetails]="mentor"
+            [$mentorDetails]="$mentorInfo()"
           />
         </div>
       }

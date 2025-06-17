@@ -3,12 +3,12 @@ import {Component, EventEmitter, input, OnInit, Output, signal, WritableSignal} 
 
 import {experienceDuration} from '../../helpers/experienceDurations';
 import { UserType } from "../../../types/user-type.enum";
+import {UserInfo} from "../../../types/user details/user-info.interface";
 
-import {MenteeInfo, MentorInfo, UserInfo} from "../../../types/user details/user-info.interface";
-
-
-interface MentorUserInfo extends UserInfo, MentorInfo {}
-interface MenteeUserInfo extends UserInfo, MenteeInfo {}
+export interface CardInfo extends UserInfo {
+  description: string;
+  neurodivergentConditions: string[];
+}
 
 @Component({
   selector: 'app-user-card',
@@ -21,7 +21,7 @@ export class UserCardComponent implements OnInit{
   @Output() cardContainerClicked = new EventEmitter<void>();
   @Output() isHovering = new EventEmitter<boolean>();
 
-  public readonly $user = input.required<MentorUserInfo | MenteeUserInfo>();
+  public readonly $userCardInfo = input.required<CardInfo>();
   $userType = input.required<UserType>();
 
   occupationStartDate!: Date;
@@ -34,6 +34,6 @@ export class UserCardComponent implements OnInit{
   protected readonly userType = UserType;
 
   ngOnInit() {
-    if(this.$user().occupationStartDate) this.occupationStartDate = new Date(this.$user().occupationStartDate as string)
+    if(this.$userCardInfo().occupationStartDate) this.occupationStartDate = new Date(this.$userCardInfo().occupationStartDate as string)
   }
 }

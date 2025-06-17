@@ -1,16 +1,17 @@
-import { Component } from '@angular/core';
-import {ListUsersComponent} from "../../../../shared/component/list-users/list-users.component";
-import {User} from "../../../../types/user.interface";
+import {Component, signal, WritableSignal} from '@angular/core';
+import {ListMentorsComponent} from "../../components/list-users/list-mentors.component";
+import {MentorUser} from "../../../../types/user.interface";
 import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
 import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
 import {NgClass} from "@angular/common";
 import {UserType} from "../../../../types/user-type.enum";
+import { MentorInfo, UserInfo} from "../../../../types/user details/user-info.interface";
 
 @Component({
   selector: 'app-my-mentors-page',
   standalone: true,
   imports: [
-    ListUsersComponent,
+    ListMentorsComponent,
     NgClass
   ],
   templateUrl: './my-mentors-page.component.html',
@@ -23,7 +24,7 @@ export class MyMentorsPageComponent {
   protected userType = UserType.MENTOR
 
 
-  user: User = {
+  $mentor: WritableSignal<MentorUser> = signal({
     id: "1",
     firstName: "vorname",
     email: "vorname@gmail.com",
@@ -43,9 +44,36 @@ export class MyMentorsPageComponent {
         "I have experience helping him self-regulate and vibe.",
       isAvailable: false,
     }
+  })
+
+  mapUserCardInfo (users: MentorUser[]): (MentorInfo & UserInfo)[] {
+    return users.map(user => {
+      const {
+        firstName,
+        lastName,
+        email,
+        profilePic,
+        occupation,
+        occupationStartDate,
+
+      } = user;
+
+      const {isAvailable, id, ...mentorInfo} = user.mentorDetails;
+
+      return {
+        firstName,
+        lastName,
+        email,
+        profilePic,
+        occupation,
+        ...mentorInfo,
+        occupationStartDate,
+      }
+    })
   }
 
-  users: User[] = [this.user, this.user, this.user,this.user,this.user,this.user,this.user,this.user];
+
+  users: MentorUser[] = [this.$mentor(), this.$mentor(), this.$mentor(),this.$mentor(),this.$mentor(),this.$mentor(),this.$mentor(),this.$mentor()];
 
 
 }

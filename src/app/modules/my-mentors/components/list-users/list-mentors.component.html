@@ -7,7 +7,7 @@
       <app-user-card
         [$userType]="$userType()"
         #card
-        [$user]="user"
+        [$userCardInfo]="mapUserCardInfo(user)"
         (cardContainerClicked)="$selectedUser.set(user); viewUserModal.show()"
       >
         <div
@@ -26,10 +26,11 @@
     }
   </div>
 </div>
-@if ($users().length > 1) {
+@if ($users().length > 1 && $userType() === "mentor") {
   @let user = $selectedUser();
   <app-view-mentor-modal
-    [$user]="user"
+    [$userInfo]="user"
+    [$mentorInfo]="$mentorInfo()"
   />
 }
 

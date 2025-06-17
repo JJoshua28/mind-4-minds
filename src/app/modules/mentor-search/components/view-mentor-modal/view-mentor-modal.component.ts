@@ -1,6 +1,7 @@
-import {Component, ElementRef, input, signal, ViewChild, WritableSignal} from '@angular/core';
+import {Component, computed, ElementRef, input, Signal, signal, ViewChild, WritableSignal} from '@angular/core';
 import {NgClass} from "@angular/common";
-import {User} from "../../../../types/user.interface";
+
+import { MentorInfo, UserInfo } from "../../../../types/user details/user-info.interface";
 
 import {MenteeDetailsComponent} from "../../../../shared/component/mentee-details/mentee-details.component";
 import {MentorDetailsComponent} from "../../../../shared/component/mentor-details/mentor-details.component";
@@ -24,7 +25,12 @@ export class ViewMentorModalComponent {
   isHidden: WritableSignal<boolean>= signal(true);
   $canConnectToMentor = input<boolean>(false)
 
-  $user = input.required<User>()
+  $userInfo = input.required<UserInfo>()
+  $mentorInfo = input.required<MentorInfo>()
+
+  $occupationStartDate: Signal<Date> = computed(() => {
+    return new Date(this.$userInfo()?.occupationStartDate as string);
+  })
 
   protected readonly experienceDuration = experienceDuration;
 

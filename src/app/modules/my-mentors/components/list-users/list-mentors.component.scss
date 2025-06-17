@@ -1,0 +1,29 @@
+@import '../../../../../styles/themes';
+@import '../../../../../styles/shared/styles';
+
+.main-content-padding {
+  margin:auto;
+  display: grid;
+  padding-bottom: 100px;
+}
+
+.button-link {
+  border: none;
+  background-color: transparent;
+  color: $primary-colour;
+
+  &:hover {
+    color: $tertiary-colour !important;
+  }
+}
+
+.leave-mentor-button {
+  @extend %shared-button-styling;
+  color: red;
+  font-weight: normal !important;
+  &:hover {
+    font-weight: bolder !important;
+  }
+}
+
+

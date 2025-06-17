@@ -1,16 +1,19 @@
 import { Component } from '@angular/core';
-import {User} from "../../../../types/user.interface";
+
 import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
 import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
-import {ListUsersComponent} from "../../../../shared/component/list-users/list-users.component";
+import {ListMentorsComponent} from "../../../my-mentors/components/list-users/list-mentors.component";
 import {UserType} from "../../../../types/user-type.enum";
 import {LearningPreferences} from "../../../../types/user details/learning-preferences.enum";
+import {MenteeInfo, UserInfo} from "../../../../types/user details/user-info.interface";
+import {ListMenteesComponent} from "../../components/list-users/list-mentees.component";
 
 @Component({
   selector: 'app-my-mentees-page',
   standalone: true,
   imports: [
-    ListUsersComponent
+    ListMentorsComponent,
+    ListMenteesComponent
   ],
   templateUrl: './my-mentees-page.component.html',
   styleUrl: './my-mentees-page.component.scss'
@@ -21,18 +24,14 @@ export class MyMenteesPageComponent {
   protected isHoveringOnUserCard = false
   protected userType = UserType.MENTEE
 
-  user: User = {
-    id: "1",
+  user: UserInfo & MenteeInfo = {
     firstName: "vorname",
     email: "vorname@gmail.com",
     lastName: "nachname",
     occupation: "carer",
-    isArchived: false,
     occupationStartDate: new Date(5).toDateString(),
     profilePic: "https://cdn.britannica.com/54/252154-050-881EE55B/janelle-monae-glass-onion-knives-out-film-premiere.jpg",
-    menteeDetails: {
-      id: "1",
-      description: "Hi, I am vorname. I have been caring for my Autistic son for 13 years now. \n" +
+    description: "Hi, I am vorname. I have been caring for my Autistic son for 13 years now. \n" +
         "I have experience helping him self-regulate and vibe.",
       goals: ["Win, win, win win", "become a better person"],
       learningPreferences: [LearningPreferences.KINESTHETIC, LearningPreferences.READING],
@@ -41,10 +40,10 @@ export class MyMenteesPageComponent {
       neurodivergentConditions: [NeurodivergenceConditions.ADHD, NeurodivergenceConditions.AUTISM],
       commitment: "I would like a programme for 6 weeks meeting twice a week"
 
-    }
+
   }
 
-  users: User[] = [this.user, this.user, this.user,this.user,this.user,this.user,this.user,this.user];
+  users = [this.user, this.user, this.user,this.user,this.user,this.user,this.user,this.user];
 
 
 }

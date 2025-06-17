@@ -16,6 +16,6 @@ export interface MentorUser extends User {
   mentorDetails: MentorDetails;
 }
 
-export interface Mentee extends User {
+export interface MenteeUser extends User {
   menteeDetails: MenteeDetails
 }

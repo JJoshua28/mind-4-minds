@@ -7,7 +7,7 @@
       <app-user-card
         [$userType]="UserType.MENTOR"
         #card
-        [$user]="mentorUserMapInfo(user)"
+        [$userCardInfo]="mentorUserMapInfo(user)"
         (cardContainerClicked)="$selectedUser.set(user); modal.show()"
       >
         <div
@@ -27,7 +27,8 @@
 @if (placeholderMentors.length > 1) {
   @let user = $selectedUser();
   <app-view-mentor-modal
-    [$user]="user"
+    [$userInfo]="user"
+    [$mentorInfo]="$mentorInfo()"
     [$canConnectToMentor]="true"
   />
 }
