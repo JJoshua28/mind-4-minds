@@ -50,7 +50,7 @@ export class RegisterMentorDetailsPageComponent implements OnInit, OnDestroy {
     experience: this._formBuilder.nonNullable.control(this.mentorDetails?.experience || ""),
     meetingPreferences: this._formBuilder.nonNullable.array(
       this.meetingPreferenceOptions.map(preference => {
-        const defaultValue = this.mentorDetails?.meetingPreferences.includes(preference);
+        const defaultValue = this.mentorDetails?.meetingPreferences && this.mentorDetails?.meetingPreferences.includes(preference) || false;
         return this._formBuilder.nonNullable.control(defaultValue)
       }),
       {validators: [atLeastOneTrueValidator]
@@ -58,7 +58,7 @@ export class RegisterMentorDetailsPageComponent implements OnInit, OnDestroy {
     ),
     neurodivergentConditions: this._formBuilder.nonNullable.array(
       this.neurodivergentConditionOptions.map(condition => {
-        const defaultValue = this.mentorDetails?.neurodivergentConditions.includes(condition);
+        const defaultValue = this.mentorDetails?.neurodivergentConditions && this.mentorDetails?.neurodivergentConditions.includes(condition) || false;
         return this._formBuilder.nonNullable.control(defaultValue)
       })
     ),
@@ -97,8 +97,18 @@ export class RegisterMentorDetailsPageComponent implements OnInit, OnDestroy {
       this.$user = computed(() => userCardInfo());
     })
   );
-
 }
+  submitRegistrationMentor() {
+    const meetingPreferences = this.meetingPreferenceOptions.filter((value, index) => this.$mentorDetailsForm()?.value?.meetingPreferences?.[index]);
+    const neurodivergentConditions = this.neurodivergentConditionOptions.filter((value, index) => this.$mentorDetailsForm()?.value?.neurodivergentConditions?.[index]);
+
+    const details = this.$mentorDetailsForm().value as Partial<MentorInfo>;
+    this.registrationService.addMentorDetails({
+      ...details,
+      meetingPreferences,
+      neurodivergentConditions
+    } as MentorInfo);
+  }
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();

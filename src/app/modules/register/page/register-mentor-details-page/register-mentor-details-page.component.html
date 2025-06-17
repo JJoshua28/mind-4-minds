@@ -29,7 +29,7 @@
       type="submit"
       [style.visibility]="$mentorDetailsForm().invalid? 'hidden' : 'visible'"
       class="continue-button"
-
+      (click)="submitRegistrationMentor()"
     ><h4
     >Continue</h4></button>
   </div>
