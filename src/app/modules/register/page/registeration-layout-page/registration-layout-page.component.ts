@@ -26,16 +26,16 @@ export class RegistrationLayoutPageComponent implements OnInit, OnDestroy {
     "/register/roles",
     "/register/user-details",
     "/register/mentee-details",
-    "/register/mentor-details"
+    "/register/mentor-details",
+    "/register/review-registration"
   ]
 
   ngOnInit() {
-    // const rolesURI = "/register/roles";
-    // const canSelectARole = this._router.url === rolesURI;
-    // if (!canSelectARole && this.registrationService.roles.length < 1 ) {
-    //   this._router.navigate([rolesURI]);
-
-//    }
+    const rolesURI = "/register/roles";
+    const canSelectARole = this._router.url === rolesURI;
+    if (!canSelectARole && this.registrationService.roles.length < 1 ) {
+      this._router.navigate([rolesURI]);
+   }
     this.subscriptions.add(this.registrationService.sectionNavigationObserver().subscribe(() => {
       this.navigateToNextSection();
     }))

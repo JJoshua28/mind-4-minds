@@ -1,8 +1,18 @@
-import {Component, input, OnInit, signal, WritableSignal} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  input,
+
+  OnInit,
+  signal,
+  ViewChild,
+  WritableSignal
+} from '@angular/core';
 import {TextInputComponent} from "../text-input/text-input.component";
 import {DateInputComponent} from "../date-input/date-input.component";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import {UserFormControls} from "../../../types/user details/user-form.interface";
+
 
 const editType = {
   EDIT: 'edit',
@@ -23,21 +33,21 @@ type EditType = typeof editType[keyof typeof editType];
   styleUrl: './edit-user-details.component.scss'
 })
 export class EditUserDetailsComponent implements OnInit {
+  @ViewChild("profilePic") profilePic!: ElementRef;
 
   $changeType = input.required<EditType>()
   $shouldDisplayCurrentPassword!: WritableSignal<boolean>;
-
   defaultProfilePic = "https://upload.wikimedia.org/wikipedia/commons/b/b5/Windows_10_Default_Profile_Picture.svg"
-  filePreviewUrl!: WritableSignal<string> ;
+  $currentProfilePic = input<string>(this.defaultProfilePic)
+  filePreviewUrl!: WritableSignal<string>;
+
 
   $userDetailsForm = input.required<FormGroup<UserFormControls>>();
 
   ngOnInit() {
     this.$shouldDisplayCurrentPassword = signal(this.$changeType() === "edit")
 
-    const {profilePic } = this.$userDetailsForm().value;
-    const previewImage = profilePic?
-      URL.createObjectURL(profilePic) : this.defaultProfilePic
+    const previewImage = this.$currentProfilePic()?.trim() || this.defaultProfilePic;
 
     this.filePreviewUrl = signal(previewImage);
 

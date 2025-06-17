@@ -108,6 +108,8 @@ export class RegisterMentorDetailsPageComponent implements OnInit, OnDestroy {
       meetingPreferences,
       neurodivergentConditions
     } as MentorInfo);
+
+    this.registrationService.navigateToNextSection()
   }
 
   ngOnDestroy() {
