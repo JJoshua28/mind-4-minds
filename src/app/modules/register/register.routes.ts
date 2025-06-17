@@ -17,5 +17,10 @@ export const registerRoutes: Routes = [
     title: "Mentee Details",
     loadComponent: () => import('./page/register-mentee-details-page/register-mentee-details-page.component').then(m => m.RegisterMenteeDetailsPageComponent),
 
+  },
+  {
+    path: "mentor-details",
+    title: "Mentor Details",
+    loadComponent: () => import('./page/register-mentor-details-page/register-mentor-details-page.component').then(m => m.RegisterMentorDetailsPageComponent)
   }
 ];

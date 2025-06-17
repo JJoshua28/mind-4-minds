@@ -4,17 +4,18 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular
 import {LearningPreferences} from "../../../../types/user details/learning-preferences.enum";
 import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
 import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
-import { MenteeDetails } from "../../../../types/user details/mentee.interface";
+
 import {TextAreaInputComponent} from "../../../../shared/component/textarea-input/text-area-input.component";
 import {TextInputComponent} from "../../../../shared/component/text-input/text-input.component";
 import {Router} from "@angular/router";
 import {RegistrationService} from "../../../register/registration.service";
-import {MenteeDetailsFormControls} from "../../../../types/user details/mentee-details.interface";
+import {MenteeDetailsFormControls} from "../../../../types/user details/mentee-details-form.interface";
 import {minLengthArray} from "../../../../shared/helpers/minArrayLengthFormControlValidation";
 import {atLeastOneTrueValidator} from "../../../../shared/helpers/atLeastOneSelectedCheckboxValidation";
 import {
   EditMenteeDetailsComponent
 } from "../../../../shared/component/edit-mentee-details/edit-mentee-details.component";
+import { MenteeInfo } from "../../../../types/user details/user-info.interface";
 
 @Component({
   selector: 'app-edit-mentee-details-page',
@@ -39,7 +40,7 @@ export class EditMenteeDetailsPageComponent {
   meetingPreferenceOptions = Object.values(MeetingPreferences);
   neurodivergentConditionOptions = Object.values(NeurodivergenceConditions);
 
-  mentee: MenteeDetails = this.registrationService.menteeDetails;
+  mentee: MenteeInfo = this.registrationService.menteeDetails;
 
   $menteeDetailsForm: WritableSignal<FormGroup<MenteeDetailsFormControls>> = signal(this._formBuilder.group({
     description: this._formBuilder.nonNullable.control(this.mentee?.description || "", [Validators.required]),
@@ -75,15 +76,19 @@ export class EditMenteeDetailsPageComponent {
   }));
 
   submitMenteeDetails() {
-    const learningPreferences = this.learningPreferenceOptions.filter((value, index) => this.$menteeDetailsForm()?.value?.learningPreferences?.[index]);
-    const meetingPreferences = this.meetingPreferenceOptions.filter((value, index) => this.$menteeDetailsForm()?.value?.meetingPreferences?.[index]);
+    const learningPreferences: LearningPreferences[] = this.learningPreferenceOptions.filter((value, index) => this.$menteeDetailsForm()?.value?.learningPreferences?.[index]);
+    const meetingPreferences: MeetingPreferences[] = this.meetingPreferenceOptions.filter((value, index) => this.$menteeDetailsForm()?.value?.meetingPreferences?.[index]);
+    const neurodivergentConditions: NeurodivergenceConditions[] = this.neurodivergentConditionOptions.filter((value, index) => this.$menteeDetailsForm()?.value?.neurodivergentConditions?.[index]);
 
-    const details = this.$menteeDetailsForm().value as Partial<MenteeDetails>;
-    this.registrationService.addMenteeDetails({
-      ...details,
+
+    const details = {
+      ...this.$menteeDetailsForm().value,
       learningPreferences,
-      meetingPreferences
-    } as MenteeDetails);
+      meetingPreferences,
+      neurodivergentConditions
+    }as MenteeInfo
+
+    this.registrationService.addMenteeDetails(details);
   }
 
 

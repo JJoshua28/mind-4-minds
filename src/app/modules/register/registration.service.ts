@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import {UserType} from "../../types/user-type.enum";
-import {MenteeDetails} from "../../types/user details/mentee.interface";
 
-export interface RegistrationUserDetails {
-  firstName: string
-  lastName: string
-  occupation: string | null
-  occupationStartDate: string | null
+import {UserType} from "../../types/user-type.enum";
+
+import {MenteeInfo, MentorInfo, UserInfo} from "../../types/user details/user-info.interface";
+import {Subject} from "rxjs";
+
+export interface RegistrationUserDetails extends Omit<UserInfo, 'profilePic'> {
   currentPassword?: string | null | undefined
   profilePic: File | null
   email: string
@@ -20,7 +19,9 @@ export interface RegistrationUserDetails {
 export class RegistrationService {
   private _userDetails!: RegistrationUserDetails;
   private _roles: Array<UserType> = [];
-  private _menteeDetails!: MenteeDetails;
+  private _menteeDetails!: MenteeInfo;
+  private _mentorDetails!: MentorInfo;
+  private _navigateToNextSection: Subject<void> = new Subject<void>();
 
   get roles () {
     return this._roles;
@@ -34,6 +35,10 @@ export class RegistrationService {
     return this._menteeDetails;
   }
 
+  get mentorDetails () {
+    return this._mentorDetails;
+  }
+
   addRoles(
     roles: UserType[]) {
     this._roles = roles;
@@ -43,7 +48,19 @@ export class RegistrationService {
     this._userDetails = details;
   }
 
-  addMenteeDetails(menteeDetails: MenteeDetails) {
+  addMenteeDetails(menteeDetails: MenteeInfo) {
     this._menteeDetails = menteeDetails;
+  }
+
+  addMentorDetails(mentorDetails: MentorInfo) {
+    this._mentorDetails = mentorDetails;
+  }
+
+  sectionNavigationObserver() {
+    return this._navigateToNextSection.asObservable();
+  }
+
+  navigateToNextSection() {
+    this._navigateToNextSection.next();
   }
 }

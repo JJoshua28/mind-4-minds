@@ -35,6 +35,20 @@
         <p>{{$mentorDetails().experience}}</p>
       </div>
     }
+    <div class="page-item">
+      <div
+        class="mb-2"
+      >
+        <h5
+          class="pb-0 mb-0"
+        >Commitment</h5>
+        <span
+          class="support-text"
+        >Your commitment to the mentorship</span>
+
+      </div>
+      <p>{{$mentorDetails().commitment}}</p>
+    </div>
     @if($mentorDetails().neurodivergentConditions.length > 1) {
       <div
         class="list-container page-item"

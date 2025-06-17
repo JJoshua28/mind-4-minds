@@ -1,28 +1,21 @@
-import {Mentee} from "./user details/mentee.interface";
-import {Mentor} from "./user details/mentor/mentor.interface";
+import { MenteeDetails} from "./user details/mentee.interface";
+import {UserInfo} from "./user details/user-info.interface";
+import {MentorDetails} from "./user details/mentor/mentor.interface";
 
-
-export interface User {
+export interface UserDetails extends UserInfo {
   id: string;
-  firstname: string;
-  surname: string;
-  occupation: string;
-  profilePic: string;
-  occupationStartDate: Date;
-  email: string;
-  menteeDetails?: Mentee
-  mentorDetails?: Mentor
+  isArchived: boolean;
 }
 
-export interface MentorUser {
-  id: string;
-  firstname: string;
-  surname: string;
-  occupation: string;
-  profilePic: string;
-  occupationStartDate: Date;
-  email: string;
-  menteeDetails?: Mentee
-  mentorDetails: Mentor
+export interface User extends UserDetails {
+  menteeDetails?: MenteeDetails
+  mentorDetails?: MentorDetails
 }
 
+export interface MentorUser extends User {
+  mentorDetails: MentorDetails;
+}
+
+export interface Mentee extends User {
+  menteeDetails: MenteeDetails
+}

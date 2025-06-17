@@ -3,12 +3,13 @@ import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.e
 import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
 import {LearningPreferences} from "../../../../types/user details/learning-preferences.enum";
 import {Router} from "@angular/router";
-import {Mentee} from "../../../../types/user details/mentee.interface";
+
 import {
   ActionTypes,
   ConfirmActionModalComponent
 } from "../../../../shared/component/confirm-action-modal/confirm-action-modal.component";
 import {MenteeDetailsComponent} from "../../../../shared/component/mentee-details/mentee-details.component";
+import {MenteeInfo} from "../../../../types/user details/user-info.interface";
 
 
 const mentee = {
@@ -37,7 +38,7 @@ const mentee = {
 export class MenteeDetailsPageComponent {
   private readonly _router = inject(Router);
 
-  $mentee = input<Mentee>(mentee)
+  $mentee = input<MenteeInfo>(mentee)
 
   @ViewChild(ConfirmActionModalComponent) relinquishMentorDutiesModal!: ConfirmActionModalComponent;
   protected readonly modalActionType = ActionTypes.DELETE;

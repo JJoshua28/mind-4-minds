@@ -1,5 +1,5 @@
 import {Component, input} from '@angular/core';
-import {Mentee} from "../../../types/user details/mentee.interface";
+import {MenteeInfo} from "../../../types/user details/user-info.interface";
 
 @Component({
   selector: 'app-mentee-details',
@@ -9,5 +9,5 @@ import {Mentee} from "../../../types/user details/mentee.interface";
   styleUrl: './mentee-details.component.scss'
 })
 export class MenteeDetailsComponent {
-  $mentee = input.required<Mentee>();
+  $mentee = input.required<MenteeInfo>();
 }

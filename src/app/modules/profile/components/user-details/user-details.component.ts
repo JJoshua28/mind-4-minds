@@ -1,16 +1,9 @@
-import {Component, inject, signal, WritableSignal} from '@angular/core';
+import {Component, computed, inject, Signal, signal, WritableSignal} from '@angular/core';
 import {Router} from "@angular/router";
 import {experienceDuration} from "../../../../shared/helpers/experienceDurations";
 
-export interface UserDetails {
-  id: number;
-  firstname: string;
-  surname: string;
-  occupation: string;
-  profilePic: string;
-  occupationStartDate: Date;
-  email: string;
-}
+import {UserInfo} from "../../../../types/user details/user-info.interface";
+
 
 
 @Component({
@@ -23,15 +16,20 @@ export interface UserDetails {
 export class UserDetailsComponent {
   private _router = inject(Router);
 
-  user: WritableSignal<UserDetails> = signal({
+  $user: WritableSignal<UserInfo> = signal({
     id: 1,
-    firstname: "vorname",
+    firstName: "vorname",
     email: "vorname@gmail.com",
-    surname: "nachname",
+    lastName: "nachname",
     occupation: "carer",
-    occupationStartDate: new Date(5),
+    occupationStartDate: new Date(5).toDateString(),
     profilePic: "https://cdn.britannica.com/54/252154-050-881EE55B/janelle-monae-glass-onion-knives-out-film-premiere.jpg"
   })
+
+  $occupationStartDate: Signal<Date> = computed(() => {
+      return new Date(this.$user()?.occupationStartDate as string);
+  })
+
 
   editDetails() {
     this._router.navigate(['/profile/user-details/edit']);
@@ -39,4 +37,5 @@ export class UserDetailsComponent {
 
 
   protected readonly experienceDuration = experienceDuration;
+  protected readonly Date = Date;
 }

@@ -1,0 +1,54 @@
+@import 'bootstrap/scss/bootstrap';
+
+@import '../../../../styles/themes';
+@import '../../../../styles/shared/styles';
+form {
+  color: $secondary-colour;
+}
+
+h5 {
+  color: $primary-colour;
+}
+
+.guidance-line {
+  color: $secondary-colour !important;
+}
+
+.list-container {
+
+}
+
+input[type="checkbox"] {
+
+  @extend %checkbox-input;
+  margin-top: 0;
+}
+
+ul {
+  flex-direction: column;
+}
+
+.error-text {
+  color: red;
+  font-weight: lighter;
+}
+@include media-breakpoint-down(sm) {
+  ul li {
+    flex-direction: row-reverse;
+    text-align: left;
+    justify-content: start;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .list-container {
+    justify-content: space-between;
+    display: flex;
+  }
+  ul {
+    li {
+      justify-content: end;
+
+    }
+  }
+}

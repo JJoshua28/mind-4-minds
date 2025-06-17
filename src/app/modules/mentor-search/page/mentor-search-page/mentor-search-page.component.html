@@ -7,7 +7,7 @@
       <app-user-card
         [$userType]="UserType.MENTOR"
         #card
-        [$user]="user"
+        [$user]="mentorUserMapInfo(user)"
         (cardContainerClicked)="$selectedUser.set(user); modal.show()"
       >
         <div

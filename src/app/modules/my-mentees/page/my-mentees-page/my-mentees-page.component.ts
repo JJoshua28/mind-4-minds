@@ -23,11 +23,12 @@ export class MyMenteesPageComponent {
 
   user: User = {
     id: "1",
-    firstname: "vorname",
+    firstName: "vorname",
     email: "vorname@gmail.com",
-    surname: "nachname",
+    lastName: "nachname",
     occupation: "carer",
-    occupationStartDate: new Date(5),
+    isArchived: false,
+    occupationStartDate: new Date(5).toDateString(),
     profilePic: "https://cdn.britannica.com/54/252154-050-881EE55B/janelle-monae-glass-onion-knives-out-film-premiere.jpg",
     menteeDetails: {
       id: "1",

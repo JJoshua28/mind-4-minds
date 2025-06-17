@@ -7,7 +7,7 @@ import {LearningPreferences} from "../../../types/user details/learning-preferen
 import {MeetingPreferences} from "../../../types/user details/mentor/mentor.enum";
 import {NeurodivergenceConditions} from "../../../types/user details/neurodivergence.enum";
 
-import {MenteeDetailsFormControls} from "../../../types/user details/mentee-details.interface";
+import {MenteeDetailsFormControls} from "../../../types/user details/mentee-details-form.interface";
 
 @Component({
   selector: 'app-edit-mentee-details',

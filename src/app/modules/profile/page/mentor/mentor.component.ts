@@ -1,4 +1,4 @@
-import {Component, inject, input, ViewChild} from '@angular/core';
+import {Component, computed, inject, input, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
 
@@ -6,6 +6,7 @@ import {NeurodivergenceConditions} from "../../../../types/user details/neurodiv
 import {MentorDetailsComponent} from "../../../../shared/component/mentor-details/mentor-details.component";
 import {MentorUser} from "../../../../types/user.interface";
 import {PreviewMentorCardComponent} from "../../components/preview-mentor-card/preview-mentor-card.component";
+import {UserInfo} from "../../../../types/user details/user-info.interface";
 
 @Component({
   selector: 'app-mentor',
@@ -19,17 +20,18 @@ import {PreviewMentorCardComponent} from "../../components/preview-mentor-card/p
 })
 export class MentorComponent {
   private readonly _router = inject(Router);
-  @ViewChild(PreviewMentorCardComponent) previewMentormodal!: PreviewMentorCardComponent;
+  @ViewChild(PreviewMentorCardComponent) previewMentorModal!: PreviewMentorCardComponent;
 
 
 
   $user = input<MentorUser>({
     id: "1",
-    firstname: "vorname",
+    firstName: "vorname",
     email: "vorname@gmail.com",
-    surname: "nachname",
+    lastName: "nachname",
     occupation: "carer",
-    occupationStartDate: new Date(5),
+    isArchived: false,
+    occupationStartDate: new Date(5).toDateString(),
     profilePic: "https://cdn.britannica.com/54/252154-050-881EE55B/janelle-monae-glass-onion-knives-out-film-premiere.jpg",
     mentorDetails: {
       id: "1",
@@ -37,11 +39,16 @@ export class MentorComponent {
       qualifications: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       experience: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       neurodivergentConditions: [NeurodivergenceConditions.ADHD, NeurodivergenceConditions.TOURETTES, NeurodivergenceConditions.AUTISM, NeurodivergenceConditions.DYSLEXIA, NeurodivergenceConditions.DYSCALCULIA],
+      commitment: "Once a week for two weeks",
       description: "Hi, I am vorname. I have been caring for my Autistic son for 13 years now. \n" +
         "I have experience helping him self-regulate and vibe.",
       isAvailable: false,
     }
   })
+
+  $mentorDetail = computed(() => ({...this.$user() as UserInfo, ...this.$user().mentorDetails}))
+
+
 
   navigateTo() {
     this._router.navigate(['/profile/mentor-details/edit']);

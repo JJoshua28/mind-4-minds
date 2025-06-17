@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {Router} from "@angular/router";
+
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 import { UserFormControls} from "../../../../types/user details/user-form.interface";
@@ -20,7 +20,6 @@ import {EditUserDetailsComponent} from "../../../../shared/component/edit-user-d
 })
 export class RegisterUserDetailsPageComponent {
   private readonly _formBuilder = inject(FormBuilder);
-  private readonly _router = inject(Router);
 
   registrationService: RegistrationService =inject(RegistrationService);
 
@@ -65,8 +64,7 @@ export class RegisterUserDetailsPageComponent {
     }
   }
 
-  navigateToMenteeDetails() {
-    const menteeDetailsRegistrationUrl = "register/mentee-details";
-    this.userDetailsForm.valid && this._router.navigate([menteeDetailsRegistrationUrl]);
+  navigateToNextSection() {
+    this.registrationService.navigateToNextSection()
   }
 }

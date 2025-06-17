@@ -66,7 +66,7 @@ export const routes: Routes = [
       {
         path: 'profile/mentor-details/edit',
         title: "Edit: Mentor Details",
-        loadComponent: () => import('./modules/profile/page/edit-mentor/edit-mentor.component').then(m => m.EditMentorComponent),
+        loadComponent: () => import('./modules/profile/page/edit-mentor/edit-mentor-details-page.component').then(m => m.EditMentorDetailsPageComponent),
       },
       {
         path: 'profile/mentee-details/edit',

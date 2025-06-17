@@ -1,6 +1,6 @@
 import {Component, input} from '@angular/core';
 
-import {Mentor} from "../../../types/user details/mentor/mentor.interface";
+import {MentorInfo} from "../../../types/user details/user-info.interface";
 
 
 @Component({
@@ -11,5 +11,5 @@ import {Mentor} from "../../../types/user details/mentor/mentor.interface";
   styleUrl: './mentor-details.component.scss'
 })
 export class MentorDetailsComponent {
-  $mentorDetails = input.required<Mentor>()
+  $mentorDetails = input.required<MentorInfo>()
 }

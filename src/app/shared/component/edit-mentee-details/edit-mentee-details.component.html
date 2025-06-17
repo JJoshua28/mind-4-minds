@@ -3,7 +3,14 @@
 >
   <div>
     @let descriptionControl = $menteeDetailsForm().get("description");
-    <h5 class="text-capitalize mb-3">Description</h5>
+    <div
+      class="d-inline-block"
+    >
+      <h5 class="text-capitalize mb-3 d-inline-block">Description</h5>
+      <span
+        class="error-text fs-5"
+      >*</span>
+    </div>
     <app-textarea-input
       label="introduce yourself to mentors"
       formControlName="description"
@@ -17,6 +24,14 @@
   <div class="mt-4">
     @let goalsControl = $menteeDetailsForm().controls.goals;
     @let goalsAbstractControl = $menteeDetailsForm().get("goals");
+    <div
+      class="d-inline-block"
+    >
+      <h5 class="text-capitalize mb-0 d-inline-block">Goals</h5>
+      <span
+        class="error-text fs-5"
+      >*</span>
+    </div>
     <div class="w-100 mt-3 mb-4" formArrayName="goals">
       @for (goal of goalsControl.controls; track goal; let index = $index) {
         <div class="d-flex gap-2 align-items-center mb-4">
@@ -62,11 +77,15 @@
   <div class="mt-4">
     @let commitmentControl = $menteeDetailsForm().get("commitment");
     <div
-      class="mb-3"
+      class="mb-3 mt-4"
     >
-      <h5
-        class="mb-0"
-      >Commitment</h5>
+      <div
+      >
+        <h5 class="text-capitalize mb-0 d-inline-block ">Commitment</h5>
+        <span
+          class="error-text fs-5 lh-sm h-75"
+        >*</span>
+      </div>
       <span
         class="guidance-line"
       >Your commitment to the journey</span>
@@ -86,7 +105,14 @@
     <div
       class="mb-4"
     >
-      <h5>Learning Preferences</h5>
+      <div
+        class="d-inline-block"
+      >
+        <h5 class="text-capitalize d-inline-block mb-0">Learning Preferences</h5>
+        <span
+          class="error-text fs-5"
+        >*</span>
+      </div>
       @if(learningPreferencesAbstractControl?.touched && learningPreferencesAbstractControl?.errors?.["atLeastOneRequired"]) {
         <span
           class="error-text"
@@ -115,7 +141,14 @@
     <div
       class="mb-4"
     >
-      <h5>Meeting Preferences</h5>
+      <div
+        class="d-inline-block"
+      >
+        <h5 class="text-capitalize d-inline-block mb-0">Meeting Preferences</h5>
+        <span
+          class="error-text fs-5"
+        >*</span>
+      </div>
       @if(meetingPreferencesAbstractControl?.touched && meetingPreferencesAbstractControl?.errors?.["atLeastOneRequired"]) {
         <span
           class="error-text"
@@ -140,10 +173,17 @@
       }
     </ul>
   </div>
-  <div class="list-container mt-4">
-    <h5
-      class="mb-4"
-    >Neurodivergent Conditions</h5>
+  <div class="list-container mt-5">
+    <div
+      class="mb-3"
+    >
+      <h5
+        class="mb-0"
+      >Neurodivergent Conditions</h5>
+      <span
+        class="guidance-line"
+      >Conditions you may need support with</span>
+    </div>
     <ul
       class="list-unstyled d-flex flex-column gap-4 "
       formArrayName="neurodivergentConditions"

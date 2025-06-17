@@ -1,0 +1,157 @@
+<form
+  [formGroup]="$mentorDetailsForm()"
+>
+  <div>
+    @let descriptionControl = $mentorDetailsForm().get("description");
+    <div
+      class="d-inline-block"
+    >
+      <h5 class="text-capitalize mb-3 d-inline-block">Description</h5>
+      <span
+        class="error-text fs-5"
+      >*</span>
+    </div>
+    <app-textarea-input
+      label="introduce yourself to mentees"
+      formControlName="description"
+    />
+    @if (descriptionControl?.touched && descriptionControl?.errors?.["required"]) {
+      <span
+        class="error-text"
+      >Required!</span>
+    }
+  </div>
+  <div>
+    @let qualificationsControl = $mentorDetailsForm().get("qualifications");
+    <div
+      class="d-inline-block mt-4"
+    >
+      <h5 class="text-capitalize mb-3 d-inline-block">Qualifications</h5>
+      <span
+        class="error-text fs-5"
+      >*</span>
+    </div>
+    <app-textarea-input
+      label="Any skills, expertise or knowledge you can offer?"
+      formControlName="qualifications"
+    />
+    @if (qualificationsControl?.touched && qualificationsControl?.errors?.["required"]) {
+      <span
+        class="error-text"
+      >Required!</span>
+    }
+  </div>
+
+  <div>
+    @let commitmentControl = $mentorDetailsForm().get("commitment");
+    <div
+      class="mb-3 mt-4"
+    >
+      <div
+      >
+        <h5 class="text-capitalize mb-0 d-inline-block ">Commitment</h5>
+        <span
+          class="error-text fs-5 lh-sm h-75"
+        >*</span>
+      </div>
+      <span
+        class="guidance-line"
+      >Your commitment to the journey</span>
+    </div>
+    <app-text-input
+      label="e.g. 1 hour a week for 3 months"
+      formControlName="commitment"
+    />
+    @if (commitmentControl?.touched && commitmentControl?.errors?.["required"]) {
+      <span
+        class="error-text"
+      >Required!</span>
+    }
+  </div>
+
+  <div>
+    @let experienceControl = $mentorDetailsForm().get("experience");
+    <div
+      class="d-inline-block mt-4"
+    >
+      <h5 class="text-capitalize mb-3 d-inline-block">Experiences</h5>
+    </div>
+    <app-textarea-input
+      label="Experiences coaching and or mentoring"
+      formControlName="experience"
+    />
+    @if (experienceControl?.touched && experienceControl?.errors?.["required"]) {
+      <span
+        class="error-text"
+      >Required!</span>
+    }
+  </div>
+
+
+  <div class="list-container mt-5">
+    @let meetingPreferencesAbstractControl = $mentorDetailsForm().get("meetingPreferences");
+    <div
+      class="mb-4 mb-sm-0"
+    >
+      <div
+        class="d-inline-block"
+      >
+        <h5 class="text-capitalize d-inline-block mb-0">Meeting Preferences</h5>
+        <span
+          class="error-text fs-5"
+        >*</span>
+      </div>
+      @if(meetingPreferencesAbstractControl?.touched && meetingPreferencesAbstractControl?.errors?.["atLeastOneRequired"]) {
+        <span
+          class="error-text"
+        >At least one is required!</span>
+      }
+    </div>
+    <ul
+      class="list-unstyled d-flex gap-4"
+      formArrayName="meetingPreferences"
+    >
+      @let meetingPreferencesControl = $mentorDetailsForm().controls.meetingPreferences;
+
+      @for (preference of meetingPreferencesControl.controls; track index; let index=$index) {
+        <li class="d-flex gap-2 text-capitalize align-items-center">
+          {{meetingPreferenceOptions[index]}}
+          <input
+            type="checkbox"
+            [formControlName]="index"
+            [id]="preference"
+          />
+        </li>
+      }
+    </ul>
+  </div>
+  <div class="list-container mt-5">
+    <div
+      class="mb-3"
+    >
+      <h5
+        class="mb-0"
+      >Neurodivergent Conditions</h5>
+     <span
+       class="guidance-line"
+     >Conditions you can support someone with</span>
+    </div>
+    <ul
+      class="list-unstyled d-flex flex-column gap-4 "
+      formArrayName="neurodivergentConditions"
+    >
+      @let neurodivergentConditionsControl = $mentorDetailsForm().controls.neurodivergentConditions;
+
+      @for (condition of neurodivergentConditionsControl.controls; track index; let index=$index) {
+        <li class="d-flex gap-2 text-capitalize align-items-center">
+          {{neurodivergentConditionOptions[index]}}
+          <input
+            type="checkbox"
+            [formControlName]="index"
+            [id]="condition"
+          />
+        </li>
+      }
+    </ul>
+  </div>
+</form>

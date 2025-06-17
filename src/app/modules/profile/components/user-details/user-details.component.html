@@ -7,18 +7,18 @@
        <div class="d-flex flex-column gap-2 align-items-center">
         <img
           alt="Janelle Monae"
-          [src]="user().profilePic"
+          [src]="$user().profilePic"
           class="profile-picture rounded"
         />
          <div class="d-flex flex-column align-items-center">
-          <h6 class="text-capitalize pb-0 lh-1" >{{user().occupation}}</h6>
-          <h6 class="text-capitalize email lh-1">{{ experienceDuration(user().occupationStartDate) }}</h6>
+           @if ($user().occupation) {<h6 class="text-capitalize pb-0 lh-1" >{{$user().occupation}}</h6>}
+           @if ($occupationStartDate()) {<h6 class="text-capitalize email lh-1">{{ experienceDuration($occupationStartDate()) }}</h6>}
          </div>
 
       </div>
       <div class="text-truncate d-inline-block">
-        <h4>{{user().firstname}} {{user().surname}}</h4>
-        <h6 class="email mt-2 mb-2">{{user().email}}</h6>
+        <h4>{{$user().firstName}} {{$user().lastName}}</h4>
+        <h6 class="email mt-2 mb-2">{{$user().email}}</h6>
         <h6>Password: ***********</h6>
       </div>
     </div>

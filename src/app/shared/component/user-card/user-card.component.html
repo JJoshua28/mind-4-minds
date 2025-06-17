@@ -15,21 +15,22 @@
       </div>
       <div class="m-2 profile-name-container h-100 w-100 d-flex flex-column gap-2 justify-content-between">
         <div>
-          <h5 class="mb-1 profile-name-container text-capitalize">{{$user().firstname}}</h5>
-          <h5 class="mb-1 profile-name-container text-capitalize">{{$user().surname}}</h5>
+          <h5 class="mb-1 profile-name-container text-capitalize">{{$user().firstName}}</h5>
+          <h5 class="mb-1 profile-name-container text-capitalize">{{$user().lastName}}</h5>
         </div>
         <div class="neurodivergent-condition-highlight-container d-flex flex-column">
-          <span class="fw-lighter text-capitalize">{{$user().occupation}}</span>
-          <span class="fw-lighter text-capitalize">{{experienceDuration($user().occupationStartDate)}}</span>
+          @if($user().occupation) {<span class="fw-lighter text-capitalize">{{$user().occupation}}</span>}
+          @if(occupationStartDate) {<span class="fw-lighter text-capitalize">{{experienceDuration(occupationStartDate)}}</span>}
         </div>
       </div>
     </div>
     <div class="mt-2">
       <p class="profile-description-container mb-0">
-        {{$roleDetails().description}}
+        {{$user().description}}
     </div>
   </div>
-  @if ($roleDetails().neurodivergentConditions.length > 1) {
+  @let neuroConditions = $user().neurodivergentConditions || [];
+  @if (neuroConditions.length > 0) {
     <div class="mt-2">
       <h6 class="fw-light mt-3 speciality-tag-heading">
         @if($userType() === userType.MENTOR) {
@@ -40,7 +41,7 @@
         }
       </h6>
       <ul class="d-flex flex-row justify-content-center gap-2 list-unstyled mb-0">
-        @let conditions = $roleDetails().neurodivergentConditions.slice(0,3);
+        @let conditions = $user().neurodivergentConditions.slice(0,3);
         @for (condition of conditions; track condition) {
           <li
             class="text-capitalize fw-bolder rounded-pill px-2 neurodivergent-condition"
@@ -48,8 +49,8 @@
             {{condition}}
           </li>
         }
-        @if($roleDetails().neurodivergentConditions.length > conditions.length) {
-          <li>+{{$roleDetails().neurodivergentConditions.length - conditions.length}}</li>
+        @if($user().neurodivergentConditions.length > conditions.length) {
+          <li>+{{$user().neurodivergentConditions.length - conditions.length}}</li>
         }
       </ul>
     </div>

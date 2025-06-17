@@ -1,10 +1,12 @@
 import {Component, ElementRef, input, signal, ViewChild, WritableSignal} from '@angular/core';
-import {MentorDetailsComponent} from "../../../../shared/component/mentor-details/mentor-details.component";
-import {MentorUser} from "../../../../types/user.interface";
-
-import {UserCardComponent} from "../../../../shared/component/user-card/user-card.component";
 import {NgClass} from "@angular/common";
+
 import {UserType} from "../../../../types/user-type.enum";
+import {MenteeInfo, MentorInfo, UserInfo} from "../../../../types/user details/user-info.interface";
+
+import {MentorDetailsComponent} from "../../../../shared/component/mentor-details/mentor-details.component";
+import {UserCardComponent} from "../../../../shared/component/user-card/user-card.component";
+
 
 @Component({
   selector: 'app-preview-mentor-card',
@@ -22,7 +24,7 @@ export class PreviewMentorCardComponent {
 
   isHidden: WritableSignal<boolean>= signal(true);
 
-  $user = input.required<MentorUser>()
+  $user = input.required<MenteeInfo & UserInfo | MentorInfo & UserInfo>()
 
   show () {
     this.isHidden.set(!this.isHidden());
