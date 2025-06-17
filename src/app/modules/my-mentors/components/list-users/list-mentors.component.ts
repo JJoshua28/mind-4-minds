@@ -1,10 +1,9 @@
 import {
   Component, computed,
   EventEmitter,
-  input,
-  OnInit,
+  input, OnChanges,
   Output, Signal,
-  signal,
+  signal, SimpleChanges,
   ViewChild,
   WritableSignal
 } from '@angular/core';
@@ -12,7 +11,7 @@ import {
 import {UserCardComponent} from "../../../../shared/component/user-card/user-card.component";
 import {
     ViewMentorModalComponent
-} from "../../../mentor-search/components/view-mentor-modal/view-mentor-modal.component";
+} from "../../../../shared/component/view-mentor-modal/view-mentor-modal.component";
 
 
 import {NgClass} from "@angular/common";
@@ -32,7 +31,7 @@ import { MentorInfo, UserInfo} from "../../../../types/user details/user-info.in
   templateUrl: './list-mentors.component.html',
   styleUrl: './list-mentors.component.scss'
 })
-export class ListMentorsComponent implements OnInit {
+export class ListMentorsComponent implements OnChanges {
   @Output() isHoveringOnUserCard = new EventEmitter<boolean>();
 
   @ViewChild(ViewMentorModalComponent) viewUserModal!: ViewMentorModalComponent;
@@ -95,8 +94,10 @@ export class ListMentorsComponent implements OnInit {
   protected readonly actionType =  ActionTypes.DELETE
   protected readonly modalMessageTopic = "end the mentorship"
 
-  ngOnInit() {
-    this.$selectedUser = signal(this.$users()[0]);
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes["$users"]) {
+      this.$selectedUser = signal(changes["$users"].currentValue[0]);
+    }
   }
 
 

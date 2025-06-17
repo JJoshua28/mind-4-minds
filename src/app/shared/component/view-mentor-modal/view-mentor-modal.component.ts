@@ -1,11 +1,11 @@
 import {Component, computed, ElementRef, input, Signal, signal, ViewChild, WritableSignal} from '@angular/core';
 import {NgClass} from "@angular/common";
 
-import { MentorInfo, UserInfo } from "../../../../types/user details/user-info.interface";
+import { MentorInfo, UserInfo } from "../../../types/user details/user-info.interface";
 
-import {MenteeDetailsComponent} from "../../../../shared/component/mentee-details/mentee-details.component";
-import {MentorDetailsComponent} from "../../../../shared/component/mentor-details/mentor-details.component";
-import { experienceDuration } from '../../../../shared/helpers/experienceDurations';
+import {MenteeDetailsComponent} from "../mentee-details/mentee-details.component";
+import {MentorDetailsComponent} from "../mentor-details/mentor-details.component";
+import { experienceDuration } from '../../helpers/experienceDurations';
 
 @Component({
   selector: 'app-view-mentor-modal',

@@ -8,7 +8,7 @@
         [$userType]="$userType()"
         #card
         [$userCardInfo]="mapUserCardInfo(user)"
-        (cardContainerClicked)="$selectedUser.set(user);"
+        (cardContainerClicked)="$selectedUser.set(user); viewUserModal.show()"
       >
         <div
           class="w-100 d-flex justify-content-end mt-3"
@@ -30,3 +30,10 @@
   [$type]="actionType"
   [$messageTopic]="modalMessageTopic"
 />
+
+@if ($users().length > 0  ) {
+  <app-view-mentee-modal
+    [$userInfo]="$selectedUser()"
+    [$menteeInfo]="$menteeInfo()"
+  />
+}

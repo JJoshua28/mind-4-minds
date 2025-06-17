@@ -1,7 +1,7 @@
-@import '../../../../../../node_modules/bootstrap/scss/bootstrap';
+@import '../../../../../node_modules/bootstrap/scss/bootstrap';
 
-@import '../../../../../styles/themes';
-@import '../../../../../styles/shared/styles';
+@import '../../../../styles/themes';
+@import '../../../../styles/shared/styles';
 
 dialog {
   color: $primary-colour;

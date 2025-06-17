@@ -1,10 +1,9 @@
 import {
-  Component,
+  Component, computed,
   EventEmitter,
-  input,
-  OnInit,
-  Output,
-  signal,
+  input, OnChanges,
+  Output, Signal,
+  signal, SimpleChanges,
   ViewChild,
   WritableSignal
 } from '@angular/core';
@@ -14,29 +13,29 @@ import {MenteeInfo, UserInfo} from "../../../../types/user details/user-info.int
 import {UserType} from "../../../../types/user-type.enum";
 
 import {UserCardComponent} from "../../../../shared/component/user-card/user-card.component";
-import {
-  ViewMentorModalComponent
-} from "../../../mentor-search/components/view-mentor-modal/view-mentor-modal.component";
+
 import {
   ActionTypes,
   ConfirmActionModalComponent
 } from "../../../../shared/component/confirm-action-modal/confirm-action-modal.component";
+import {ViewMenteeModalComponent} from "../../../../shared/component/view-mentee-modal/view-mentee-modal.component";
 
 @Component({
   selector: 'app-list-mentees',
   standalone: true,
   imports: [
     UserCardComponent,
-    ViewMentorModalComponent,
     NgClass,
-    ConfirmActionModalComponent
+    ConfirmActionModalComponent,
+    ViewMenteeModalComponent
   ],
   templateUrl: './list-mentees.component.html',
   styleUrl: './list-mentees.component.scss'
 })
-export class ListMenteesComponent implements OnInit {
+export class ListMenteesComponent implements OnChanges {
   @Output() isHoveringOnUserCard = new EventEmitter<boolean>();
 
+  @ViewChild(ViewMenteeModalComponent) viewUserModal!: ViewMenteeModalComponent;
   @ViewChild(ConfirmActionModalComponent) confirmActionModal!: ConfirmActionModalComponent;
 
   $heading = input.required<string>();
@@ -46,6 +45,28 @@ export class ListMenteesComponent implements OnInit {
   $noConnectionsMessage = input.required<string>();
 
   $selectedUser!: WritableSignal<(UserInfo & MenteeInfo)>;
+
+  $menteeInfo: Signal<MenteeInfo>  = computed(() => {
+    const {
+      description,
+      neurodivergentConditions,
+      expectations,
+      goals,
+      learningPreferences,
+      commitment,
+      meetingPreferences
+    } = this.$selectedUser();
+
+    return {
+      description,
+      neurodivergentConditions,
+      expectations,
+      goals,
+      learningPreferences,
+      commitment,
+      meetingPreferences
+    }
+  })
 
   mapUserCardInfo (user: UserInfo & MenteeInfo) {
     const {
@@ -75,7 +96,9 @@ export class ListMenteesComponent implements OnInit {
   protected readonly actionType =  ActionTypes.DELETE
   protected readonly modalMessageTopic = "end the mentorship"
 
-  ngOnInit() {
-    this.$selectedUser = signal(this.$users()[0]);
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes["$users"]) {
+      this.$selectedUser = signal(changes["$users"].currentValue[0]);
+    }
   }
 }

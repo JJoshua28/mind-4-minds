@@ -1,12 +1,14 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {EditMenteeDetailsPageComponent} from './edit-mentee-details-page.component';
 import {By} from '@angular/platform-browser';
-import {RegistrationService} from '../../../register/registration.service';
-import {MenteeDetails} from '../../../../types/user details/mentee.interface';
+
+import {MenteeInfo} from "../../../../types/user details/user-info.interface";
 import {LearningPreferences} from "../../../../types/user details/learning-preferences.enum";
 import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
 
-const validMenteeDetails: MenteeDetails = {
+import {RegistrationService} from '../../../register/registration.service';
+
+const validMenteeDetails: MenteeInfo = {
   description: 'Some text',
   goals: ['Learn Angular'],
   learningPreferences: [LearningPreferences.KINESTHETIC],
@@ -16,7 +18,7 @@ const validMenteeDetails: MenteeDetails = {
   commitment: 'Weekly'
 };
 
-const invalidMenteeDetails: MenteeDetails = {
+const invalidMenteeDetails: MenteeInfo = {
   description: '',
   goals: [],
   learningPreferences: [],
@@ -30,7 +32,7 @@ describe('EditMenteeDetailsPageComponent', () => {
   let component: EditMenteeDetailsPageComponent;
   let fixture: ComponentFixture<EditMenteeDetailsPageComponent>;
 
-  function setupTest(menteeDetails: MenteeDetails) {
+  function setupTest(menteeDetails: MenteeInfo) {
     return TestBed.configureTestingModule({
       imports: [EditMenteeDetailsPageComponent],
       providers: [

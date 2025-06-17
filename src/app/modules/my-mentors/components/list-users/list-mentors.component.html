@@ -26,10 +26,9 @@
     }
   </div>
 </div>
-@if ($users().length > 1 && $userType() === "mentor") {
-  @let user = $selectedUser();
+@if ($users().length > 0) {
   <app-view-mentor-modal
-    [$userInfo]="user"
+    [$userInfo]="$selectedUser()"
     [$mentorInfo]="$mentorInfo()"
   />
 }

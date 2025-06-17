@@ -12,10 +12,12 @@
         }
       </ul>
     </div>
-    <div class="page-item">
-      <h5>Expectations</h5>
-      <p>{{$mentee().expectations}}</p>
-    </div>
+    @if($mentee().expectations) {
+      <div class="page-item">
+        <h5>Expectations</h5>
+        <p>{{$mentee().expectations}}</p>
+      </div>
+    }
     <div class="page-item">
       <h5>Your Commitment</h5>
       <p>{{$mentee().commitment}}</p>

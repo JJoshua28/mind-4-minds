@@ -1,7 +1,7 @@
 import {Component, computed, Signal, signal, ViewChild, WritableSignal} from '@angular/core';
 
 import {UserCardComponent} from "../../../../shared/component/user-card/user-card.component";
-import {ViewMentorModalComponent} from "../../components/view-mentor-modal/view-mentor-modal.component";
+import {ViewMentorModalComponent} from "../../../../shared/component/view-mentor-modal/view-mentor-modal.component";
 import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
 import {MentorUser } from "../../../../types/user.interface";
 import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";

@@ -1,0 +1,58 @@
+<main
+  [ngClass]="{ 'hidden-modal-container': isHidden()}"
+>
+  <dialog
+    #modal
+    class="border rounded"
+    (keydown.escape)="close()"
+
+  >
+    <div
+      class="d-flex justify-content-end w-100 mb-3"
+    >
+      <i
+        class="bi bi-x-lg fs-1 d-block close-icon"
+        (click)="close()"
+      ></i>
+    </div>
+    <div>
+      <div class="personal-details-container mb-5 mx-auto">
+        <img
+          alt="Janelle Monae"
+          [src]="$userInfo().profilePic"
+          class="profile-picture rounded"
+        />
+        <div class="d-flex flex-column">
+          <div class="text-truncate d-inline-block">
+            <h4
+              class="text-truncate text-capitalize"
+            >{{$userInfo().firstName}} {{$userInfo().lastName}}</h4>
+          </div>
+          <div>
+            @if ($userInfo().occupation) {<h6 class="text-capitalize pb-0 lh-1" >{{$userInfo().occupation}}</h6>}
+            @if ($userInfo().occupationStartDate) {<h6 class="text-capitalize email lh-1">{{ experienceDuration($occupationStartDate()) }}</h6>}
+          </div>
+
+        </div>
+      </div>
+
+      @if($menteeInfo()) {
+        <div
+          class="details-container mx-auto"
+        >
+          <app-mentee-details [$mentee]="$menteeInfo()"/>
+        </div>
+      }
+      @if ($canConnectToMentor()) {
+        <div class="d-flex justify-content-end mt-5 pb-3">
+          <button
+            class="button"
+            (click)="close()"
+          >
+            <h6>Connect with the mentor</h6>
+          </button>
+        </div>
+      }
+    </div>
+  </dialog>
+</main>
