@@ -4,6 +4,7 @@ import {NgClass} from "@angular/common";
 import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
 import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
 import {Snippet} from "../inbox-snippet/communications-snippet.component";
+import {UserType} from "../../../../types/user-type.enum";
 
 @Component({
   selector: 'app-view-message-modal',
@@ -28,7 +29,9 @@ export class ViewMessageModalComponent {
     email: "vorname@gmail.com",
     lastName: "nachname",
     isArchived:false,
+    roles: [UserType.MENTOR],
     occupation: "carer",
+    joined: new Date(5).toDateString(),
     occupationStartDate: new Date(5).toDateString(),
     profilePic: "https://cdn.britannica.com/54/252154-050-881EE55B/janelle-monae-glass-onion-knives-out-film-premiere.jpg",
     mentorDetails: {

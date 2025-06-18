@@ -1,0 +1,74 @@
+@import 'bootstrap/scss/bootstrap';
+
+@import "../../../../../styles/shared/styles";
+@import "../../../../../styles/themes";
+
+div {
+  color: $primary-colour;
+}
+
+.snippet-container {
+  @extend %is-clickable;
+  &:hover {
+    background-color: #e9ecef;
+  }
+}
+
+.message-snippet {
+  @extend .fixed-text-container;
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+}
+
+.message-snippet h5 {
+  color: $primary-colour;
+  font-weight: bolder;
+}
+
+.bullet-icon-colour {
+  color: $tertiary-colour;
+}
+
+.bullet-icon {
+  font-size: 3rem;
+}
+
+.snippet-subject {
+  color: $secondary-colour;
+  font-weight: bold;
+}
+
+.message-container {
+  border-left: 5px solid $primary-colour;
+}
+
+.name-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.date-and-time-styling {
+  color: $secondary-colour;
+}
+
+input {
+  @extend %checkbox-input;
+}
+
+.checkbox {
+  padding: 3px;
+}
+
+@include media-breakpoint-down(sm) {
+  .name-container {
+    flex-direction: column;
+    justify-content: start;
+  }
+
+  }
+
+

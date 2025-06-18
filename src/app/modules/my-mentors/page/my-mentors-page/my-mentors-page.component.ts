@@ -31,6 +31,8 @@ export class MyMentorsPageComponent {
     lastName: "nachname",
     isArchived: false,
     occupation: "carer",
+    joined: new Date(5).toDateString(),
+    roles: [UserType.MENTOR],
     occupationStartDate: new Date(5).toDateString(),
     profilePic: "https://cdn.britannica.com/54/252154-050-881EE55B/janelle-monae-glass-onion-knives-out-film-premiere.jpg",
     mentorDetails: {

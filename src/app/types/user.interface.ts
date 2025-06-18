@@ -1,9 +1,12 @@
 import { MenteeDetails} from "./user details/mentee.interface";
 import {UserInfo} from "./user details/user-info.interface";
 import {MentorDetails} from "./user details/mentor/mentor.interface";
+import {UserType} from "./user-type.enum";
 
 export interface UserDetails extends UserInfo {
   id: string;
+  joined: string;
+  roles: UserType[]
   isArchived: boolean;
 }
 

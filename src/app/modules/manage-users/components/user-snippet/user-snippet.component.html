@@ -1,0 +1,33 @@
+<div
+  class="d-flex flex-row  align-items-start gap-3 py-3 text-capitalize h-auto ps-1 snippet-container"
+  (click)="$event.stopPropagation(); userSnippetClicked.emit($userDetails().id)"
+>
+  <input
+    type="checkbox"
+    class="checkbox"
+    (click)="$event.stopPropagation(); userCheckboxClicked.emit($userDetails().id)"
+    [checked]="$isChecked()"
+  />
+  <div
+    class="message-snippet text-capitalize"
+  >
+    <div class="w-100 name-container">
+      <div class="d-flex flex-row gap-1">
+        <h5 class="fixed-text-container mb-0">{{$userDetails().firstName}} {{$userDetails().lastName}}</h5>
+      </div>
+      <span class="date-and-time-styling">joined {{$userDetails().joined}}</span>
+    </div>
+    <div class="w-100 mt-1">
+      <h6
+        class="fixed-text-container mb-0 date-and-time-styling"
+      >{{$userDetails().email}}</h6>
+    </div>
+    <ul
+      class="list-unstyled d-flex gap-3 mt-1"
+    >
+      @for(role of $userDetails().roles; track role) {
+        <li>{{role}}</li>
+      }
+    </ul>
+  </div>
+</div>

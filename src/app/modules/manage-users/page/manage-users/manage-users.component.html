@@ -1,0 +1,28 @@
+<div class="container mt-5 mb-5 overflow-visible">
+  <div
+    class="w-100 h-100 d-flex flex-column gap-0 align-items-start"
+  >
+    <h3
+      class="mb-0"
+    >Users</h3>
+    <h6
+      class="guidance-line"
+    >Manage all systems users</h6>
+  </div>
+
+  <app-edit-inbox-snippet-bar
+    [$tickCheckbox]="$checkedUsers().length > 0"
+    (tickBoxClicked)="handleCheckAllClicked()"
+  />
+
+  <div class="mt-4">
+    @for (user of $snippets(); track user.id) {
+      <app-user-snippet
+        [$isChecked]="$checkedUsers().includes(user.id)"
+        [$userDetails]="user"
+        (userSnippetClicked)="selectedUser = user"
+        (userCheckboxClicked)="handleUserCheckboxClicked($event)"
+      />
+    }
+  </div>
+</div>

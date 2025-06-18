@@ -7,6 +7,7 @@ import {MentorDetailsComponent} from "../../../../shared/component/mentor-detail
 import {MentorUser} from "../../../../types/user.interface";
 import {PreviewMentorCardComponent} from "../../components/preview-mentor-card/preview-mentor-card.component";
 import {UserInfo} from "../../../../types/user details/user-info.interface";
+import {UserType} from "../../../../types/user-type.enum";
 
 @Component({
   selector: 'app-mentor',
@@ -30,9 +31,11 @@ export class MentorComponent {
     email: "vorname@gmail.com",
     lastName: "nachname",
     occupation: "carer",
+    joined: new Date(5).toDateString(),
     isArchived: false,
     occupationStartDate: new Date(5).toDateString(),
     profilePic: "https://cdn.britannica.com/54/252154-050-881EE55B/janelle-monae-glass-onion-knives-out-film-premiere.jpg",
+    roles: [UserType.MENTOR, UserType.ADMIN],
     mentorDetails: {
       id: "1",
       meetingPreferences: [MeetingPreferences.ONLINE_MESSAGING, MeetingPreferences.VIDEO_CALLS],
