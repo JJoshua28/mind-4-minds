@@ -1,18 +1,19 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
-/dist
+/frontend/dist
 /tmp
 /out-tsc
 /bazel-out
 
 # Node
-/node_modules
+frontend/node_modules
+node_modules
 npm-debug.log
 yarn-error.log
 
 # IDEs and editors
-.idea/
+../.idea/
 .project
 .classpath
 .c9/
@@ -21,7 +22,7 @@ yarn-error.log
 *.sublime-workspace
 
 # Visual Studio Code
-.vscode/*
+frontend/.vscode/tasks.json
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
@@ -29,7 +30,7 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
-/.angular/cache
+frontend/.angular/cache
 .sass-cache/
 /connect.lock
 /coverage
