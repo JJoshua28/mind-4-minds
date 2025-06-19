@@ -11,7 +11,7 @@ on:
       - master
 
 jobs:
-  build-and-test:
+  front-end-build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,8 +23,11 @@ jobs:
         with:
           node-version: 18
 
+      - name: Move to frontend repo
+        run: cd frontend
+
       - name: Install dependencies
-        run: npm i
+        run: npm ci
 
       - name: Run tests (Jest)
         run: npm run test -- --coverage
