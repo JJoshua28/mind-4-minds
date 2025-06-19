@@ -2,10 +2,10 @@
   "name": "mind-4-minds-app",
   "version": "0.0.0",
   "scripts": {
-    "ng": "../node_modules/.bin/ng",
-    "start": "../node_modules/.bin/ng serve",
-    "build": "../node_modules/.bin/ng build",
-    "watch": "../node_modules/.bin/ng build --watch --configuration development",
+    "ng": "./node_modules/.bin/ng",
+    "start": "./node_modules/.bin/ng serve",
+    "build": "./node_modules/.bin/ng build",
+    "watch": "./node_modules/.bin/ng build --watch --configuration development",
     "test": "NODE_OPTIONS='--loader ts-node/esm' jest",
     "test:watch": "NODE_OPTIONS='--loader ts-node/esm' jest --watch",
     "serve:ssr:mind-4-minds-app": "node dist/mind-4-minds-app/server/server.mjs"
