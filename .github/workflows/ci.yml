@@ -23,15 +23,16 @@ jobs:
         with:
           node-version: 18
 
-      - name: Move to frontend repo
-        run: cd frontend
-
       - name: Install dependencies
-        run: npm i
+        run: npm ci
+        working-directory: ./frontend
 
       - name: Run tests (Jest)
         run: npm run test -- --coverage
+        working-directory: ./frontend
+
 
       - name: Build app
         run: npm run build
+        working-directory: ./frontend
 
