@@ -23,7 +23,7 @@ export class RegisterUserDetailsPageComponent {
 
   registrationService: RegistrationService =inject(RegistrationService);
 
-  $profilePicToPreview = signal(this.registrationService.userDetails.storageProfilePic);
+  $profilePicToPreview = signal(this.registrationService.userDetails.storageProfilePic || "");
 
 
   passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/;
