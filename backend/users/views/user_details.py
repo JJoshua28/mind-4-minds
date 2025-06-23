@@ -6,8 +6,9 @@ from ..serializers.user_details import UserDetailsSerializer
 class UserDetailsViewSet(viewsets.ModelViewSet):
     queryset = UserDetails.objects.filter(user__is_active=True)
     serializer_class = UserDetailsSerializer
+    lookup_field = 'id'
 
-    def get_permissions(self):
+def get_permissions(self):
         if self.action == 'create':  # 'create' maps to POST
             permission_classes = [AllowAny]
         else:

@@ -9,6 +9,7 @@ interface UserAccount {
 }
 
 
+
 import {MenteeInfo, MentorInfo, UserInfo} from "../../types/user details/user-info.interface";
 import {map, of, Subject, switchMap, take} from "rxjs";
 import {LocalStorageService} from "../../shared/services/local-storage.service";
@@ -18,6 +19,7 @@ import {mapUserFormToApiPayload} from "../../shared/mapper/userDetailsToApi.mapp
 import mapMenteeDetailsToApiPayload from "../../shared/mapper/menteeDetailsToApi.mapper";
 import {UserDetails} from "../../types/user.interface";
 import {mapMentorDetailsToApiPayload} from "../../shared/mapper/mentorDetailsToApi.mapper";
+import {AuthServiceService, AuthToken} from "../../shared/services/auth-service.service";
 
 export interface RegistrationUserDetails extends Omit<UserInfo, 'profilePic'> {
   profilePic: File | null;
@@ -32,6 +34,7 @@ export interface RegistrationUserDetails extends Omit<UserInfo, 'profilePic'> {
 export class RegistrationService {
   private _localStorageService = inject(LocalStorageService);
   private readonly apiService = inject(HttpService);
+  private readonly _authService = inject(AuthServiceService);
 
   private _userDetails!: RegistrationUserDetails;
   private _roles: Array<UserType> = [];
@@ -146,10 +149,10 @@ export class RegistrationService {
 
 
   createUser () {
-    const usersEndpoint = 'users';
-    const userDetailsEndpoint = 'user-details';
-    const menteeDetailsEndpoint = 'mentee-details';
-    const mentorDetailsEndpoint = 'mentor-details';
+    const usersEndpoint = 'users/accounts';
+    const userDetailsEndpoint = 'users/details';
+    const menteeDetailsEndpoint = 'users/mentee-details';
+    const mentorDetailsEndpoint = 'users/mentor-details';
 
     const userRequest = this.createUserRequest(this.userDetails);
 
@@ -164,7 +167,7 @@ export class RegistrationService {
         if(this.roles.includes(UserType.MENTEE)) {
           const menteeDetailsPayload = mapMenteeDetailsToApiPayload(this.menteeDetails, userDetailsPayload.id);
           return this.apiService.post(menteeDetailsEndpoint, menteeDetailsPayload).pipe(
-            map(() => userDetailsPayload) // Pass it along
+            map(() => userDetailsPayload)
           );
         }
         return of(userDetailsPayload);
@@ -184,7 +187,14 @@ export class RegistrationService {
     ).subscribe({
       next: (authToken) => {
         this._localStorageService.clear()
-        this._localStorageService.setItem("auth_token", authToken);
+
+        const {access, refresh, user_id} = authToken as AuthToken;
+
+        this._authService.setRefreshToken(refresh);
+        this._authService.setAccessToken(access);
+
+        this._localStorageService.setItem("user_id", user_id);
+
         this._registrationComplete.next(this.roles);
       },
       error: (err) => {

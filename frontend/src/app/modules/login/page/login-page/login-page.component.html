@@ -19,6 +19,7 @@
     </div>
     <form
       [formGroup]="loginCredentials"
+      (ngSubmit)="onSubmit()"
       class="rounded px-1 py-5 login-container gap-5"
     >
       <div
@@ -33,18 +34,20 @@
 
       <app-text-input
         class="w-75"
+        (focusin)="loginCredentials.markAsTouched()"
         label="Email address"
         formControlName="email"
       />
       <app-text-input
         class="w-75"
+        (focusin)="loginCredentials.markAsTouched()"
         label="password"
         formControlName="password"
       />
       <div class="d-flex flex-column align-items-center w-100 gap-3 mt-0">
         <button
+          [disabled]="loginCredentials.invalid || loginCredentials.untouched"
           type="submit"
-          (click)="navigateTo()"
           class="rounded-pill fs-4 login-button py-2 px-4"
         >Log in</button>
         <button
@@ -53,6 +56,9 @@
         >New here? Register</button>
       </div>
 
+      <h5
+        [style.visibility]="errorMessage && loginCredentials.untouched? 'visible' : 'hidden'"
+        class="error-text">{{errorMessage}}</h5>
     </form>
   </div>
 </main>

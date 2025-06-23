@@ -35,7 +35,6 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-# ✅ The actual custom user model
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -44,12 +43,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     joined = models.DateTimeField(auto_now_add=True)
 
-    # Connect the custom manager
     objects = CustomUserManager()
 
-    # Tell Django which field to use as the unique login field
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []  # When creating superuser, only email and password are needed
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         return self.email

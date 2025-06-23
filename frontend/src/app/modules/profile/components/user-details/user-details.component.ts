@@ -1,8 +1,9 @@
-import {Component, computed, inject, Signal, signal, WritableSignal} from '@angular/core';
+import {Component, computed, inject, OnInit, Signal, signal, WritableSignal} from '@angular/core';
 import {Router} from "@angular/router";
 import {experienceDuration} from "../../../../shared/helpers/experienceDurations";
 
 import {UserInfo} from "../../../../types/user details/user-info.interface";
+import {UserServiceService} from "../../../../shared/services/user/user-service.service";
 
 
 
@@ -13,8 +14,14 @@ import {UserInfo} from "../../../../types/user details/user-info.interface";
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.scss'
 })
-export class UserDetailsComponent {
+export class UserDetailsComponent implements OnInit {
   private _router = inject(Router);
+
+  private readonly _userService = inject(UserServiceService);
+
+  ngOnInit() {
+    this._userService.userDetails()
+  }
 
   $user: WritableSignal<UserInfo> = signal({
     id: 1,

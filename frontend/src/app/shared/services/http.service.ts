@@ -10,21 +10,21 @@ export class HttpService {
 
   get(url: string, config = {}) {
     return this.httpClient.get(this.baseUrl + url, {
-      ...config,
-      headers: undefined
+      headers: undefined,
+      ...config
     });
   }
 
   post(url: string, data: any, config = {}) {
     return this.httpClient.post(this.baseUrl + url, data, {
+      headers: undefined,
       ...config,
-      headers: undefined
     });
   }
   put(url: string, data: any, config = {}) {
     return this.httpClient.put(this.baseUrl + url, data, {
+      headers: undefined,
       ...config,
-      headers: undefined
     });
   }
   delete(url: string, config = {}) {
