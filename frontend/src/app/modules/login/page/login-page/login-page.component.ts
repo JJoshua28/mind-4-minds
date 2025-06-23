@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {TextInputComponent} from "../../../../shared/component/text-input/text-input.component";
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -19,7 +19,7 @@ import {take} from "rxjs";
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit {
   protected readonly _router: Router = inject(Router);
   private readonly _formBuilder: FormBuilder = inject(FormBuilder);
 
@@ -35,8 +35,8 @@ export class LoginPageComponent {
     password: ['', Validators.required],
   })
 
-  navigateTo() {
-    this._router.navigate(['my-mentees']);
+  ngOnInit() {
+    this._localStorageService.clear();
   }
 
   navigateToLandingPage(roles: UserType[]) {
@@ -76,7 +76,7 @@ export class LoginPageComponent {
         this._authService.setRefreshToken(refresh);
         this._localStorageService.setItem('user_id', user_id);
 
-        this._userService.userDetails().pipe(take(1)).subscribe({
+        this._userService.userDetails(user_id).pipe(take(1)).subscribe({
           next: (userDetails) => {
             this.navigateToLandingPage(userDetails.roles);
           }

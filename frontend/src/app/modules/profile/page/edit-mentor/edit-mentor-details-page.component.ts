@@ -86,7 +86,7 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
             email: this.registrationService.userDetails?.email,
             occupation: this.registrationService.userDetails?.occupation || null,
             occupationStartDate: this.registrationService.userDetails?.occupationStartDate || null,
-            profilePic: this.registrationService.userDetails?.profilePic && URL.createObjectURL(this.registrationService?.userDetails?.profilePic as File) || "https://upload.wikimedia.org/wikipedia/commons/b/b5/Windows_10_Default_Profile_Picture.svg",
+            profilePic: this.registrationService.userDetails?.profilePic && URL.createObjectURL(this.registrationService?.userDetails?.profilePic as File) || "../../../../../assets/images/profilePic.png"
           } as UserInfo;
           return {
             ...userInfo,

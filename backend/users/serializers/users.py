@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class CustomUserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, required=False)
     email = serializers.EmailField(required=True)
     details = serializers.PrimaryKeyRelatedField(read_only=True)
     joined = serializers.DateTimeField(read_only=True)

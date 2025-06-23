@@ -4,6 +4,9 @@ import {experienceDuration} from "../../../../shared/helpers/experienceDurations
 
 import {UserInfo} from "../../../../types/user details/user-info.interface";
 import {UserServiceService} from "../../../../shared/services/user/user-service.service";
+import {map, take} from "rxjs";
+import {toSignal} from "@angular/core/rxjs-interop";
+import {AuthServiceService} from "../../../../shared/services/auth-service.service";
 
 
 
@@ -14,34 +17,41 @@ import {UserServiceService} from "../../../../shared/services/user/user-service.
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.scss'
 })
-export class UserDetailsComponent implements OnInit {
+export class UserDetailsComponent  {
   private _router = inject(Router);
 
   private readonly _userService = inject(UserServiceService);
+  private readonly _authService = inject(AuthServiceService);
 
-  ngOnInit() {
-    this._userService.userDetails()
-  }
+  $userStatus = toSignal(this._userService.userDetails().pipe(map(user => user.isArchived))) as Signal<boolean>;
 
-  $user: WritableSignal<UserInfo> = signal({
-    id: 1,
-    firstName: "vorname",
-    email: "vorname@gmail.com",
-    lastName: "nachname",
-    occupation: "carer",
-    occupationStartDate: new Date(5).toDateString(),
-    profilePic: "https://cdn.britannica.com/54/252154-050-881EE55B/janelle-monae-glass-onion-knives-out-film-premiere.jpg"
+  $user = toSignal(this._userService.userInfo()) as Signal<UserInfo>;
+
+  $profilePic = computed(() => { return this.$user()?.profilePic || "/assets/images/default.jpeg"
   })
 
   $occupationStartDate: Signal<Date> = computed(() => {
       return new Date(this.$user()?.occupationStartDate as string);
   })
 
+  logout() {
+    this._authService.logout();
+  }
 
   editDetails() {
     this._router.navigate(['/profile/user-details/edit']);
   }
 
+  toggleAccountStatus() {
+    this._userService.updateUserAccount(
+      {
+        isArchived: this.$userStatus(),
+        email: this.$user()?.email
+      }).subscribe(() => {
+        this.$user = toSignal(this._userService.userInfo()) as Signal<UserInfo>;
+      }
+    )
+  }
 
   protected readonly experienceDuration = experienceDuration;
   protected readonly Date = Date;

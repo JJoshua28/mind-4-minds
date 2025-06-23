@@ -5,11 +5,13 @@
       class="personal-details-container"
     >
        <div class="d-flex flex-column gap-2 align-items-center">
-        <img
-          alt="Janelle Monae"
-          [src]="$user().profilePic"
-          class="profile-picture rounded"
-        />
+         @if ($user()) {
+          <img
+            alt="{{$user().firstName}} {{ $user().lastName }} profile picture"
+            [src]=$profilePic()
+            class="profile-picture rounded"
+          />
+         }
          <div class="d-flex flex-column align-items-center">
            @if ($user().occupation) {<h6 class="text-capitalize pb-0 lh-1" >{{$user().occupation}}</h6>}
            @if ($occupationStartDate()) {<h6 class="text-capitalize email lh-1">{{ experienceDuration($occupationStartDate()) }}</h6>}
@@ -19,7 +21,7 @@
       <div class="text-truncate d-inline-block">
         <h4>{{$user().firstName}} {{$user().lastName}}</h4>
         <h6 class="email mt-2 mb-2">{{$user().email}}</h6>
-        <h6>Password: ***********</h6>
+        <h6>Password:</h6>
       </div>
     </div>
     <div class="w-100 mt-5 d-flex justify-content-between align-items-end pb-2">
@@ -30,11 +32,15 @@
         <i class="bi bi-pencil-square"></i>
         <h6 class="mb-0">Edit Details</h6>
       </div>
-      <div class="d-flex gap-2 edit-button mt-1  align-items-center">
+      <div
+        (click)="logout()"
+        class="d-flex gap-2 edit-button mt-1  align-items-center">
         <i class="bi bi-box-arrow-right"></i>
         <h6 class="mb-0">Log out</h6>
       </div>
     </div>
   </div>
-  <h6 class="mb-0 mt-5 mx-0 account-activity-button">Deactivate account</h6>
+  <h6
+    (click)="toggleAccountStatus()"
+    class="mb-0 mt-5 mx-0 account-activity-button">{{ !$userStatus()? "Deactivate" : "Active"}} account</h6>
 </div>
