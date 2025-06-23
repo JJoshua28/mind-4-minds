@@ -1,10 +1,5 @@
 import {Component, computed, inject, Signal, signal, ViewChild} from '@angular/core';
-import {
-  EditMentorDetailsComponent
-} from "../../../../shared/component/edit-mentor-details/edit-mentor-details.component";
-import {
-  PreviewMentorCardComponent
-} from "../../../profile/components/preview-mentor-card/preview-mentor-card.component";
+
 import {RegistrationService } from "../../registration.service";
 import {UserType} from "../../../../types/user-type.enum";
 import {MenteeInfo, MentorInfo, UserInfo} from "../../../../types/user details/user-info.interface";
@@ -17,8 +12,6 @@ import {ViewMenteeModalComponent} from "../../../../shared/component/view-mentee
   selector: 'app-review-registration-page',
   standalone: true,
   imports: [
-    EditMentorDetailsComponent,
-    PreviewMentorCardComponent,
     UserCardComponent,
     ViewMentorModalComponent,
     ViewMenteeModalComponent
@@ -72,4 +65,7 @@ export class ReviewRegistrationPageComponent {
     }
   })
 
+  completeRegistration() {
+    this.registrationService.createUser();
+  }
 }

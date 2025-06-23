@@ -54,6 +54,10 @@ export class RegistrationLayoutPageComponent implements OnInit, OnDestroy {
       this.createRegistrationSteps(this.registrationService.roles);
       this.navigateToNextSection();
     }))
+
+    this.subscriptions.add(this.registrationService.registrationCompleteObserver().subscribe((roles) => {
+      this.navigateToLandingPage(roles);
+    }))
   }
 
   ngOnDestroy() {
@@ -83,6 +87,20 @@ export class RegistrationLayoutPageComponent implements OnInit, OnDestroy {
       lastStep as string
     ]
 
+  }
+
+  navigateToLandingPage(roles: UserType[]) {
+    let landingPage = ""
+
+    if (roles.includes(UserType.MENTEE)) {
+      landingPage = "my-mentors"
+    } else if (roles.includes(UserType.MENTOR)) {
+      landingPage = "my-mentees"
+    } else {
+      landingPage = "users"
+    }
+
+    this._router.navigate([`/${landingPage}`]);
   }
 
   navigateToNextSection () {

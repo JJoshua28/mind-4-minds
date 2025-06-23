@@ -2,14 +2,26 @@ import {inject, Injectable} from '@angular/core';
 
 import {UserType} from "../../types/user-type.enum";
 
+interface UserAccount {
+  id: string;
+  email: string;
+  password: string;
+}
+
+
 import {MenteeInfo, MentorInfo, UserInfo} from "../../types/user details/user-info.interface";
-import {Subject} from "rxjs";
+import {map, of, Subject, switchMap, take} from "rxjs";
 import {LocalStorageService} from "../../shared/services/local-storage.service";
 
+import {HttpService} from "../../shared/services/http.service";
+import {mapUserFormToApiPayload} from "../../shared/mapper/userDetailsToApi.mapper";
+import mapMenteeDetailsToApiPayload from "../../shared/mapper/menteeDetailsToApi.mapper";
+import {UserDetails} from "../../types/user.interface";
+import {mapMentorDetailsToApiPayload} from "../../shared/mapper/mentorDetailsToApi.mapper";
+
 export interface RegistrationUserDetails extends Omit<UserInfo, 'profilePic'> {
-  profilePic: File | null
+  profilePic: File | null;
   storageProfilePic?: string;
-  email: string
   newPassword: string | null
 }
 
@@ -19,18 +31,22 @@ export interface RegistrationUserDetails extends Omit<UserInfo, 'profilePic'> {
 })
 export class RegistrationService {
   private _localStorageService = inject(LocalStorageService);
+  private readonly apiService = inject(HttpService);
 
   private _userDetails!: RegistrationUserDetails;
   private _roles: Array<UserType> = [];
   private _menteeDetails!: MenteeInfo;
   private _mentorDetails!: MentorInfo;
-  private _navigateToNextSection: Subject<void> = new Subject<void>();
+  private _navigateToNextSection: Subject<void> = new Subject<void>()
+  private _registrationComplete: Subject<UserType[]> = new Subject<UserType[]>()
 
   constructor() {
     this._roles = this._localStorageService.getItem('roles') || [];
     this._userDetails = {
       ...this._localStorageService.getItem('userDetails'),
       storageProfilePic: this._localStorageService.getItem('profilePic') || undefined,
+      profilePic: this._localStorageService.getItem('profilePic') || undefined,
+
     } as RegistrationUserDetails;
     this._menteeDetails = this._localStorageService.getItem('menteeDetails') as MenteeInfo|| {};
     this._mentorDetails = this._localStorageService.getItem('mentorDetails') as MentorInfo|| {};
@@ -87,6 +103,94 @@ export class RegistrationService {
 
   sectionNavigationObserver() {
     return this._navigateToNextSection.asObservable();
+  }
+
+  registrationCompleteObserver() {
+    return this._registrationComplete.asObservable();
+  }
+
+  getAuthenticationToken () {
+    const endpoint = "token"
+    const {email, newPassword: password} = this.userDetails
+
+    return this.apiService.post(endpoint, {email, password})
+  }
+
+  createUserRequest(details: RegistrationUserDetails) {
+    const {email, newPassword: password} = details
+    return {
+      email,
+      password,
+    }
+  }
+
+  createUserDetailsRequest(details: RegistrationUserDetails, roles: UserType[], userId: string): FormData {
+    const { storageProfilePic, email, newPassword,...registration } = details;
+    const userRegistration = mapUserFormToApiPayload(registration, roles)
+    const formData = new FormData();
+
+    for (const key in userRegistration) {
+      if (Object.prototype.hasOwnProperty.call(userRegistration, key)) {
+        const value = userRegistration[key as keyof typeof userRegistration];
+
+        if (value !== undefined && value !== null) {
+          formData.append(key, value);
+        }
+      }
+    }
+
+    formData.append('user', userId);
+
+    return formData;
+  }
+
+
+  createUser () {
+    const usersEndpoint = 'users';
+    const userDetailsEndpoint = 'user-details';
+    const menteeDetailsEndpoint = 'mentee-details';
+    const mentorDetailsEndpoint = 'mentor-details';
+
+    const userRequest = this.createUserRequest(this.userDetails);
+
+    this.apiService.post(usersEndpoint, userRequest).pipe(
+      switchMap((user) => {
+        const userAccount = user as UserAccount;
+        const formData = this.createUserDetailsRequest(this.userDetails, this.roles, userAccount.id);
+        return this.apiService.post(userDetailsEndpoint, formData);
+      }),
+      switchMap((userDetails) => {
+        const userDetailsPayload = userDetails as UserDetails;
+        if(this.roles.includes(UserType.MENTEE)) {
+          const menteeDetailsPayload = mapMenteeDetailsToApiPayload(this.menteeDetails, userDetailsPayload.id);
+          return this.apiService.post(menteeDetailsEndpoint, menteeDetailsPayload).pipe(
+            map(() => userDetailsPayload) // Pass it along
+          );
+        }
+        return of(userDetailsPayload);
+      }),
+      switchMap((userDetails) => {
+        const userDetailsPayload = userDetails as UserDetails;
+        if(this.roles.includes(UserType.MENTOR)) {
+          const mentorDetailsPayload = mapMentorDetailsToApiPayload(this.mentorDetails, userDetailsPayload.id);
+          return this.apiService.post(mentorDetailsEndpoint, mentorDetailsPayload);
+        }
+        return of(userDetailsPayload);
+      }),
+      switchMap(() => {
+        return this.getAuthenticationToken()
+      }),
+      take(1),
+    ).subscribe({
+      next: (authToken) => {
+        this._localStorageService.clear()
+        this._localStorageService.setItem("auth_token", authToken);
+        this._registrationComplete.next(this.roles);
+      },
+      error: (err) => {
+        console.error('Registration failed', err);
+      }
+    });
   }
 
   navigateToNextSection() {

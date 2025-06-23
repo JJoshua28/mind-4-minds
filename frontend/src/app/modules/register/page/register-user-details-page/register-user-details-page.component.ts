@@ -23,7 +23,7 @@ export class RegisterUserDetailsPageComponent {
 
   registrationService: RegistrationService =inject(RegistrationService);
 
-  $profilePicToPreview = signal(this.registrationService.userDetails.storageProfilePic as string);
+  $profilePicToPreview = signal(this.registrationService.userDetails.storageProfilePic);
 
 
   passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/;
@@ -39,7 +39,7 @@ export class RegisterUserDetailsPageComponent {
       this.registrationService?.userDetails?.occupation ||'', Validators.minLength(2)
     ),
     occupationStartDate: this._formBuilder.control(
-      this.registrationService?.userDetails?.occupationStartDate || ''
+      this.registrationService?.userDetails?.occupationStartDate || null
     ),
     profilePic: this._formBuilder.control<File | null>(null,
       this.registrationService?.roles.includes(UserType.MENTOR) && !this.$profilePicToPreview()
@@ -61,7 +61,7 @@ export class RegisterUserDetailsPageComponent {
 
   submitUserDetails() {
     if(this.userDetailsForm.valid) {
-      const details = this.userDetailsForm.value as RegistrationUserDetails;
+      const { currentPassword, ...details } = this.userDetailsForm.value as { currentPassword: string | null } & RegistrationUserDetails;
       this.registrationService.addUserDetails(details);
     }
   }
