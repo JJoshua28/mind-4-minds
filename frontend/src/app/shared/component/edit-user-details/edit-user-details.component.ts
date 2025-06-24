@@ -37,20 +37,15 @@ export class EditUserDetailsComponent implements OnInit {
 
   $changeType = input.required<EditType>()
   $shouldDisplayCurrentPassword!: WritableSignal<boolean>;
-  defaultProfilePic = "https://upload.wikimedia.org/wikipedia/commons/b/b5/Windows_10_Default_Profile_Picture.svg"
-  $currentProfilePic = input<string>(this.defaultProfilePic)
-  filePreviewUrl!: WritableSignal<string>;
+  $currentProfilePic = input.required<string>()
 
+  filePreviewUrl!: WritableSignal<string>;
 
   $userDetailsForm = input.required<FormGroup<UserFormControls>>();
 
   ngOnInit() {
     this.$shouldDisplayCurrentPassword = signal(this.$changeType() === "edit")
-
-    const previewImage = this.$currentProfilePic()?.trim() || this.defaultProfilePic;
-
-    this.filePreviewUrl = signal(previewImage);
-
+    this.filePreviewUrl = signal(this.$currentProfilePic())
   }
 
   onFileChange(event: Event) {

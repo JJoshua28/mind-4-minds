@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import os
 
 from pathlib import Path
 from datetime import timedelta
@@ -141,6 +142,10 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+MEDIA_URL = '/profile_pics/'  # or /media/ if you prefer
+MEDIA_ROOT = os.path.join(BASE_DIR, 'profile_pics')  # or 'media'
+
 
 DEBUG = True
 # Static files (CSS, JavaScript, Images)

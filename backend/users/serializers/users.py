@@ -15,5 +15,17 @@ class CustomUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'password', 'details', 'is_active', 'joined']
 
     def create(self, validated_data):
-        validated_data.pop('details', None)  # ensure no unexpected kwarg
+        validated_data.pop('details', None)
         return User.objects.create_user(**validated_data)
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        if password:
+            instance.set_password(password)  # 🔐 Ensure hashing
+
+        instance.save()
+        return instance

@@ -149,10 +149,10 @@ export class RegistrationService {
 
 
   createUser () {
-    const usersEndpoint = 'users/accounts';
-    const userDetailsEndpoint = 'users/details';
-    const menteeDetailsEndpoint = 'users/mentee-details';
-    const mentorDetailsEndpoint = 'users/mentor-details';
+    const usersEndpoint = 'users/accounts/';
+    const userDetailsEndpoint = 'users/details/';
+    const menteeDetailsEndpoint = 'users/mentee-details/';
+    const mentorDetailsEndpoint = 'users/mentor-details/';
 
     const userRequest = this.createUserRequest(this.userDetails);
 

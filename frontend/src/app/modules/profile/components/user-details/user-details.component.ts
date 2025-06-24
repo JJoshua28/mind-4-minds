@@ -3,7 +3,7 @@ import {Router} from "@angular/router";
 import {experienceDuration} from "../../../../shared/helpers/experienceDurations";
 
 import {UserInfo} from "../../../../types/user details/user-info.interface";
-import {UserServiceService} from "../../../../shared/services/user/user-service.service";
+import {UserService} from "../../../../shared/services/user/user-service.service";
 import {map, take} from "rxjs";
 import {toSignal} from "@angular/core/rxjs-interop";
 import {AuthServiceService} from "../../../../shared/services/auth-service.service";
@@ -14,13 +14,16 @@ import {AuthServiceService} from "../../../../shared/services/auth-service.servi
   selector: 'app-user-details',
   standalone: true,
   imports: [],
+  providers: [
+    UserService,
+  ],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.scss'
 })
 export class UserDetailsComponent  {
   private _router = inject(Router);
 
-  private readonly _userService = inject(UserServiceService);
+  private readonly _userService = inject(UserService);
   private readonly _authService = inject(AuthServiceService);
 
   $userStatus = toSignal(this._userService.userDetails().pipe(map(user => user.isArchived))) as Signal<boolean>;

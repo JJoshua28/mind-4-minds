@@ -6,9 +6,11 @@ User = get_user_model()
 
 class UserDetailsSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), write_only=True)
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False, write_only=True)
     profilePic = serializers.SerializerMethodField(read_only=True)
     profile_pic = serializers.ImageField(required=False, write_only=True)
+    occupation_start_date = serializers.DateField(required=False)
+    occupation = serializers.CharField(required=False)
 
     class Meta:
         model = UserDetails

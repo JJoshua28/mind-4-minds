@@ -122,6 +122,10 @@
         @if ($userDetailsForm().errors?.["currentPasswordRequired"]) {
           <span class="error-text">Current password is required when changing your password.</span>
         }
+
+        @if ($userDetailsForm().get('currentPassword')?.errors?.['incorrectPassword']) {
+          <span class="error-text">The password you provided is incorrect.</span>
+        }
       </div>
     }
 

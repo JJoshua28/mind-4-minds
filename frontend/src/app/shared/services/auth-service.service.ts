@@ -36,12 +36,11 @@ export class AuthServiceService {
 
   refreshToken() {
     const refresh = this.getRefreshToken();
-    return this.httpService.post('/api/token/refresh', { refresh });
+    return this.httpService.post('token/refresh', { refresh });
   }
 
   logout() {
     this._localStorageService.clear();
     this._router.navigate(['/login']);
   }
-
 }

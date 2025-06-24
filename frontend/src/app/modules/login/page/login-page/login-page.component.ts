@@ -6,7 +6,7 @@ import {HttpService} from "../../../../shared/services/http.service";
 import {LocalStorageService} from "../../../../shared/services/local-storage.service";
 import {AuthServiceService, AuthToken} from "../../../../shared/services/auth-service.service";
 import {UserType} from "../../../../types/user-type.enum";
-import {UserServiceService} from "../../../../shared/services/user/user-service.service";
+import {UserService} from "../../../../shared/services/user/user-service.service";
 import {take} from "rxjs";
 
 @Component({
@@ -15,6 +15,9 @@ import {take} from "rxjs";
   imports: [
     TextInputComponent,
     ReactiveFormsModule
+  ],
+  providers: [
+    UserService,
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
@@ -26,7 +29,7 @@ export class LoginPageComponent implements OnInit {
   private readonly _apiService = inject(HttpService);
   private readonly _authService = inject(AuthServiceService);
   private readonly _localStorageService = inject(LocalStorageService);
-  private readonly _userService = inject(UserServiceService);
+  private readonly _userService = inject(UserService);
 
   protected errorMessage!: string | null;
 
@@ -36,7 +39,10 @@ export class LoginPageComponent implements OnInit {
   })
 
   ngOnInit() {
-    this._localStorageService.clear();
+    if(this._localStorageService.getItem('auth_token') || this._localStorageService.getItem('user_id'))
+    {
+      this._localStorageService.clear();
+    }
   }
 
   navigateToLandingPage(roles: UserType[]) {
