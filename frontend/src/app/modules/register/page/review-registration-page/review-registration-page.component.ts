@@ -1,4 +1,4 @@
-import {Component, computed, inject, Signal, signal, ViewChild} from '@angular/core';
+import {Component, computed, inject, Signal, signal, ViewChild, WritableSignal} from '@angular/core';
 
 import {RegistrationService } from "../../registration.service";
 import {UserType} from "../../../../types/user-type.enum";
@@ -24,6 +24,8 @@ export class ReviewRegistrationPageComponent {
   @ViewChild(ViewMenteeModalComponent) viewMenteeModal!: ViewMenteeModalComponent;
 
   private readonly registrationService: RegistrationService = inject(RegistrationService);
+
+  $errorText: WritableSignal<string> = signal("");
 
   $guidelineText: Signal<string> = signal(
     this.registrationService.roles.includes(UserType.MENTEE)?
@@ -66,6 +68,10 @@ export class ReviewRegistrationPageComponent {
   })
 
   completeRegistration() {
-    this.registrationService.createUser();
+    this.registrationService.createUser().subscribe({
+      error: error => {
+        this.$errorText.set(error.message);
+      }
+    });
   }
 }

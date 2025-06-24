@@ -11,7 +11,7 @@ interface UserAccount {
 
 
 import {MenteeInfo, MentorInfo, UserInfo} from "../../types/user details/user-info.interface";
-import {map, of, Subject, switchMap, take} from "rxjs";
+import {map, Observable, of, Subject, switchMap, take, tap} from "rxjs";
 import {LocalStorageService} from "../../shared/services/local-storage.service";
 
 import {HttpService} from "../../shared/services/http.service";
@@ -148,7 +148,7 @@ export class RegistrationService {
   }
 
 
-  createUser () {
+  createUser (): Observable<Object> {
     const usersEndpoint = 'users/accounts/';
     const userDetailsEndpoint = 'users/details/';
     const menteeDetailsEndpoint = 'users/mentee-details/';
@@ -156,10 +156,15 @@ export class RegistrationService {
 
     const userRequest = this.createUserRequest(this.userDetails);
 
-    this.apiService.post(usersEndpoint, userRequest).pipe(
+    return this.apiService.post(usersEndpoint, userRequest).pipe(
       switchMap((user) => {
         const userAccount = user as UserAccount;
         const formData = this.createUserDetailsRequest(this.userDetails, this.roles, userAccount.id);
+        try {
+          this.apiService.post(userDetailsEndpoint, formData);
+        } catch (error) {
+          console.log(error);
+        }
         return this.apiService.post(userDetailsEndpoint, formData);
       }),
       switchMap((userDetails) => {
@@ -183,9 +188,7 @@ export class RegistrationService {
       switchMap(() => {
         return this.getAuthenticationToken()
       }),
-      take(1),
-    ).subscribe({
-      next: (authToken) => {
+      tap((authToken) => {
         this._localStorageService.clear()
 
         const {access, refresh, user_id} = authToken as AuthToken;
@@ -196,11 +199,9 @@ export class RegistrationService {
         this._localStorageService.setItem("user_id", user_id);
 
         this._registrationComplete.next(this.roles);
-      },
-      error: (err) => {
-        console.error('Registration failed', err);
-      }
-    });
+      }),
+      take(1)
+    );
   }
 
   navigateToNextSection() {

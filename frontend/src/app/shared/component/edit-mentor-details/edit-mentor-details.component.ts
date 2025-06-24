@@ -13,7 +13,6 @@ import {TextInputComponent} from "../text-input/text-input.component";
   imports: [
     ReactiveFormsModule,
     TextAreaInputComponent,
-    TitleCasePipe,
     TextInputComponent
   ],
   templateUrl: './edit-mentor-details.component.html',

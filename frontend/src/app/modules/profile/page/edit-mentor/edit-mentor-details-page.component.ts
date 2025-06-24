@@ -9,21 +9,26 @@ import {
 } from "../../../../shared/component/edit-mentor-details/edit-mentor-details.component";
 import {RegistrationService} from "../../../register/registration.service";
 import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
-import {Subscription} from "rxjs";
+import {forkJoin, map, Subscription} from "rxjs";
 import {MentorInfo, UserInfo} from "../../../../types/user details/user-info.interface";
 import {MentorDetailsFormControl} from "../../../../types/user details/mentor/mentor-details-form.interface";
 import {atLeastOneTrueValidator} from "../../../../shared/helpers/atLeastOneSelectedCheckboxValidation";
 import {PreviewMentorCardComponent} from "../../components/preview-mentor-card/preview-mentor-card.component";
+import {MentorService} from "../../../../shared/services/user/mentor.service";
+import {UserService} from "../../../../shared/services/user/user-service.service";
+import {MentorDetails} from "../../../../types/user details/mentor/mentor.interface";
 
 @Component({
   selector: 'app-edit-mentor-details-page',
   standalone: true,
   imports: [
-    TextAreaInputComponent,
     ReactiveFormsModule,
-    TitleCasePipe,
     EditMentorDetailsComponent,
     PreviewMentorCardComponent
+  ],
+  providers: [
+    UserService,
+    MentorService
   ],
   templateUrl: './edit-mentor-details-page.component.html',
   styleUrl: './edit-mentor-details-page.component.scss'
@@ -37,66 +42,86 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
 
   private readonly subscriptions: Subscription = new Subscription();
 
-  private readonly registrationService = inject(RegistrationService);
+  private readonly mentorService = inject(MentorService);
+  private readonly userService = inject(UserService);
 
   meetingPreferenceOptions = Object.values(MeetingPreferences);
   neurodivergentConditionOptions = Object.values(NeurodivergenceConditions);
 
-  mentorDetails: MentorInfo = this.registrationService.mentorDetails;
+  mentorDetails!: MentorInfo;
 
   $user!:Signal<UserInfo & MentorInfo>;
 
-  $mentorDetailsForm: WritableSignal<FormGroup<MentorDetailsFormControl>> = signal(this._formBuilder.group({
-    description: this._formBuilder.nonNullable.control(this.mentorDetails?.description || "", [Validators.required]),
-    qualifications: this._formBuilder.nonNullable.control(this.mentorDetails?.qualifications || "", [Validators.required]),
-    commitment: this._formBuilder.nonNullable.control(this.mentorDetails?.commitment || "", [Validators.required]),
-    experience: this._formBuilder.nonNullable.control(this.mentorDetails?.experience || ""),
-    meetingPreferences: this._formBuilder.nonNullable.array(
-      this.meetingPreferenceOptions.map(preference => {
-        const defaultValue = this.mentorDetails?.meetingPreferences.includes(preference);
-        return this._formBuilder.nonNullable.control(defaultValue)
-      }),
-      {validators: [atLeastOneTrueValidator]
-      }
-    ),
-    neurodivergentConditions: this._formBuilder.nonNullable.array(
-      this.neurodivergentConditionOptions.map(condition => {
-        const defaultValue = this.mentorDetails?.neurodivergentConditions.includes(condition);
-        return this._formBuilder.nonNullable.control(defaultValue)
-      })
-    ),
-
-  }))
+  $mentorDetailsForm!: WritableSignal<FormGroup<MentorDetailsFormControl>>;
 
   ngOnInit() {
     this.subscriptions.add(
-      this.$mentorDetailsForm().valueChanges.subscribe(() => {
+      forkJoin([this.userService.userInfo(), this.mentorService.mentorInfo()]).subscribe(([userInfo, mentorInfo]) => {
+        this.mentorDetails = mentorInfo;
+
+        this.$mentorDetailsForm = signal(this._formBuilder.group({
+          description: this._formBuilder.nonNullable.control(this.mentorDetails?.description || "", [Validators.required]),
+          qualifications: this._formBuilder.nonNullable.control(this.mentorDetails?.qualifications || "", [Validators.required]),
+          commitment: this._formBuilder.nonNullable.control(this.mentorDetails?.commitment || "", [Validators.required]),
+          experience: this._formBuilder.nonNullable.control(this.mentorDetails?.experience || ""),
+          meetingPreferences: this._formBuilder.nonNullable.array(
+            this.meetingPreferenceOptions.map(preference => {
+              const defaultValue = this.mentorDetails?.meetingPreferences.includes(preference);
+              return this._formBuilder.nonNullable.control(defaultValue)
+            }),
+            { validators: [atLeastOneTrueValidator] }
+          ),
+          neurodivergentConditions: this._formBuilder.nonNullable.array(
+            this.neurodivergentConditionOptions.map(condition => {
+              const defaultValue = this.mentorDetails?.neurodivergentConditions.includes(condition);
+              return this._formBuilder.nonNullable.control(defaultValue)
+            })
+          ),
+        }));
+
         this.$user = computed(() => {
-          const meetingPreferences: MeetingPreferences[] = this.meetingPreferenceOptions.filter((value, index) => this.$mentorDetailsForm()?.value?.meetingPreferences?.[index]);
-          const neurodivergentConditions: NeurodivergenceConditions[] = this.neurodivergentConditionOptions.filter((value, index) => this.$mentorDetailsForm()?.value?.neurodivergentConditions?.[index]);
+          const meetingPreferences: MeetingPreferences[] = this.meetingPreferenceOptions.filter(
+            (value, index) => this.$mentorDetailsForm().value?.meetingPreferences?.[index]
+          );
+          const neurodivergentConditions: NeurodivergenceConditions[] = this.neurodivergentConditionOptions.filter(
+            (value, index) => this.$mentorDetailsForm().value?.neurodivergentConditions?.[index]
+          );
           const mentorInfo = {
-            ...this.$mentorDetailsForm()?.value as Partial<MentorInfo>,
+            ...this.$mentorDetailsForm().value as Partial<MentorInfo>,
             meetingPreferences,
             neurodivergentConditions,
           } as MentorInfo;
 
-          const userInfo = {
-            firstName: this.registrationService.userDetails?.firstName,
-            lastName: this.registrationService.userDetails?.lastName,
-            email: this.registrationService.userDetails?.email,
-            occupation: this.registrationService.userDetails?.occupation || null,
-            occupationStartDate: this.registrationService.userDetails?.occupationStartDate || null,
-            profilePic: this.registrationService.userDetails?.profilePic && URL.createObjectURL(this.registrationService?.userDetails?.profilePic as File) || "../../../../../assets/images/profilePic.png"
-          } as UserInfo;
+
           return {
             ...userInfo,
+            profilePic: userInfo.profilePic || "/assets/images/default.jpeg",
             ...mentorInfo,
-          }
-        })
-      })
-    )
+          };
+        });
 
+        this.subscriptions.add(
+          this.$mentorDetailsForm().valueChanges.subscribe(() => {
+          })
+        );
+      })
+    );
   }
+
+  updateMentorDetails() {
+    if (this.$mentorDetailsForm().valid) {
+      const meetingPreferences = this.meetingPreferenceOptions.filter((value, index) => this.$mentorDetailsForm()?.value?.meetingPreferences?.[index]);
+      const neurodivergentConditions = this.neurodivergentConditionOptions.filter((value, index) => this.$mentorDetailsForm()?.value?.neurodivergentConditions?.[index]);
+
+      const formData = {
+        ...this.$mentorDetailsForm().value as Partial<MentorDetails>,
+        meetingPreferences: meetingPreferences,
+        neurodivergentConditions: neurodivergentConditions,
+      }
+      this.mentorService.updateMentorDetails(formData as Partial<MentorDetails>).subscribe();
+    }
+  }
+
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();

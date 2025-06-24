@@ -1,13 +1,14 @@
-import {Component, computed, inject, input, ViewChild} from '@angular/core';
+import {Component, computed, inject, input, OnInit, Signal, signal, ViewChild, WritableSignal} from '@angular/core';
 import {Router} from "@angular/router";
-import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
 
-import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
 import {MentorDetailsComponent} from "../../../../shared/component/mentor-details/mentor-details.component";
 import {MentorUser} from "../../../../types/user.interface";
 import {PreviewMentorCardComponent} from "../../components/preview-mentor-card/preview-mentor-card.component";
-import {UserInfo} from "../../../../types/user details/user-info.interface";
-import {UserType} from "../../../../types/user-type.enum";
+import {MentorInfo, UserInfo} from "../../../../types/user details/user-info.interface";
+
+import {MentorService} from "../../../../shared/services/user/mentor.service";
+
+import {UserService} from "../../../../shared/services/user/user-service.service";
 
 @Component({
   selector: 'app-mentor',
@@ -16,45 +17,55 @@ import {UserType} from "../../../../types/user-type.enum";
     MentorDetailsComponent,
     PreviewMentorCardComponent
   ],
+  providers: [
+    UserService,
+    MentorService
+  ],
   templateUrl: './mentor.component.html',
   styleUrl: './mentor.component.scss'
 })
-export class MentorComponent {
+export class MentorComponent implements OnInit {
   private readonly _router = inject(Router);
+
+  private readonly _mentorService = inject(MentorService)
+
   @ViewChild(PreviewMentorCardComponent) previewMentorModal!: PreviewMentorCardComponent;
 
+  $user!: WritableSignal<MentorUser>
 
+  $mentorDetail!: Signal<UserInfo & MentorInfo>
 
-  $user = input<MentorUser>({
-    id: "1",
-    firstName: "vorname",
-    email: "vorname@gmail.com",
-    lastName: "nachname",
-    occupation: "carer",
-    joined: new Date(5).toDateString(),
-    isArchived: false,
-    occupationStartDate: new Date(5).toDateString(),
-    profilePic: "https://cdn.britannica.com/54/252154-050-881EE55B/janelle-monae-glass-onion-knives-out-film-premiere.jpg",
-    roles: [UserType.MENTOR, UserType.ADMIN],
-    mentorDetails: {
-      id: "1",
-      meetingPreferences: [MeetingPreferences.ONLINE_MESSAGING, MeetingPreferences.VIDEO_CALLS],
-      qualifications: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      experience: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      neurodivergentConditions: [NeurodivergenceConditions.ADHD, NeurodivergenceConditions.TOURETTES, NeurodivergenceConditions.AUTISM, NeurodivergenceConditions.DYSLEXIA, NeurodivergenceConditions.DYSCALCULIA],
-      commitment: "Once a week for two weeks",
-      description: "Hi, I am vorname. I have been caring for my Autistic son for 13 years now. \n" +
-        "I have experience helping him self-regulate and vibe.",
-      isAvailable: false,
-    }
-  })
+  ngOnInit(): void {
 
-  $mentorDetail = computed(() => ({...this.$user() as UserInfo, ...this.$user().mentorDetails}))
+    this._mentorService.mentorUser().subscribe((user) => {
+      this.$user = signal(user)
 
-
+      this.$mentorDetail = computed(() => ({...this.$user() as UserInfo, ...this.$user().mentorDetails}))
+    })
+  }
 
   navigateTo() {
     this._router.navigate(['/profile/mentor-details/edit']);
+  }
+
+  updateMentorStatus() {
+    const currentMentorDetails = this.$user().mentorDetails;
+    const updatedDetails = {
+      ...currentMentorDetails,
+      isAvailable: !currentMentorDetails.isAvailable,
+    };
+
+    this._mentorService.updateMentorDetails(updatedDetails).subscribe({
+      next: (updatedMentorDetails) => {
+        this.$user.update(user => ({
+          ...user,
+          mentorDetails: updatedMentorDetails
+        }));
+      },
+      error: (err) => {
+        console.error("Failed to update mentor availability:", err);
+      }
+    });
   }
 
 }

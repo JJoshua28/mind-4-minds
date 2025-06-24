@@ -37,6 +37,10 @@
 
 
   </div>
+    <h5
+      style.visibility="{{$errorText() === '' ? 'hidden' : 'visible'}}"
+      class="text-danger text-center">{{$errorText()}}</h5>
+
   <div class="d-flex justify-content-end w-100 mt-5 continue-button-container">
 
     <button
@@ -46,7 +50,6 @@
     ><h4
     >Continue</h4></button>
   </div>
-
 </main>
 
 @if (shouldLoadMentorDetail) {

@@ -88,7 +88,7 @@ class MentorDetails(models.Model):
         user_details = models.OneToOneField(UserDetails, on_delete=models.CASCADE, related_name='mentor_details')
         description = models.TextField()
         qualifications = models.TextField()
-        experience = models.TextField()
+        experience = models.TextField(default="")
         commitment = models.CharField(max_length=255)
         is_available = models.BooleanField(default=True)
         meeting_preferences = models.JSONField(default=list)

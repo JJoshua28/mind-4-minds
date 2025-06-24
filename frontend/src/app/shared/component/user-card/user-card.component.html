@@ -8,7 +8,7 @@
     <div class="d-flex">
       <div>
           <img
-            alt="Janelle Monae"
+            alt="{{ $userCardInfo().firstName}} {{ $userCardInfo().lastName }} profile picture"
             [src]="$userCardInfo().profilePic"
             class="profile-picture rounded"
           />

@@ -1,11 +1,12 @@
-<main
-  class="m-auto w-75 mt-4 mb-5"
->
-  <h1>Edit Mentor Details</h1>
-  <div
-    class="mt-4 border border-light rounded px-4 pt-4 pb-3 d-flex flex-column gap-5 mb-3"
+@defer (when !!$user && $mentorDetailsForm ) {
+  <main
+    class="m-auto w-75 mt-4 mb-5"
   >
-    <app-edit-mentor-details [$mentorDetailsForm]="$mentorDetailsForm()"/>
+    <h1>Edit Mentor Details</h1>
+    <div
+      class="mt-4 border border-light rounded px-4 pt-4 pb-3 d-flex flex-column gap-5 mb-3"
+    >
+      <app-edit-mentor-details [$mentorDetailsForm]="$mentorDetailsForm()"/>
       <button
         class="d-flex align-items-center justify-content-end gap-2 save-button px-0"
         [style.visibility]="$mentorDetailsForm().invalid? 'hidden' : 'visible'"
@@ -14,22 +15,23 @@
         <i class="bi bi-person-square fs-5"></i>
         <h5 class="mb-0">Preview</h5>
       </button>
-  </div>
-  <div class="d-flex justify-content-between">
-    <button
-      class="cancel-button text-capitalize"
-      (click)="navigateTo()"
-    >Cancel</button>
-    <button
-      [style.visibility]="$mentorDetailsForm().invalid? 'hidden' : 'visible'"
-      type="submit"
-      class="save-button"
-      (click)="navigateTo()"
-    >Save</button>
-  </div>
-  @if ($mentorDetailsForm().valid) {
-    <app-preview-mentor-card
-      [$user]="$user()"
-    />
-  }
-</main>
+    </div>
+    <div class="d-flex justify-content-between">
+      <button
+        class="cancel-button text-capitalize"
+        (click)="navigateTo()"
+      >Cancel</button>
+      <button
+        [style.visibility]="$mentorDetailsForm().invalid? 'hidden' : 'visible'"
+        type="submit"
+        class="save-button"
+        (click)="updateMentorDetails(); navigateTo()"
+      >Save</button>
+    </div>
+    @if ($mentorDetailsForm().valid) {
+      <app-preview-mentor-card
+        [$user]="$user()"
+      />
+    }
+  </main>
+}

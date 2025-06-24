@@ -19,7 +19,7 @@
       <div>
         <div class="personal-details-container mb-5 mx-auto">
           <img
-            alt="Janelle Monae"
+            alt="{{ $user().firstName}} {{ $user().lastName }} profile picture"
             [src]="$user().profilePic"
             class="profile-picture rounded"
           />
