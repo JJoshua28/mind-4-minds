@@ -1,45 +1,48 @@
-<div class="navigation-bar-container">
-  <div class="h-100 w-100 d-flex justify-content-between flex-row flex-nowrap align-items-end px-lg-5">
-    <img
-      src="../../../../assets/images/mind4minds%20logo.png"
-      alt="mind for minds logo"
-      class="is-clickable"
-      height="75"
-      width="300"
-    />
+@defer (when $navigationItems) {
+  <div class="navigation-bar-container">
+    <div class="h-100 w-100 d-flex justify-content-between flex-row flex-nowrap align-items-end px-lg-5">
+      <img
+        src="../../../../assets/images/mind4minds%20logo.png"
+        alt="mind for minds logo"
+        class="is-clickable"
+        height="75"
+        width="300"
+      />
 
-    <i
-      class="bi bi-person-circle fs-1 is-clickable"
-      (click)="handleNavigateTo(NavigationItems.profile)"
-    ></i>
+      <i
+        class="bi bi-person-circle fs-1 is-clickable"
+        (click)="handleNavigateTo(NavigationItems.profile)"
+      ></i>
 
-  </div>
-  <nav class="mt-4 ms-3">
-    <ul class="d-flex flex-row gap-5 ps-5 list-inline">
-      @for (item of $navigationItems(); track item) {
-        @if(item === 'inbox') {
-          <div
-            class="d-flex flex-row justify-content-start gap-1"
-            (click)="handleNavigateTo(item)"
-            (keydown.enter)="handleNavigateTo(item)"
-          >
+    </div>
+    <nav class="mt-4 ms-3">
+      <ul class="d-flex flex-row gap-5 ps-5 list-inline">
+        @for (item of $navigationItems(); track item) {
+          @if(item === 'inbox') {
+            <div
+              class="d-flex flex-row justify-content-start gap-1"
+              (click)="handleNavigateTo(item)"
+              (keydown.enter)="handleNavigateTo(item)"
+            >
             <span
               class="bullet-icon"
               [style.visibility]="$hasNewInboxMessage()? 'visible' : 'hidden'"
             >&#8226;</span>
 
-            <li class="is-clickable text-capitalize">{{item}}</li>
-          </div>
+              <li class="is-clickable text-capitalize">{{item}}</li>
+            </div>
 
-        } @else {
-          <li
-            class="is-clickable text-capitalize"
-            (click)="handleNavigateTo(item)"
-            (keydown.enter)="handleNavigateTo(item)"
-          >{{item}}</li>
+          } @else {
+            <li
+              class="is-clickable text-capitalize"
+              (click)="handleNavigateTo(item)"
+              (keydown.enter)="handleNavigateTo(item)"
+            >{{item}}</li>
+          }
         }
-      }
-    </ul>
-  </nav>
-</div>
+      </ul>
+    </nav>
+  </div>
 
+
+}
