@@ -1,4 +1,4 @@
-import { Component, ElementRef, input, signal, ViewChild, WritableSignal} from '@angular/core';
+import {Component, ElementRef, EventEmitter, input, Output, signal, ViewChild, WritableSignal} from '@angular/core';
 import {NgClass} from "@angular/common";
 
 export enum ActionTypes {
@@ -17,6 +17,8 @@ export enum ActionTypes {
 })
 export class ConfirmActionModalComponent {
   @ViewChild('relinquishMentorDutiesModal') modal!: ElementRef<HTMLDialogElement>;
+
+  @Output() hasConfirmedAction = new EventEmitter<void>();
   $type = input.required<ActionTypes>()
   $messageTopic = input.required<string>()
 

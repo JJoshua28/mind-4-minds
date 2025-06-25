@@ -1,7 +1,15 @@
-<div class="w-100 mt-4 profile-container">
-  <router-outlet />
+<div class="w-100 mt-4 profile-container px-2">
+  <div
+    class="main-content-container"
+  >
+    <router-outlet
+    />
+  </div>
   <i
-    class="bi bi-layout-sidebar-reverse sidebar-layout"
+    class="bi bi-layout-sidebar-reverse fs-1 sidebar-layout"
   ></i>
-  <app-sidebar-navigation class="sidebar-navigation" />
+  <div
+  >
+    <app-sidebar-navigation class="sidebar-navigation" />
+  </div>
 </div>

@@ -10,6 +10,7 @@
     >Manage all systems users</h6>
   </div>
 
+@if($snippets().length > 0) {
   <app-edit-inbox-snippet-bar
     [$tickCheckbox]="$checkedUsers().length > 0"
     (tickBoxClicked)="handleCheckAllClicked()"
@@ -25,4 +26,9 @@
       />
     }
   </div>
+} @else {
+  <div class="mt-4">
+    <h4>No users found</h4>
+  </div>
+}
 </div>

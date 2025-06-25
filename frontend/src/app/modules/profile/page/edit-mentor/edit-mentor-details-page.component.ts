@@ -9,7 +9,7 @@ import {
 } from "../../../../shared/component/edit-mentor-details/edit-mentor-details.component";
 import {RegistrationService} from "../../../register/registration.service";
 import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
-import {forkJoin, map, Subscription} from "rxjs";
+import {delay, forkJoin, map, Subscription, switchMap, take} from "rxjs";
 import {MentorInfo, UserInfo} from "../../../../types/user details/user-info.interface";
 import {MentorDetailsFormControl} from "../../../../types/user details/mentor/mentor-details-form.interface";
 import {atLeastOneTrueValidator} from "../../../../shared/helpers/atLeastOneSelectedCheckboxValidation";
@@ -17,6 +17,9 @@ import {PreviewMentorCardComponent} from "../../components/preview-mentor-card/p
 import {MentorService} from "../../../../shared/services/user/mentor.service";
 import {UserService} from "../../../../shared/services/user/user-service.service";
 import {MentorDetails} from "../../../../types/user details/mentor/mentor.interface";
+import {UserType} from "../../../../types/user-type.enum";
+import {mapMentorDetailsToApiPayload} from "../../../../shared/mapper/mentorDetailsToApi.mapper";
+import {HttpService} from "../../../../shared/services/http.service";
 
 @Component({
   selector: 'app-edit-mentor-details-page',
@@ -44,6 +47,7 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
 
   private readonly mentorService = inject(MentorService);
   private readonly userService = inject(UserService);
+  private readonly apiService = inject(HttpService);
 
   meetingPreferenceOptions = Object.values(MeetingPreferences);
   neurodivergentConditionOptions = Object.values(NeurodivergenceConditions);
@@ -66,14 +70,14 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
           experience: this._formBuilder.nonNullable.control(this.mentorDetails?.experience || ""),
           meetingPreferences: this._formBuilder.nonNullable.array(
             this.meetingPreferenceOptions.map(preference => {
-              const defaultValue = this.mentorDetails?.meetingPreferences.includes(preference);
+              const defaultValue = this.mentorDetails?.meetingPreferences?.includes(preference);
               return this._formBuilder.nonNullable.control(defaultValue)
             }),
             { validators: [atLeastOneTrueValidator] }
           ),
           neurodivergentConditions: this._formBuilder.nonNullable.array(
             this.neurodivergentConditionOptions.map(condition => {
-              const defaultValue = this.mentorDetails?.neurodivergentConditions.includes(condition);
+              const defaultValue = this.mentorDetails?.neurodivergentConditions?.includes(condition);
               return this._formBuilder.nonNullable.control(defaultValue)
             })
           ),
@@ -118,10 +122,37 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
         meetingPreferences: meetingPreferences,
         neurodivergentConditions: neurodivergentConditions,
       }
-      this.mentorService.updateMentorDetails(formData as Partial<MentorDetails>).subscribe();
+
+      this.subscriptions.add(
+        this.userService.userDetails().pipe(
+          switchMap((userDetails) => {
+            const mentorDetailsEndpoint = 'users/mentor-details/';
+
+            if (userDetails.roles.includes(UserType.MENTOR)) {
+              return this.mentorService.updateMentorDetails(formData as Partial<MentorDetails>).pipe(
+                map(() => userDetails) // Pass userDetails to next step
+              );
+            } else {
+              const mentorDetailsPayload = mapMentorDetailsToApiPayload(formData, userDetails.id);
+              return this.apiService.post(mentorDetailsEndpoint, mentorDetailsPayload).pipe(
+                map(() => {
+                  return {
+                    ...userDetails,
+                    roles: [...userDetails.roles, UserType.MENTOR]
+                  };
+                })
+              );
+            }
+          }),
+          switchMap((updatedUserDetails) => {
+            const { email, id, joined, profilePic, ...details } = updatedUserDetails;
+            return this.userService.updateUserDetails({...details, roles: [...updatedUserDetails.roles, UserType.MENTOR]});
+          }),
+          delay(300),
+        ).subscribe(() =>  this.navigateTo())
+      );
     }
   }
-
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();

@@ -8,26 +8,26 @@ export class HttpService {
   private baseUrl: string = 'http://localhost:8000/api/';
   private httpClient: HttpClient = inject(HttpClient);
 
-  get(url: string, config = {}) {
+  get<T>(url: string, config = {}) {
     return this.httpClient.get(this.baseUrl + url, {
       headers: undefined,
       ...config
     });
   }
 
-  post(url: string, data: any, config = {}) {
+  post<T>(url: string, data: any, config = {}) {
     return this.httpClient.post(this.baseUrl + url, data, {
       headers: undefined,
       ...config,
     });
   }
-  put(url: string, data: any, config = {}) {
+  put<T>(url: string, data: any, config = {}) {
     return this.httpClient.put(this.baseUrl + url, data, {
       headers: undefined,
       ...config,
     });
   }
-  delete(url: string, config = {}) {
+  delete<T>(url: string, config = {}) {
     return this.httpClient.delete(this.baseUrl + url, config);
   }
 }

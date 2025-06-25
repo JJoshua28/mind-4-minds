@@ -1,35 +1,38 @@
-<div class=" main-content-padding w-75 mt-5">
-  <div class="w-100">
-    <h3>All mentors</h3>
-  </div>
-  <div class="d-flex w-100 flex-wrap mt-4 justify-content-start gap-3" >
-    @for (user of placeholderMentors; track index; let index = $index) {
-      <app-user-card
-        [$userType]="UserType.MENTOR"
-        #card
-        [$userCardInfo]="mentorUserMapInfo(user)"
-        (cardContainerClicked)="$selectedUser.set(user); modal.show()"
-      >
-        <div
-          class="w-100 d-flex justify-content-end mt-3"
-        >
-          <button
-            [ngClass]="{'container-hovered': card.$isHovering()}"
-            class="button-link text-capitalize fw-bold"
-          >connect</button>
-        </div>
-      </app-user-card>
-    } @empty {
-      <h3>No Mentors found, please speak to an admin</h3>
-    }
-  </div>
-</div>
-@if (placeholderMentors.length > 0) {
-  @let user = $selectedUser();
-  <app-view-mentor-modal
-    [$userInfo]="user"
-    [$mentorInfo]="$mentorInfo()"
-    [$canConnectToMentor]="true"
-  />
-}
+@defer (when $mentors()) {
+  <div class=" main-content-padding w-75 mt-5">
+    <div class="w-100">
+      <h3>All mentors</h3>
+    </div>
+    <div class="d-flex w-100 flex-wrap mt-4 justify-content-start gap-3" >
+      @for (user of $mentors(); track index; let index = $index) {
+        <app-user-card
+          [$userType]="UserType.MENTOR"
+          #card
+          [$userCardInfo]="mentorUserMapInfo(user)"
+          (cardContainerClicked)="onCardClick(user)"
 
+        >
+          <div
+            class="w-100 d-flex justify-content-end mt-3"
+          >
+            <button
+              [ngClass]="{'container-hovered': card.$isHovering()}"
+              class="button-link text-capitalize fw-bold"
+            >connect</button>
+          </div>
+        </app-user-card>
+      } @empty {
+        <h3>No Mentors found, please speak to an admin</h3>
+      }
+    </div>
+  </div>
+
+  @if (hasSelectedUser) {
+    @let user = $selectedUser();
+    <app-view-mentor-modal
+      [$userInfo]="user"
+      [$mentorInfo]="$mentorInfo()"
+      [$canConnectToMentor]="true"
+    />
+  }
+}

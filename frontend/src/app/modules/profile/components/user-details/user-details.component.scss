@@ -26,9 +26,11 @@ h4 {
 }
 
 .detail-container {
-  width: 700px;
-  height: auto;
-  margin-top: 1.5rem;
+  main {
+    min-width: 100% !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
 }
 

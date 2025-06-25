@@ -1,5 +1,6 @@
-import {UserInfo} from "../user details/user-info.interface";
+
 import {UserType} from "../user-type.enum";
+import {UserAccount} from "./user-account .interface";
 
 export interface ApiUserDetails {
   id: string;
@@ -9,6 +10,7 @@ export interface ApiUserDetails {
   occupation_start_date: string
   profilePic: string
   roles: string[]
+  user_account: UserAccount;
 }
 
 

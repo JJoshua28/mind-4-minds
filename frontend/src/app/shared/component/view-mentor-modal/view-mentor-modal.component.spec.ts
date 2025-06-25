@@ -51,16 +51,9 @@ describe('ViewUserModalComponent', () => {
   });
 
 
-    it('should be hidden by default', () => {
-      component.isHidden = signal(true)
-      const componentContainer = fixture.nativeElement.querySelector('main');
-      expect(componentContainer.classList).toContain("hidden-modal-container");
-
-    });
     describe('When the modal is shown', () => {
       beforeEach(async () => {
         component.show()
-        component.isHidden = signal(false)
         component.modal = fixture.nativeElement.querySelector('dialog')
 
         await fixture.whenStable();

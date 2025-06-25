@@ -8,13 +8,14 @@ import {HttpService} from "../http.service";
 import {UserService} from "./user-service.service";
 
 import {MentorDetails} from "../../../types/user details/mentor/mentor.interface";
-import {MentorDetailsApi} from "../../../types/api/mentor-details.interface";
+import {MentorDetailsApi, MentorUserApi} from "../../../types/api/mentor-details.interface";
 import {mapMentorDetails} from "../../mapper/api/apiToMentorDetails.mapper";
 import {UserType} from "../../../types/user-type.enum";
 import {MentorUser, UserDetails} from "../../../types/user.interface";
 import {toSignal} from "@angular/core/rxjs-interop";
 import {mapMentorDetailsToApiPayload} from "../../mapper/mentorDetailsToApi.mapper";
 import {MentorInfo} from "../../../types/user details/user-info.interface";
+import {mapMentorUserApiToUser} from "../../mapper/api/apiToMentorUser.mapper";
 
 @Injectable({
   providedIn: null
@@ -33,7 +34,7 @@ export class MentorService implements OnInit {
     const userId = this._localStorageService.getItem("user_id") ;
 
 
-    if (!authToken || !userId && this._router.url !== '/login') {
+    if (!authToken || !userId && this._router.url !== '/login' && !this._router.url.includes('/edit')) {
       this.throwUserUnauthorizedUser();
     }
   }
@@ -42,15 +43,27 @@ export class MentorService implements OnInit {
     this._router.navigate(['/profile']);
   }
 
+
+  getActiveMentors(): Observable<MentorUser[]> {
+    const userId = this._userService.userId;
+    const mentorEndpoint = `users/mentor-details/?is_available=true&user_id_not=${userId}`;
+
+    return this.apiService.get(mentorEndpoint).pipe(
+      map((response) => {
+        const mentorsApi = response as MentorUserApi[]
+        return mentorsApi.length > 0 ?
+          mentorsApi.map(mentor => {
+            return mapMentorUserApiToUser(mentor);
+          }) : [];
+      }),
+      take(1)
+    )
+  }
+
   mentorDetails(): Observable<MentorDetails> {
     const mentorEndpoint = "users/mentor-details/?user_id=";
 
     return this._userService.userDetails().pipe(
-      tap((userDetails) => {
-        if(!userDetails.roles.includes(UserType.MENTOR)) {
-          this.throwUserUnauthorizedUser()
-        }
-      }),
       switchMap((userDetails) => {
         const {id} = userDetails;
 
@@ -62,8 +75,10 @@ export class MentorService implements OnInit {
       }),
       take(1),
       map((mentorDetails) => {
-        const [details] = mentorDetails as MentorDetailsApi[];
-        return mapMentorDetails(details)
+        const mentorResponse = mentorDetails as MentorDetailsApi[];
+        const [details] = mentorResponse;
+        return mentorResponse.length > 0 ?
+          mapMentorDetails(details) : {} as MentorDetails;
       }),
     )
   }
@@ -134,5 +149,12 @@ export class MentorService implements OnInit {
 
   }
 
+  deleteMenteeDetails(detailsId: string) {
+    const menteeEndpoint = `users/mentor-details/${detailsId}/`;
+
+    return this.apiService.delete(menteeEndpoint).pipe(
+      take(1)
+    )
+  }
 
 }

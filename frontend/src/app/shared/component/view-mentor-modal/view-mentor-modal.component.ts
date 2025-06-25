@@ -12,7 +12,6 @@ import { experienceDuration } from '../../helpers/experienceDurations';
   standalone: true,
   imports: [
     NgClass,
-    MenteeDetailsComponent,
     MentorDetailsComponent
   ],
   templateUrl: './view-mentor-modal.component.html',
@@ -22,7 +21,6 @@ import { experienceDuration } from '../../helpers/experienceDurations';
 export class ViewMentorModalComponent {
   @ViewChild('modal') modal!: ElementRef<HTMLDialogElement>;
 
-  isHidden: WritableSignal<boolean>= signal(true);
   $canConnectToMentor = input<boolean>(false)
 
   $userInfo = input.required<UserInfo>()
@@ -35,12 +33,10 @@ export class ViewMentorModalComponent {
   protected readonly experienceDuration = experienceDuration;
 
   show () {
-    this.isHidden.set(!this.isHidden());
     this.modal.nativeElement.showModal()
   }
 
   close () {
-    this.isHidden.set(!this.isHidden());
 
     this.modal.nativeElement.close();
   }

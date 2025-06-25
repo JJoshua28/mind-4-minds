@@ -9,13 +9,20 @@ import {MentorInfo, UserInfo} from "../../../../types/user details/user-info.int
 import {MentorService} from "../../../../shared/services/user/mentor.service";
 
 import {UserService} from "../../../../shared/services/user/user-service.service";
+import {
+  ActionTypes,
+  ConfirmActionModalComponent
+} from "../../../../shared/component/confirm-action-modal/confirm-action-modal.component";
+import {delay, switchMap} from "rxjs";
+import {UserType} from "../../../../types/user-type.enum";
 
 @Component({
   selector: 'app-mentor',
   standalone: true,
   imports: [
     MentorDetailsComponent,
-    PreviewMentorCardComponent
+    PreviewMentorCardComponent,
+    ConfirmActionModalComponent
   ],
   providers: [
     UserService,
@@ -28,12 +35,18 @@ export class MentorComponent implements OnInit {
   private readonly _router = inject(Router);
 
   private readonly _mentorService = inject(MentorService)
+  private readonly userService = inject(UserService);
+
 
   @ViewChild(PreviewMentorCardComponent) previewMentorModal!: PreviewMentorCardComponent;
 
   $user!: WritableSignal<MentorUser>
 
   $mentorDetail!: Signal<UserInfo & MentorInfo>
+
+  @ViewChild(ConfirmActionModalComponent) relinquishMentorDutiesModal!: ConfirmActionModalComponent;
+  protected readonly modalActionType = ActionTypes.DELETE;
+  protected readonly modalMessageTopic = "leave your mentorship programme"
 
   ngOnInit(): void {
 
@@ -68,4 +81,21 @@ export class MentorComponent implements OnInit {
     });
   }
 
+  relinquishMentorDuties() {
+
+    this.userService.userDetails().pipe(
+      switchMap((userDetails) => {
+        const {profilePic, roles, ...details} = userDetails;
+        const newRoles:UserType[] = roles.filter((role) => role !== UserType.MENTEE);
+
+        return this.userService.updateUserDetails({...details, roles: newRoles})
+      }),
+      switchMap(() => {
+        return this._mentorService.deleteMenteeDetails(this.$user().mentorDetails.id)
+      }),
+      delay(1500)
+    ).subscribe(() =>{
+      this._router.navigate(['/profile']);
+    });
+  }
 }

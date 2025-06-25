@@ -1,28 +1,34 @@
-<main class="m-auto"
->
-  <h1>Mentee details</h1>
-  <app-mentee-details
-    [$mentee]="$mentee()"
+@defer (when $mentee()) {
+  <main
   >
-    <button
-      class="d-flex align-items-center gap-2  pb-2 availability-button edit-button px-0"
-      (click)="navigateTo()"
+    <div
     >
-      <i class="bi bi-pencil-square"></i>
-      <h6 class="mb-0">Edit Details</h6>
-    </button>
-  </app-mentee-details>
+      <h1>Mentee details</h1>
+      <app-mentee-details
+        [$mentee]="$mentee()"
+      >
+        <button
+          class="d-flex align-items-center gap-2  pb-2 availability-button edit-button px-0"
+          (click)="navigateTo()"
+        >
+          <i class="bi bi-pencil-square"></i>
+          <h6 class="mb-0">Edit Details</h6>
+        </button>
+      </app-mentee-details>
 
-  <button
-    (click)="relinquishMentorDutiesModal.show()"
-    class="mt-4 unavailable-button"
-  >
-    <h6
-    >Leave Mentorship</h6>
-  </button>
-  <app-confirm-action-modal
-    [$messageTopic]="modalMessageTopic"
-    [$type]="modalActionType"
-  />
-</main>
+      <button
+        (click)="relinquishMenteeDutiesModal.show()"
+        class="mt-4 unavailable-button"
+      >
+        <h6
+        >Leave Mentorship</h6>
+      </button>
+      <app-confirm-action-modal
+        (hasConfirmedAction)="relinquishMenteeDuties()"
+        [$messageTopic]="modalMessageTopic"
+        [$type]="modalActionType"
+      />
+    </div>
+  </main>
 
+}

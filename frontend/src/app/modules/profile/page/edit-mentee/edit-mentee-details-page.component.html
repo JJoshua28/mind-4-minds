@@ -1,21 +1,25 @@
-<main class="container">
-  <h1>Edit Mentee Details</h1>
-  <div class="mt-2 border border-light rounded px-4 pt-4 pb-2 mb-5">
-    <app-edit-mentee-details
-      [$menteeDetailsForm]="$menteeDetailsForm()"
-    />
-    <div class="d-flex justify-content-between mt-5">
-      <button
-        class="cancel-button text-capitalize"
-        (click)="cancelEdit()"
-      >Cancel</button>
-      <button
-        type="submit"
-        [style.visibility]="$menteeDetailsForm().invalid? 'hidden' : 'visible'"
-        class="save-button"
-      >Save</button>
+@defer (when mentee) {
+  <main class="container">
+    <h1>Edit Mentee Details</h1>
+    <div class="mt-2 border border-light rounded px-4 pt-4 pb-2 mb-5">
+      <app-edit-mentee-details
+        [$menteeDetailsForm]="$menteeDetailsForm()"
+      />
+      <div class="d-flex justify-content-between mt-5">
+        <button
+          class="cancel-button text-capitalize"
+          (click)="navigateToDetails()"
+        >Cancel</button>
+        <button
+          type="submit"
+          [style.visibility]="$menteeDetailsForm().invalid? 'hidden' : 'visible'"
+          (click)="submitMenteeDetails()"
+          class="save-button"
+        >Save</button>
+      </div>
     </div>
-  </div>
 
 
-</main>
+  </main>
+
+}

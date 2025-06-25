@@ -4,7 +4,9 @@
 @import '../../../../../styles/shared/styles';
 
 main {
-  color: $primary-colour;
+  min-width: 100% !important;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .page-item {
@@ -14,20 +16,9 @@ main {
 .list-container {
 
 }
-@include media-breakpoint-up(lg) {
+@include media-breakpoint-up(sm) {
   main {
-    width: 50%;
-  }
-}
-
-@include media-breakpoint-down(lg) {
-  main {
-    margin: 0 auto !important;
-  }
-}
-@include media-breakpoint-only(md) {
-  main {
-    width: 75%;
+    width: 95%;
   }
 }
 

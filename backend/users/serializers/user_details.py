@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from ..models import UserDetails
+from .users import CustomUserSerializer
 
 User = get_user_model()
 
@@ -11,12 +12,14 @@ class UserDetailsSerializer(serializers.ModelSerializer):
     profile_pic = serializers.ImageField(required=False, write_only=True)
     occupation_start_date = serializers.DateField(required=False)
     occupation = serializers.CharField(required=False)
+    user_account = CustomUserSerializer(read_only=True, source='user')
 
     class Meta:
         model = UserDetails
         fields = [
             'id',
             'user',
+            'user_account',
             'first_name',
             'last_name',
             'roles',

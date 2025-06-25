@@ -41,6 +41,7 @@
     </app-mentor-details>
     <div class="d-flex justify-content-between">
       <button
+        (click)="relinquishMentorDutiesModal.show()"
         class="mt-4 unavailable-button"
       >
         <h6>Relinquish Mentor Duties</h6>
@@ -59,6 +60,12 @@
     </div>
     <app-preview-mentor-card
       [$user]="$mentorDetail()"
+    />
+
+    <app-confirm-action-modal
+      (hasConfirmedAction)="relinquishMentorDuties()"
+      [$messageTopic]="modalMessageTopic"
+      [$type]="modalActionType"
     />
   </main>
 

@@ -6,7 +6,7 @@ interface MentorDetailsApiPayload extends Omit<MentorDetails, "id" | "isAvailabl
   isAvailable?: boolean;
 }
 
-export function mapMentorDetailsToApiPayload(data: MentorDetailsApiPayload, userId?: string): Partial<MentorDetailsApi> {
+export function mapMentorDetailsToApiPayload(data: Partial<MentorDetailsApiPayload>, userId?: string): Partial<MentorDetailsApi> {
   const payload: Partial<MentorDetailsApi> = {
     description: data.description,
     qualifications: data.qualifications,

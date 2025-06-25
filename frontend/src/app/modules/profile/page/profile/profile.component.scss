@@ -1,41 +1,39 @@
+@import 'bootstrap/scss/bootstrap';
+
 .profile-container {
+  width: 100% !important;
+  height: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 2rem;
   margin-bottom: 75px;
 }
 
-.sidebar-layout {
-  font-size: 2rem;
-  position: absolute;
-  right: 5px;
-  top: 160px;
+.main-content-container {
+  width: 65% !important;
 }
 
 .sidebar-navigation {}
 
-@media only screen and (min-width: 1000px) {
+@include media-breakpoint-up(md) {
   .sidebar-layout {
     display: none;
   }
+}
 
-  }
-
-@media only screen and (max-width: 1000px) {
-  .sidebar-navigation {
-    display: none;
-  }
+@include media-breakpoint-down(lg) {
   .profile-container {
-    gap: 0;
-    padding-left: 0;
-    justify-content: space-around;
+    justify-content: flex-start;
+  }
+
+  .main-content-container {
+    width: 100% !important;
   }
 }
 
-
-@media only screen and (max-width: 600px) {
-  .profile-container {
-    display: block;
-    padding-left: 15px;
-    padding-right: 15px;
+@include media-breakpoint-down(md) {
+  .sidebar-navigation {
+    display: none;
+    gap: 0;
   }
 }

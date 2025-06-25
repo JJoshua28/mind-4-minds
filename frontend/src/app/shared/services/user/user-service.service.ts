@@ -14,6 +14,7 @@ import {mapUserAccountToApiPayload} from "../../mapper/userAccountToApi.mapper";
 import {UserType} from "../../../types/user-type.enum";
 import {mapUserFormToApiPayload} from "../../mapper/userDetailsToApi.mapper";
 import {RegistrationUserDetails} from "../../../modules/register/registration.service";
+import {mapApiUserDetailsToUserDetails} from "../../mapper/api/apiToUser.mapper";
 
 
 @Injectable({
@@ -44,6 +45,25 @@ export class UserService implements OnInit {
 
   throwUserUnauthorizedUser() {
     this._router.navigate(['/login']);
+  }
+
+  get userId() {
+    return this._localStorageService.getItem("user_id");
+  }
+
+  getAllUserDetails () {
+    const detailsEndpoint = `users/details`;
+
+    return this.apiService.get<ApiUserDetails>(detailsEndpoint).pipe(
+      map(userDetails => {
+        const details  = userDetails as ApiUserDetails[];
+        return details.map(detail => {
+          const {user_account, ...details_record} = detail;
+          return mapApiToUserDetails(user_account, detail);
+        })
+      }),
+      take(1),
+    );
   }
 
   userDetails(userId?: string): Observable<UserDetails> {
@@ -88,7 +108,7 @@ export class UserService implements OnInit {
     return formData;
   }
 
-  updateUserDetails(updateRequest: UserDetailsUpdateRequest) {
+   updateUserDetails(updateRequest: Partial<UserDetailsUpdateRequest>) {
     const usersEndpoint = `users/accounts/${this._userId }`;
     const updateDetailsEndpoint = `users/details`;
 
@@ -96,10 +116,14 @@ export class UserService implements OnInit {
       switchMap(userAccount => {
         const {details} = userAccount as UserAccount;
         const userDetailsEndpoint = `${updateDetailsEndpoint}/${details}/`;
-        const mappedDetails = this.createUserDetailsRequest(updateRequest, updateRequest.roles)
-        return this.apiService.put(userDetailsEndpoint, mappedDetails).pipe(take(1))
-      })
-    )
+        const mappedDetails = this.createUserDetailsRequest(updateRequest as UserDetailsUpdateRequest, updateRequest.roles as UserType[])
+        return this.apiService.put<ApiUserDetails>(userDetailsEndpoint, mappedDetails).pipe(take(1))
+      }),
+      map((details) => {
+        const detail = details as ApiUserDetails;
+        return mapApiUserDetailsToUserDetails(detail);
+      }
+    ))
   }
 
   userInfo(): Observable<UserInfo> {

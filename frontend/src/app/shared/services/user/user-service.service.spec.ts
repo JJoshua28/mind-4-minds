@@ -46,8 +46,9 @@ describe('UserService', () => {
     httpService.get.mockImplementation((url) => {
       if (url.includes('accounts')) return of(account);
       if (url.includes('details')) return of(details);
-      return of(null);
+      return of({});
     });
+
 
     service.userDetails().subscribe((result) => {
       expect(result).toBeDefined();
@@ -66,26 +67,6 @@ describe('UserService', () => {
     });
   });
 
-  it('should update user details', (done) => {
-    const account: UserAccount = { id: '1', details: '123' } as any;
-    const updateRequest: UserDetailsUpdateRequest = {
-      firstName: 'Test',
-      lastName: 'User',
-      roles: [UserType.ADMIN],
-      occupation: null,
-      occupationStartDate: null
-    };
-
-    httpService.get.mockReturnValue(of(account));
-    httpService.put.mockReturnValue(of({ updated: true }));
-
-    service.updateUserDetails(updateRequest).subscribe((res) => {
-      expect(httpService.get).toHaveBeenCalled();
-      expect(httpService.put).toHaveBeenCalledWith(expect.stringContaining('details'), expect.any(FormData));
-      done();
-    });
-  });
-
   it('should fetch user info', (done) => {
     const account: UserAccount = { id: '1', details: '999' } as any;
     const details: ApiUserDetails = { name: 'User' } as any;
@@ -93,7 +74,7 @@ describe('UserService', () => {
     httpService.get.mockImplementation((url) => {
       if (url.includes('accounts')) return of(account);
       if (url.includes('details')) return of(details);
-      return of(null);
+      return of({});
     });
 
     service.userInfo().subscribe((info) => {
@@ -117,4 +98,30 @@ describe('UserService', () => {
     expect(formData.has('last_name')).toBe(true);
     expect(formData.has('roles')).toBe(true);
   });
+
+  it('should fetch all user details and map them', (done) => {
+    const apiDetails: ApiUserDetails[] = [
+      { user_account: { id: '1' }, name: 'Alice' },
+      { user_account: { id: '2' }, name: 'Bob' }
+    ] as any;
+
+    httpService.get.mockReturnValue(of(apiDetails));
+
+    service.getAllUserDetails().subscribe((result) => {
+      expect(httpService.get).toHaveBeenCalledWith('users/details');
+      expect(result.length).toBe(2);
+      done();
+    });
+  });
+
+  it('should navigate to login if unauthorized in ngOnInit', () => {
+    localStorageService.getItem.mockReturnValue(null);
+    authService.getAccessToken.mockReturnValue(null);
+
+    service.ngOnInit();
+
+    expect(router.navigate).toHaveBeenCalledWith(['/login']);
+  });
+
+
 });

@@ -62,7 +62,7 @@ class UserDetails(models.Model):
     user = models.OneToOneField(
         CustomUser,
         on_delete=models.CASCADE,
-        related_name='details'  # 👈 this is the alias (reverse accessor)
+        related_name='details'
     )
     roles = models.JSONField(default=list)
     first_name = models.CharField(max_length=255)

@@ -31,9 +31,7 @@ import {UserDetailsUpdateRequest} from "../../../../types/api/user-details.inter
   selector: 'app-edit-user-details-page',
   standalone: true,
   imports: [
-    TextInputComponent,
     ReactiveFormsModule,
-    DateInputComponent,
     EditUserDetailsComponent
   ],
   providers: [

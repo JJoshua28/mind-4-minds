@@ -25,7 +25,7 @@
         [style.visibility]="$mentorDetailsForm().invalid? 'hidden' : 'visible'"
         type="submit"
         class="save-button"
-        (click)="updateMentorDetails(); navigateTo()"
+        (click)="updateMentorDetails()"
       >Save</button>
     </div>
     @if ($mentorDetailsForm().valid) {

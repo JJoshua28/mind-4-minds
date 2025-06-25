@@ -12,7 +12,7 @@
         class="cancel-button"
       ><h6>Cancel</h6></button>
       <button
-        (click)="close()"
+        (click)="close(); hasConfirmedAction.emit()"
         [class]="$type() === ActionTypes.CONFIRM ? 'confirm-button' : 'delete-button'"
       ><h6>Confirm</h6></button>
     </div>
