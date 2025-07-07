@@ -50,7 +50,7 @@ jobs:
 
       - name: Install Django and other deps manually
         run: |
-          pip install Django djangorestframework djangorestframework-simplejwt django-cors-headers python-decouple psycopg2-binary
+          pip install Django djangorestframework djangorestframework-simplejwt django-cors-headers python-decouple psycopg2-binary django_filters
         working-directory: ./backend
 
       - name: Write .env file from GitHub secrets
