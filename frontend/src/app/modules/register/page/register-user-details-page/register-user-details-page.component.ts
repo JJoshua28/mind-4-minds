@@ -23,23 +23,23 @@ export class RegisterUserDetailsPageComponent {
 
   registrationService: RegistrationService =inject(RegistrationService);
 
-  $profilePicToPreview = signal(this.registrationService.userDetails.storageProfilePic || "/assets/images/default.jpeg");
+  $profilePicToPreview = signal(this.registrationService.userDetails()?.storageProfilePic || "/assets/images/default.jpeg");
 
 
   passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/;
 
   userDetailsForm: FormGroup<UserFormControls> = this._formBuilder.group({
     firstName: this._formBuilder.nonNullable.control(
-      this.registrationService?.userDetails?.firstName || '', [Validators.required, Validators.minLength(2)]
+      this.registrationService?.userDetails()?.firstName || '', [Validators.required, Validators.minLength(2)]
     ),
     lastName: this._formBuilder.nonNullable.control(
-      this.registrationService?.userDetails?.lastName || '', [Validators.required,  Validators.minLength(2)]
+      this.registrationService?.userDetails()?.lastName || '', [Validators.required,  Validators.minLength(2)]
     ),
     occupation: this._formBuilder.control(
-      this.registrationService?.userDetails?.occupation ||'', Validators.minLength(2)
+      this.registrationService?.userDetails()?.occupation ||'', Validators.minLength(2)
     ),
     occupationStartDate: this._formBuilder.control(
-      this.registrationService?.userDetails?.occupationStartDate || null
+      this.registrationService?.userDetails()?.occupationStartDate || null
     ),
     profilePic: this._formBuilder.control<File | null>(null,
       this.registrationService?.roles.includes(UserType.MENTOR) && !this.$profilePicToPreview()
@@ -47,11 +47,11 @@ export class RegisterUserDetailsPageComponent {
         : []
     ),
     email: this._formBuilder.nonNullable.control(
-      this.registrationService?.userDetails?.email || '', [Validators.required, Validators.email]
+      this.registrationService?.userDetails()?.email || '', [Validators.required, Validators.email]
     ),
     currentPassword: this._formBuilder.control<string | null >('', []) as FormControl<string | null>,
     newPassword: this._formBuilder.control<string | null>(
-      this.registrationService?.userDetails?.newPassword || '', [
+      this.registrationService?.userDetails()?.newPassword || '', [
       Validators.required,
       Validators.minLength(6),
       Validators.pattern(this.passwordRegex)

@@ -1,35 +1,54 @@
-@defer (when $roles()) {
-  <nav class="nav-container">
-    <ul class="list-unstyled is-clickable d-flex justify-content-around flex-column gap-3 me-5">
+<nav class="nav-container">
+  <ul class="list-unstyled is-clickable d-flex justify-content-around flex-column gap-3 me-5">
+    <li
+      class="list-item text-capitalize"
+      (click)="handleNavigateTo(NavigationItems.USER_DETAILS)"
+    ><h5>user details</h5></li>
+    @if ($roles().includes(UserType.MENTOR)) {
       <li
         class="list-item text-capitalize"
-        (click)="handleNavigateTo(NavigationItems.USER_DETAILS)"
-      ><h5>user details</h5></li>
-      @if ($roles().includes(UserType.MENTOR)) {
-        <li
-          class="list-item text-capitalize"
-          (click)="handleNavigateTo(NavigationItems.MENTOR_DETAILS)"
-        ><h5>mentor details</h5></li>
-      }
-      @else {
-        @let mentorDetails = NavigationItems.MENTOR_DETAILS +'/edit';
-        <li
-          class="list-item text-capitalize"
-          (click)="handleNavigateTo(mentorDetails)"
-        ><h5>become a mentor</h5></li>
-      }
-      @if ($roles().includes(UserType.MENTEE)) {
-        <li
-          class="list-item text-capitalize"
-          (click)="handleNavigateTo(NavigationItems.MENTEE_DETAILS)"
-        ><h5>mentee details</h5></li>
-      } @else {
-        @let menteeDetails = NavigationItems.MENTEE_DETAILS +'/edit';
-        <li
-          class="list-item text-capitalize"
-          (click)="handleNavigateTo(menteeDetails)"
-        ><h5>become a mentee</h5></li>
-      }
-    </ul>
-  </nav>
-}
+        (click)="handleNavigateTo(NavigationItems.MENTOR_DETAILS)"
+      ><h5>mentor details</h5></li>
+    }
+    @else {
+      @let mentorDetails = NavigationItems.MENTOR_DETAILS +'/edit';
+      <li
+        class="list-item text-capitalize"
+        (click)="handleNavigateTo(mentorDetails)"
+      ><h5>become a mentor</h5></li>
+    }
+    @if ($roles().includes(UserType.MENTEE)) {
+      <li
+        class="list-item text-capitalize"
+        (click)="handleNavigateTo(NavigationItems.MENTEE_DETAILS)"
+      ><h5>mentee details</h5></li>
+    } @else {
+      @let menteeDetails = NavigationItems.MENTEE_DETAILS +'/edit';
+      <li
+        class="list-item text-capitalize"
+        (click)="handleNavigateTo(menteeDetails)"
+      ><h5>become a mentee</h5></li>
+    }
+    @if(!$userDetails().roles.includes(UserType.ADMIN)) {
+      <li
+        class="list-item text-capitalize"
+        (click)="requestAdminPrivileges()"
+      ><h5>request admin permissions</h5></li>
+    }
+
+    @if($userDetails().isAdmin) {
+      <li
+        class="list-item text-capitalize"
+        (click)="confirmActionModal.show()"
+      ><h5>remove admin rights</h5></li>
+    }
+  </ul>
+</nav>
+
+<app-confirm-action-modal
+  (hasConfirmedAction)="removeAdminPrivileges()"
+  [$type]="confirmActionType"
+  [$messageTopic]="confirmActionText"
+/>
+
+

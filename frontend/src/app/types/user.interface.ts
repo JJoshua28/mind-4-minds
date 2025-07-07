@@ -5,6 +5,8 @@ import {UserType} from "./user-type.enum";
 
 export interface UserDetails extends UserInfo {
   id: string;
+  accountId: string;
+  isAdmin: boolean;
   joined: string;
   roles: UserType[]
   isArchived: boolean;

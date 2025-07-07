@@ -1,34 +1,43 @@
-<div class="container mt-5 mb-5 overflow-visible">
-  <div
-    class="w-100 h-100 d-flex flex-column gap-0 align-items-start"
-  >
-    <h3
-      class="mb-0"
-    >Users</h3>
-    <h6
-      class="guidance-line"
-    >Manage all systems users</h6>
-  </div>
+@defer (when $snippets()) {
+  <div class="container mt-5 mb-5 overflow-visible">
+    <div
+      class="w-100 h-100 d-flex flex-column gap-0 align-items-start"
+    >
+      <h3
+        class="mb-0"
+      >Users ({{$snippets().length}})</h3>
+      <h6
+        class="guidance-line"
+      >Manage all systems users</h6>
+    </div>
 
-@if($snippets().length > 0) {
-  <app-edit-inbox-snippet-bar
-    [$tickCheckbox]="$checkedUsers().length > 0"
-    (tickBoxClicked)="handleCheckAllClicked()"
-  />
-
-  <div class="mt-4">
-    @for (user of $snippets(); track user.id) {
-      <app-user-snippet
-        [$isChecked]="$checkedUsers().includes(user.id)"
-        [$userDetails]="user"
-        (userSnippetClicked)="selectedUser = user"
-        (userCheckboxClicked)="handleUserCheckboxClicked($event)"
+    @if($snippets().length > 0) {
+      <app-edit-inbox-snippet-bar
+        [$tickCheckbox]="$checkedUsers().length > 0"
+        (tickBoxClicked)="handleCheckAllClicked()"
+        (binClicked)="$checkedUsers().length > 0 && confirmActionModal.show()"
       />
+
+      <div class="mt-4">
+        @for (user of $snippets(); track user.id) {
+          <app-user-snippet
+            [$isChecked]="$checkedUsers().includes(user.accountId)"
+            [$userDetails]="user"
+            (userSnippetClicked)="navigateToUserDetails(user.id)"
+            (userCheckboxClicked)="handleUserCheckboxClicked($event)"
+          />
+        }
+      </div>
+
+      <app-confirm-action-modal
+        (hasConfirmedAction)="handleDeleteUsers()"
+        [$messageTopic]="modalMessageTopic"
+        [$type]="modalActionType"
+      />
+    } @else {
+      <div class="mt-4">
+        <h4>{{!userService.$userDetails().isAdmin? 'Admin approval required' : "No users found" }}</h4>
+      </div>
     }
   </div>
-} @else {
-  <div class="mt-4">
-    <h4>No users found</h4>
-  </div>
 }
-</div>

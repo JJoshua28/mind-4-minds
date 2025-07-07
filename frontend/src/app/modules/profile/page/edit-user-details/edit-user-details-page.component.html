@@ -4,7 +4,7 @@
     <div class="mt-4 border border-light rounded px-4 pt-4 pb-3">
       <app-edit-user-details
         [$currentProfilePic]="$profilePic()"
-        [$changeType]="changeType"
+        [$changeType]="changeType()"
         [$userDetailsForm]="userDetailsForm"
 
       />
@@ -13,13 +13,13 @@
       <div class="d-flex justify-content-between mt-5">
         <button
           class="cancel-button text-capitalize"
-          (click)="navigateTo()"
+          (click)="navigateToDetails()"
         >Cancel</button>
         <button
           type="submit"
           [style.visibility]="userDetailsForm.invalid? 'hidden' : 'visible'"
           class="save-button"
-          (click)="submitUpdate(); navigateTo()"
+          (click)="submitUpdate(); navigateToDetails()"
         >Save</button>
       </div>
     </div>

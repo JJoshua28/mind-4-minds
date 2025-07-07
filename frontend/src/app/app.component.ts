@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {Component, inject, OnDestroy } from '@angular/core';
+import { RouterOutlet} from '@angular/router';
+import {UserService} from "./shared/services/user/user-service.service";
 
 
 @Component({
@@ -9,6 +10,14 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
-  title = 'mind-4-minds-app';
+export class AppComponent implements OnDestroy {
+  private readonly _userService = inject(UserService)
+
+
+
+
+  ngOnDestroy(): void {
+    this._userService.subscriptions.unsubscribe();
+  }
+
 }

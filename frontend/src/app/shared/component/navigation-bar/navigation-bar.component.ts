@@ -1,59 +1,78 @@
-import {Component, inject, OnInit, Signal, signal, WritableSignal} from '@angular/core';
+import {Component, computed, inject, OnDestroy, OnInit, Signal, signal, WritableSignal} from '@angular/core';
 import {NgClass} from "@angular/common";
-import {Router} from "@angular/router";
+import {NavigationEnd, Router} from "@angular/router";
 import {UserService} from "../../services/user/user-service.service";
 import {UserType} from "../../../types/user-type.enum";
-import {map} from "rxjs";
-import {toSignal} from "@angular/core/rxjs-interop";
+import {filter, map, Subscription} from "rxjs";
+import {toObservable, toSignal} from "@angular/core/rxjs-interop";
+import {RequestsRepositoryService} from "../../repositories/requests.repository.service";
 
 enum NavigationItems {
+  inbox='inbox',
   FIND_A_MENTOR="find a mentor",
   MY_MENTEES = "my mentees",
-  inbox='inbox',
   MY_MENTORS = "my mentors",
-  profile='profile',
   users='users',
+  profile='profile',
 }
 
 enum SecondLevelNavigationItems {
+  INBOX='inbox',
   MY_MENTORS = "my mentors",
   MY_MENTEES = "my mentees",
   FIND_A_MENTOR="find a mentor",
-  INBOX='inbox',
   USERS = "users",
 }
 
 @Component({
   selector: 'app-navigation-bar',
   standalone: true,
-  providers: [
-    UserService,
-  ],
   templateUrl: './navigation-bar.component.html',
   styleUrl: './navigation-bar.component.scss'
 })
 
-export class NavigationBarComponent implements OnInit {
+export class NavigationBarComponent implements OnInit, OnDestroy {
   private _router = inject(Router);
 
-  private _userService = inject(UserService);
+  private readonly _subscriptions: Subscription = new Subscription();
 
-  $roles!: Signal<UserType[]>;
-  $hasNewInboxMessage: WritableSignal<boolean> = signal<boolean>(true);
-  $navigationItems!: Signal<SecondLevelNavigationItems[]>;
+  protected userService = inject(UserService);
+  private readonly _requestsService = inject(RequestsRepositoryService);
+
+  $hasNewInboxMessage: WritableSignal<boolean> = signal<boolean>(false);
+
+  $navigationItems: WritableSignal<SecondLevelNavigationItems[]> = signal(this.generateRoles(this.userService.$userDetails().roles));
+
+  constructor() {
+    toObservable(this.userService.$userDetails).subscribe((user) => {
+      this.$navigationItems.set(this.generateRoles(user.roles));
+    });
+  }
+
+  ngOnInit(): void {
+    this._subscriptions.add(
+      this._requestsService.hasNewRequests(this.userService.$userDetails().id).subscribe(hasNewRequests => {
+        this.$hasNewInboxMessage.set(hasNewRequests);
+      })
+    )
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
 
   private routeMapper (navigationItem: NavigationItems): string {
     let navigationRoute = '';
 
     switch(navigationItem) {
-      case NavigationItems.FIND_A_MENTOR:
-        navigationRoute = 'find-a-mentor';
-        break;
       case NavigationItems.inbox:
         navigationRoute = 'inbox';
         break;
+      case NavigationItems.FIND_A_MENTOR:
+        navigationRoute = 'find-a-mentor';
+        break;
       case NavigationItems.profile:
-        navigationRoute = 'profile';
+        navigationRoute = `user-details/${this.userService.$userDetails().id}`;
         break;
       case NavigationItems.MY_MENTORS:
         navigationRoute = 'my-mentors';
@@ -70,12 +89,20 @@ export class NavigationBarComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-    this._userService.userDetails().pipe(map(user => user.roles))
-      .subscribe(userRoles => {
-        this.$roles = signal(userRoles);
-        this.$navigationItems = signal(this.generateRoles(this.$roles()));
-      })
+  navigateHome() {
+      let landingPage = ""
+
+      if (this.userService.$userDetails().roles.includes(UserType.MENTEE)) {
+        landingPage = "my-mentors"
+      } else if (this.userService.$userDetails().roles.includes(UserType.MENTOR)) {
+        landingPage = "my-mentees"
+      } else if (this.userService.$userDetails().roles.includes(UserType.ADMIN)) {
+        landingPage = "users"
+      }
+      else {
+        landingPage = `/user-details/${this.userService.$userDetails().id}`
+      }
+      this._router.navigate([`/${landingPage}`]);
   }
 
   generateRoles(roles: UserType[]) {

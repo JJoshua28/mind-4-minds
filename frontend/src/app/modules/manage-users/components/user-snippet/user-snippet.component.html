@@ -5,7 +5,7 @@
   <input
     type="checkbox"
     class="checkbox"
-    (click)="$event.stopPropagation(); userCheckboxClicked.emit($userDetails().id)"
+    (click)="$event.stopPropagation(); userCheckboxClicked.emit($userDetails().accountId)"
     [checked]="$isChecked()"
   />
   <div
@@ -13,7 +13,7 @@
   >
     <div class="w-100 name-container">
       <div class="d-flex flex-row gap-1">
-        <h5 class="fixed-text-container mb-0">{{$userDetails().firstName}} {{$userDetails().lastName}}</h5>
+        <h5 class="fixed-text-container mb-0">{{$userDetails().firstName}} {{$userDetails().lastName}} ({{$userDetails().isArchived? "Archived" : "Active"}})</h5>
       </div>
       <span class="date-and-time-styling">joined {{$userDetails().joined}}</span>
     </div>
@@ -23,7 +23,7 @@
       >{{$userDetails().email}}</h6>
     </div>
     <ul
-      class="list-unstyled d-flex gap-3 mt-1"
+      class="list-unstyled d-flex gap-3 mt-2"
     >
       @for(role of $userDetails().roles; track role) {
         <li>{{role}}</li>

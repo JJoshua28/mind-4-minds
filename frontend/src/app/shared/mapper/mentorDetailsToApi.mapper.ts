@@ -2,7 +2,7 @@ import {MentorInfo} from "../../types/user details/user-info.interface";
 import {MentorDetailsApi} from "../../types/api/mentor-details.interface";
 import {MentorDetails} from "../../types/user details/mentor/mentor.interface";
 
-interface MentorDetailsApiPayload extends Omit<MentorDetails, "id" | "isAvailable"> {
+export interface MentorDetailsApiPayload extends Omit<MentorDetails, "id" | "isAvailable"> {
   isAvailable?: boolean;
 }
 

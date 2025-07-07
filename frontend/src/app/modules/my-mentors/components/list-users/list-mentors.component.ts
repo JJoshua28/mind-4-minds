@@ -18,6 +18,7 @@ import {NgClass} from "@angular/common";
 import {UserType} from "../../../../types/user-type.enum";
 import {ActionTypes, ConfirmActionModalComponent} from "../../../../shared/component/confirm-action-modal/confirm-action-modal.component";
 import { MentorInfo, UserInfo} from "../../../../types/user details/user-info.interface";
+import {MentorUser} from "../../../../types/user.interface";
 
 @Component({
   selector: 'app-list-mentors',
@@ -33,28 +34,29 @@ import { MentorInfo, UserInfo} from "../../../../types/user details/user-info.in
 })
 export class ListMentorsComponent implements OnChanges {
   @Output() isHoveringOnUserCard = new EventEmitter<boolean>();
+  @Output() endMentorShip = new EventEmitter<string>();
 
   @ViewChild(ViewMentorModalComponent) viewUserModal!: ViewMentorModalComponent;
   @ViewChild(ConfirmActionModalComponent) confirmActionModal!: ConfirmActionModalComponent;
 
 
   $heading = input.required<string>();
-  $users = input.required<(UserInfo & MentorInfo)[]>();
+  $users = input.required<MentorUser[]>();
   $userType = input.required<UserType>();
 
   $noConnectionsMessage = input.required<string>();
 
-  $selectedUser!: WritableSignal<(UserInfo & MentorInfo)>;
+  $selectedUser!: WritableSignal<MentorUser>;
 
-  mapUserCardInfo (user: UserInfo & MentorInfo) {
+  mapUserCardInfo (user: MentorUser) {
     const {
       firstName,
       lastName,
       profilePic,
-      description,
       occupation,
-      neurodivergentConditions,
       occupationStartDate,
+      mentorDetails: {description,
+      neurodivergentConditions,}
 
     } = user;
 
@@ -77,7 +79,7 @@ export class ListMentorsComponent implements OnChanges {
       experience,
       commitment,
       meetingPreferences
-    } = this.$selectedUser();
+    } = this.$selectedUser().mentorDetails;
 
     return {
       description,
@@ -86,6 +88,26 @@ export class ListMentorsComponent implements OnChanges {
       experience,
       commitment,
       meetingPreferences
+    }
+  })
+
+  $userInfo: Signal<UserInfo> = computed(() => {
+    const {
+      firstName,
+      lastName,
+      email,
+      profilePic,
+      occupation,
+      occupationStartDate,
+    } = this.$selectedUser();
+
+    return {
+      firstName,
+      lastName,
+      email,
+      profilePic,
+      occupation,
+      occupationStartDate,
     }
   })
 

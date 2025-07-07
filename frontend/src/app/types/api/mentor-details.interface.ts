@@ -23,6 +23,6 @@ export interface MentorUserApi {
   meeting_preferences: string[];
   neurodivergent_conditions: string[];
   is_available?: boolean;
+  mentee_ids: string[];
   user_details_record: ApiUserDetails;
-  user_account: UserAccount;
 }

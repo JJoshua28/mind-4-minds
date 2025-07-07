@@ -1,146 +1,142 @@
-import {inject, Injectable, OnInit} from '@angular/core';
+import {inject, Injectable, PLATFORM_ID, signal, WritableSignal} from '@angular/core';
 import {LocalStorageService} from "../local-storage.service";
-import {Router} from "@angular/router";
-import {HttpService} from "../http.service";
-import { forkJoin, map, Observable, of, switchMap, take} from "rxjs";
-import {AuthServiceService} from "../auth-service.service";
-import {UserAccount, UserAccountDetails} from "../../../types/api/user-account .interface";
-import {mapApiToUserDetails} from "../../mapper/api/apiToUserDetails.mapper";
+
+import {
+  combineLatestWith,
+  filter,
+  interval,
+  map,
+  Observable,
+  of,
+  startWith, Subject,
+  Subscription,
+  switchMap,
+  take,
+  tap
+} from "rxjs";
+
 import {UserDetails} from "../../../types/user.interface";
-import {ApiUserDetails, UserDetailsUpdateRequest} from "../../../types/api/user-details.interface";
+
 import {UserInfo} from "../../../types/user details/user-info.interface";
-import {mapApiToUserInfo} from "../../mapper/api/apiToUserInfo.mapper";
-import {mapUserAccountToApiPayload} from "../../mapper/userAccountToApi.mapper";
-import {UserType} from "../../../types/user-type.enum";
-import {mapUserFormToApiPayload} from "../../mapper/userDetailsToApi.mapper";
-import {RegistrationUserDetails} from "../../../modules/register/registration.service";
+
+import {UserRepository} from "../../repositories/user.repository";
+import {ApiUserDetails} from "../../../types/api/user-details.interface";
 import {mapApiUserDetailsToUserDetails} from "../../mapper/api/apiToUser.mapper";
+import {Router} from "@angular/router";
+import {toObservable} from "@angular/core/rxjs-interop";
+import {isPlatformBrowser} from "@angular/common";
 
 
 @Injectable({
-  providedIn: null
+  providedIn: 'root'
 })
 
-export class UserService implements OnInit {
-  private readonly _router = inject(Router)
+export class UserService {
+  public readonly subscriptions: Subscription = new Subscription();
+  private readonly _router = inject(Router);
 
   private readonly _localStorageService = inject(LocalStorageService)
-  private readonly _authService = inject(AuthServiceService)
-
-  private readonly apiService = inject(HttpService)
-
-  private _userId = this._localStorageService.getItem("user_id")  || "" as string;
-
-  ngOnInit(): void {
-    const authToken = this._authService.getAccessToken();
-    const userId = this._localStorageService.getItem("user_id") ;
+  private readonly _userRepository = inject(UserRepository)
 
 
-    if (!authToken || !userId && this._router.url !== '/login') {
-      this.throwUserUnauthorizedUser();
+  readonly $userAccountId:WritableSignal<string> = signal(this._localStorageService.getItem("user_id") || "");
+
+  readonly userAccountId$!: Observable<string>;
+
+  readonly unauthorizedRedirect$ = new Subject<void>();
+
+  readonly $userDetails: WritableSignal<UserDetails> = signal<UserDetails>({
+    id: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    profilePic: '',
+    occupation: '',
+    occupationStartDate: '',
+    roles: [],
+    accountId: this.$userAccountId(),
+    joined: '',
+    isArchived: false,
+    isAdmin: false
+  });
+
+  private platformId = inject(PLATFORM_ID);
+  private isBrowser: boolean;
+
+   constructor () {
+     this.isBrowser = isPlatformBrowser(this.platformId);
+
+     if(this.$userAccountId() !== "")
+     {
+       this.subscriptions.add(interval(30000).pipe(
+         startWith(0),
+         switchMap(() => this._userRepository.getUserDetailsByAccountId(this.$userAccountId())),
+       ).subscribe(
+         ( userDetails) => {
+           this.$userDetails.set(userDetails);
+         }
+       ))
+     }
+     this.unauthorizedRedirect$.subscribe(() => {
+       this._router.navigate(['/login']);
+     })
+   }
+
+
+  initUserFromStorage(){
+    if (!this.isBrowser) {
+      // Running on server: skip localStorage access
+      return of(false);
+    }
+    // Safe to access localStorage here
+    const data = localStorage.getItem('user');
+    return of(data).pipe(
+      filter((data) => !!data))
+    // ... initialize user from data
+  }
+
+
+  initialiseData (userDetails?: ApiUserDetails){
+     if(userDetails)
+     {
+       const mappedUserDetails = mapApiUserDetailsToUserDetails(userDetails);
+       this.$userDetails.set(mappedUserDetails);
+
+       return of(mappedUserDetails)
+     }
+     else
+     {
+       this.$userAccountId.set(this._localStorageService.getItem("user_id") || "");
+
+       return interval(30000).pipe(
+         startWith(0),
+         switchMap(() => this._userRepository.getUserDetailsByAccountId(this.$userAccountId())),
+         tap((userDetails) => {
+           this.$userDetails.set(userDetails);
+         }),
+       )
+
+     }
+
+   }
+
+  updateData (userDetailsToUpdate?: Partial<UserDetails>) {
+    if(userDetailsToUpdate)
+    {
+      this.$userDetails.update(userDetails => {
+        return {...userDetails, ...userDetailsToUpdate};
+      });
+
+      return;
     }
 
-    this._userId = userId as string;
-  }
-
-  throwUserUnauthorizedUser() {
-    this._router.navigate(['/login']);
-  }
-
-  get userId() {
-    return this._localStorageService.getItem("user_id");
-  }
-
-  getAllUserDetails () {
-    const detailsEndpoint = `users/details`;
-
-    return this.apiService.get<ApiUserDetails>(detailsEndpoint).pipe(
-      map(userDetails => {
-        const details  = userDetails as ApiUserDetails[];
-        return details.map(detail => {
-          const {user_account, ...details_record} = detail;
-          return mapApiToUserDetails(user_account, detail);
-        })
-      }),
-      take(1),
-    );
-  }
-
-  userDetails(userId?: string): Observable<UserDetails> {
-    const usersEndpoint = `users/accounts/${userId || this._userId }`;
-    const detailsEndpoint = `users/details`;
-
-    return this.apiService.get(usersEndpoint).pipe(
-      switchMap(userAccount => {
-        const { details } = userAccount as UserAccount;
-        const userDetailsEndpoint = `${detailsEndpoint}/${details}`;
-        return forkJoin([
-          of(userAccount) as Observable<UserAccount>,
-          this.apiService.get(userDetailsEndpoint) as Observable<ApiUserDetails>
-        ]);
-      }),
-      map(([userAccount, userDetails]) => mapApiToUserDetails(userAccount, userDetails)),
+     this._userRepository.getUserDetailsByAccountId(this.$userAccountId()).pipe(
       take(1)
-    );
+    ).subscribe(
+      (userDetails) => {
+        this.$userDetails.set(userDetails);
+    })
+
   }
 
-  updateUserAccount(account: UserAccountDetails) {
-    const updateAccountEndpoint = `users/accounts/${this._userId}/`;
-
-    const mappedAccountDetails = mapUserAccountToApiPayload(account);
-
-    return this.apiService.put(updateAccountEndpoint, mappedAccountDetails).pipe(take(1))
-  }
-
-  createUserDetailsRequest(details: UserDetailsUpdateRequest, roles: UserType[]): FormData {
-    const userRegistration = mapUserFormToApiPayload(details, roles)
-    const formData = new FormData();
-
-    for (const key in userRegistration) {
-      if (Object.prototype.hasOwnProperty.call(userRegistration, key)) {
-        const value = userRegistration[key as keyof typeof userRegistration];
-
-        if (value !== undefined && value !== null) {
-          formData.append(key, value);
-        }
-      }
-    }
-    return formData;
-  }
-
-   updateUserDetails(updateRequest: Partial<UserDetailsUpdateRequest>) {
-    const usersEndpoint = `users/accounts/${this._userId }`;
-    const updateDetailsEndpoint = `users/details`;
-
-    return this.apiService.get(usersEndpoint).pipe(
-      switchMap(userAccount => {
-        const {details} = userAccount as UserAccount;
-        const userDetailsEndpoint = `${updateDetailsEndpoint}/${details}/`;
-        const mappedDetails = this.createUserDetailsRequest(updateRequest as UserDetailsUpdateRequest, updateRequest.roles as UserType[])
-        return this.apiService.put<ApiUserDetails>(userDetailsEndpoint, mappedDetails).pipe(take(1))
-      }),
-      map((details) => {
-        const detail = details as ApiUserDetails;
-        return mapApiUserDetailsToUserDetails(detail);
-      }
-    ))
-  }
-
-  userInfo(): Observable<UserInfo> {
-    const usersEndpoint = `users/accounts/${this._userId}`;
-    const detailsEndpoint = `users/details`;
-
-    return this.apiService.get(usersEndpoint).pipe(
-      switchMap(userAccount => {
-        const { details } = userAccount as UserAccount;
-        const userDetailsEndpoint = `${detailsEndpoint}/${details}`;
-        return forkJoin([
-          of(userAccount) as Observable<UserAccount>,
-          this.apiService.get(userDetailsEndpoint) as Observable<ApiUserDetails>
-        ]);
-      }),
-      map(([userAccount, userDetails]) => mapApiToUserInfo(userAccount, userDetails)),
-      take(1)
-    );
-  }
 }

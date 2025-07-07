@@ -7,118 +7,107 @@ import {Subscription} from "rxjs";
 import {UserType} from "../../../../types/user-type.enum";
 
 @Component({
-  selector: 'app-registration-layout-page',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    TextInputComponent,
-    RouterOutlet
-  ],
-  templateUrl: './registration-layout-page.component.html',
-  styleUrl: './registration-layout-page.component.scss'
+selector: 'app-registration-layout-page',
+standalone: true,
+imports: [
+  ReactiveFormsModule,
+  RouterOutlet
+],
+templateUrl: './registration-layout-page.component.html',
+styleUrl: './registration-layout-page.component.scss'
 })
 export class RegistrationLayoutPageComponent implements OnInit, OnDestroy {
-  private readonly _router: Router = inject(Router);
-  private readonly subscriptions: Subscription = new Subscription();
-  private readonly registrationService: RegistrationService = inject(RegistrationService);
+private readonly _router: Router = inject(Router);
+private readonly subscriptions: Subscription = new Subscription();
+private readonly registrationService: RegistrationService = inject(RegistrationService);
 
-  registrationOrder: string[] =  [
-    "login",
-    "/register/roles",
-    "/register/user-details",
-    "/register/review-registration"
+registrationOrder: string[] =  [
+  "login",
+  "/register/roles",
+  "/register/user-details-page",
+  "/register/review-registration"
+]
+
+userRegistrationOrder: string[] =  [
+  "login",
+  "/register/roles",
+]
+
+ngOnInit() {
+  if(this.registrationService.roles.length > 0) {
+    this.createRegistrationSteps(this.registrationService.roles);
+  }
+
+  this.subscriptions.add(this.registrationService.registrationCompleteObserver().subscribe((roles) => {
+    this.navigateToLandingPage(roles);
+  }))
+
+  this.subscriptions.add(this.registrationService.sectionNavigationObserver().subscribe(() => {
+    this.createRegistrationSteps(this.registrationService.roles);
+    this.navigateToNextSection();
+  }))
+
+}
+
+ngOnDestroy() {
+  this.subscriptions.unsubscribe();
+}
+
+mapUserTypeToRegistrationRoute (userType: UserType) {
+  switch (userType) {
+    case UserType.MENTEE:
+      return "/register/mentee";
+    case UserType.MENTOR:
+      return "/register/mentor-details";
+    default:
+      return "";
+  }
+
+}
+
+createRegistrationSteps (userRoles: UserType[]) {
+  const roleRoutes = userRoles.map(role => this.mapUserTypeToRegistrationRoute(role)).filter(route => route);
+  const registrationProcess = [...this.registrationOrder];
+  const lastStep = registrationProcess.pop();
+
+  this.userRegistrationOrder = [
+    ...registrationProcess,
+    ...roleRoutes,
+    lastStep as string
   ]
 
-  userRegistrationOrder: string[] =  [
-    "login",
-    "/register/roles",
-  ]
-
-  ngOnInit() {
-    const rolesURI = "/register/roles";
-
-    if(this.registrationService.roles.length > 0) {
-      this.createRegistrationSteps(this.registrationService.roles);
-    }
-
-    if(!this.userRegistrationOrder.includes(this._router.url)) {
-      this._router.navigate([rolesURI]);
-    }
-
-    const canSelectARole = this._router.url === rolesURI;
-    if (!canSelectARole && this.registrationService.roles.length < 1 ) {
-      this._router.navigate([rolesURI]);
-   }
-
-    this.subscriptions.add(this.registrationService.sectionNavigationObserver().subscribe(() => {
-      this.createRegistrationSteps(this.registrationService.roles);
-      this.navigateToNextSection();
-    }))
-
-    this.subscriptions.add(this.registrationService.registrationCompleteObserver().subscribe((roles) => {
-      this.navigateToLandingPage(roles);
-    }))
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
-  }
-
-  mapUserTypeToRegistrationRoute (userType: UserType) {
-    switch (userType) {
-      case UserType.MENTEE:
-        return "/register/mentee-details";
-      case UserType.MENTOR:
-        return "/register/mentor-details";
-      default:
-        return "";
-    }
-
-  }
-
-  createRegistrationSteps (userRoles: UserType[]) {
-    const roleRoutes = userRoles.map(role => this.mapUserTypeToRegistrationRoute(role)).filter(route => route);
-    const registrationProcess = [...this.registrationOrder];
-    const lastStep = registrationProcess.pop();
-
-    this.userRegistrationOrder = [
-      ...registrationProcess,
-      ...roleRoutes,
-      lastStep as string
-    ]
-
-  }
+}
 
   navigateToLandingPage(roles: UserType[]) {
-    let landingPage = ""
+  let landingPage = ""
 
-    if (roles.includes(UserType.MENTEE)) {
-      landingPage = "my-mentors"
-    } else if (roles.includes(UserType.MENTOR)) {
-      landingPage = "my-mentees"
-    } else {
-      landingPage = "users"
-    }
-
-    this._router.navigate([`/${landingPage}`]);
+  if (roles.includes(UserType.MENTEE)) {
+    landingPage = "my-mentors"
+  } else if (roles.includes(UserType.MENTOR)) {
+    landingPage = "my-mentees"
+  } else {
+    landingPage = "users"
   }
 
-  navigateToNextSection () {
+  this._router.navigate([`/${landingPage}`]);
+}
 
-    const currentRouteIndex = this.userRegistrationOrder.indexOf(this._router.url)
-    const nextIndex = currentRouteIndex === this.userRegistrationOrder.length -1? 0 : currentRouteIndex + 1;
+navigateToNextSection () {
 
-    this._router.navigate(
-      [this.userRegistrationOrder[nextIndex]]
-    );
+  const currentRouteIndex = this.userRegistrationOrder.indexOf(this._router.url)
+  const nextIndex = currentRouteIndex === this.userRegistrationOrder.length -1? 0 : currentRouteIndex + 1;
 
-  }
+  this._router.navigate(
+    [this.userRegistrationOrder[nextIndex]]
+  );
 
-  navigateBack() {
-    const currentRouteIndex = this.userRegistrationOrder.indexOf(this._router.url)
-    this._router.navigate(
-      [this.userRegistrationOrder[currentRouteIndex -1]]
-    );
-  }
+}
+
+navigateBack() {
+  const currentRouteIndex = this.userRegistrationOrder.indexOf(this._router.url)
+  this._router.navigate(
+    [this.userRegistrationOrder[currentRouteIndex -1]]
+  );
+}
 
 }

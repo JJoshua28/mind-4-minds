@@ -3,16 +3,30 @@
 @import '../../../../../styles/themes';
 @import '../../../../../styles/shared/styles';
 
+:host {
+  background-color: $primary-colour;
+}
 main {
+  position: absolute;
   width: 100%;
-  min-height: 100vh;
+  height: auto;
+  min-height: 100%;
   background: $primary-colour;
+  padding-bottom: 4rem;
 }
 
-main div {
+.image-styling {
+  width: 40%;
+  height:  auto;
+}
+
+.layout-container {
+  margin-top: 2%;
+  width: 85%;
+  height: auto;
   margin-left: auto;
+  background-color: $primary-colour;
   margin-right: auto;
-  height: 100%;
 }
 
 .heading {
@@ -29,18 +43,25 @@ h3 {
 
 
 .registration-container {
-  width: 100% !important;
-  height: 100%;
+  width: 100%;
+  min-height: 75%;
   background-color: white;
 }
 
+@include media-breakpoint-up(md) {
+  .layout-container {
+    width: 75%;
+  }
+}
+
+@include media-breakpoint-down(xl) {
+  .image-styling {
+    width: 60%;
+  }
+}
 
 @include media-breakpoint-up(sm) {
-  main div {
-    margin: auto;
-    width: 75%;
 
-  }
   main {
     justify-content: center;
   }

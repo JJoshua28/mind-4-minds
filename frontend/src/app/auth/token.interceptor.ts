@@ -11,9 +11,10 @@ import {
   catchError,
   filter,
   switchMap,
-  take,
+  take, tap,
   throwError
 } from 'rxjs';
+import {UserService} from "../shared/services/user/user-service.service";
 
 let isRefreshing = false;
 const refreshTokenSubject = new BehaviorSubject<string | null>(null);
@@ -22,7 +23,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthServiceService);
 
   const skipUrls = ['/api/token', '/api/token/refresh'];
-  const skipPostUrls = ['/api/user', '/api/mentee-details', '/api/mentors-details'];
+  const skipPostUrls = ['/api/users/details', '/api/users/mentee-details', '/api/users/mentor-details'];
 
   const shouldSkip = (url: string, list: string[]) => list.some(skip => url.includes(skip));
 
@@ -53,6 +54,10 @@ function handle401Error(req: HttpRequest<any>, next: HttpHandlerFn, authService:
   if (!isRefreshing) {
     isRefreshing = true;
     refreshTokenSubject.next(null);
+
+    if(!authService.getRefreshToken()) {
+      authService.logout();
+    }
 
     return authService.refreshToken().pipe(
       switchMap((tokenResponse: any) => {

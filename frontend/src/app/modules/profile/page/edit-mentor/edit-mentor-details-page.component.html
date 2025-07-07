@@ -1,6 +1,6 @@
-@defer (when !!$user && $mentorDetailsForm ) {
+@defer (when $dataIsReady()) {
   <main
-    class="m-auto w-75 mt-4 mb-5"
+    class="m-auto w-75 mt-5 mb-5"
   >
     <h1>Edit Mentor Details</h1>
     <div
@@ -19,7 +19,7 @@
     <div class="d-flex justify-content-between">
       <button
         class="cancel-button text-capitalize"
-        (click)="navigateTo()"
+        (click)="navigateToDetails()"
       >Cancel</button>
       <button
         [style.visibility]="$mentorDetailsForm().invalid? 'hidden' : 'visible'"
@@ -29,6 +29,7 @@
       >Save</button>
     </div>
     @if ($mentorDetailsForm().valid) {
+
       <app-preview-mentor-card
         [$user]="$user()"
       />

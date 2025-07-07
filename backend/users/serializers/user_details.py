@@ -28,6 +28,9 @@ class UserDetailsSerializer(serializers.ModelSerializer):
             'profile_pic',
             'profilePic',
         ]
+    def get(self):
+        return UserDetails.objects.all().exclude(user=self.request.user)
+
 
     def get_profilePic(self, obj):
         request = self.context.get('request')

@@ -18,7 +18,11 @@ class MentorDetailsSerializer(serializers.ModelSerializer):
         read_only=True,
         source='user_details.user'
     )
-
+    mentee_ids = serializers.ListField(
+        child=serializers.UUIDField(),
+        write_only=True,
+        required=False
+    )
 
     class Meta:
         model = MentorDetails
@@ -33,5 +37,22 @@ class MentorDetailsSerializer(serializers.ModelSerializer):
             'is_available',
             'commitment',
             'meeting_preferences',
+            'mentee_ids',
             'neurodivergent_conditions',
         ]
+
+    def update(self, instance, validated_data):
+        mentee_ids = validated_data.pop("mentee_ids", None)
+        instance = super().update(instance, validated_data)
+
+        if mentee_ids is not None:
+            # first clear existing links:
+            instance.menteedetails_set.clear()
+            # then add new ones:
+            from ..models import MenteeMentorLink
+            for mentee_id in mentee_ids:
+                MenteeMentorLink.objects.create(
+                    mentors=instance,
+                    mentees_id=mentee_id
+                )
+        return instance

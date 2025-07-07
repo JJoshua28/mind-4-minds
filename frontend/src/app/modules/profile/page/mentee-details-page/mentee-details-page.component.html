@@ -1,0 +1,22 @@
+@defer (when $userDetails) {
+  <main
+    class="w-100 h-100 d-flex"
+  >
+    <div
+      class="d-flex gap-5 content-container mt-4"
+    >
+      <div
+        class="w-75"
+      >
+        <app-mentee
+          [userDetailsId]="userDetailsId()"
+        />
+      </div>
+      <app-sidebar-navigation
+        (updateData)="requestDetails()"
+        [$userDetails]="$userDetails()"
+      />
+    </div>
+  </main>
+
+}

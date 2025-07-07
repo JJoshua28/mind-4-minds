@@ -6,19 +6,15 @@ from django.db import models
 from .helpers.random_profile_pic_name import profile_pic_upload_to
 
 
-# ✅ Custom user manager — tells Django how to create users and superusers
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('The Email field is required')
 
-        # Normalize the email (e.g. make the domain lowercase)
         email = self.normalize_email(email)
 
-        # Create a user instance
         user = self.model(email=email, **extra_fields)
 
-        # Set password securely (hashed)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -36,9 +32,12 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    class Meta:
+        app_label = "users"
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
-    email = models.EmailField(unique=True)  # Using email instead of username
+    email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     joined = models.DateTimeField(auto_now_add=True)

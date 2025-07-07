@@ -1,63 +1,71 @@
-<main
-  [ngClass]="{ 'hidden-modal-container': isHidden()}"
->
-  <dialog
-    #modal
-    class="border rounded"
-    (keydown.escape)="close()"
-
+@defer (when $isReady()) {
+  <main
   >
-    <div
-      class="d-flex justify-content-end w-100 mb-3"
-    >
-      <i
-        class="bi bi-x-lg fs-2 d-block close-icon"
-        (click)="close()"
-      ></i>
-    </div>
-    <div class="d-flex flex-column justify-content-between message-action-container">
-      <div>
-        <div class="personal-details-container mb-5 mx-auto">
-          <img
-            alt="{{ $user().firstName}} {{ $user().lastName }} profile picture"
-            [src]="$user().profilePic"
-            class="profile-picture rounded"
-          />
-          <div class="d-flex flex-column">
-            <div class="text-truncate d-inline-block">
-              <h4
-                class="text-truncate text-capitalize"
-              >{{$user().firstName}} {{$user().lastName}}</h4>
-            </div>
-            <div>
-              <h6 class="pb-0 lh-1 sub-text" >{{$user().email}}</h6>
-            </div>
-            <div>
-              <h6 class="text-capitalize pb-0 lh-1 sub-text" >{{$message().date}}</h6>
-            </div>
+    <dialog
+      #modal
+      class="border rounded"
+      (keydown.escape)="modalClosed.emit(); close()"
 
+    >
+      <div
+        class="d-flex justify-content-end w-100 mb-3"
+      >
+        <i
+          class="bi bi-x-lg fs-2 d-block close-icon"
+          (click)="modalClosed.emit(); close()"
+        ></i>
+      </div>
+      <div class="d-flex flex-column justify-content-between message-action-container">
+        <div>
+          <div class="personal-details-container mb-5 mx-auto">
+            <img
+              alt="{{ $user().firstName}} {{ $user().lastName }} profile picture"
+              [src]="$user().profilePic || '/assets/images/default.jpeg'"
+              class="profile-picture rounded"
+            />
+            <div class="d-flex flex-column">
+              <div class="text-truncate d-inline-block">
+                <h4
+                  class="text-truncate text-capitalize"
+                >{{$user().firstName}} {{$user().lastName}}</h4>
+              </div>
+              <div>
+                <h6 class="pb-0 lh-1 sub-text" >{{$user().email}}</h6>
+              </div>
+              <div>
+                <h6 class="text-capitalize pb-0 lh-1 sub-text" >{{$message().date}}</h6>
+              </div>
+
+            </div>
+          </div>
+          <div>
+            <p>{{$message().body}}</p>
+
+            @if($message().actionType === actionType.ADD_MENTOR) {
+              <app-mentee-details
+                [$mentee]="$mentee()"
+              />
+            }
           </div>
         </div>
-        <div>
-          <p>{{$message().message}}</p>
-        </div>
+        @if (!$message().isComplete) {
+          <div class="d-flex justify-content-between mt-3 pb-2">
+            <button
+              class="decline-button"
+              (click)="requestDeclined.emit(); close()"
+            >
+              <h5>Decline</h5>
+            </button>
+            <button
+              class="accept-button"
+              (click)="requestAccepted.emit(); close(); modalClosed.emit()"
+            >
+              <h5>Accept</h5>
+            </button>
+          </div>
+        }
       </div>
-      @if ($hasActions()) {
-        <div class="d-flex justify-content-between mt-3 pb-2">
-          <button
-            class="decline-button"
-            (click)="close()"
-          >
-            <h5>Decline</h5>
-          </button>
-        <button
-          class="accept-button"
-          (click)="close()"
-        >
-          <h5>Accept</h5>
-        </button>
-        </div>
-      }
-  </div>
-  </dialog>
-</main>
+    </dialog>
+  </main>
+
+}

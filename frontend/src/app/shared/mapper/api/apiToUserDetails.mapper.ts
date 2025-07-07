@@ -6,6 +6,7 @@ import {UserType} from "../../../types/user-type.enum";
 export function mapApiToUserDetails (account: UserAccount, details: ApiUserDetails): UserDetails {
   return {
     id: details.id,
+    accountId: account.id,
     firstName: details.first_name,
     lastName: details.last_name,
     occupation: details.occupation,
@@ -14,6 +15,7 @@ export function mapApiToUserDetails (account: UserAccount, details: ApiUserDetai
     roles: details.roles as UserType[],
     joined: account.joined,
     isArchived: !account.is_active,
+    isAdmin: account.is_staff,
     email: account.email,
   }
 

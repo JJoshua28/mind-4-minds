@@ -1,127 +1,145 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpService } from '../http.service';
+import { UserService } from './user-service.service';
 import { LocalStorageService } from '../local-storage.service';
-import { AuthServiceService } from '../auth-service.service';
 import { Router } from '@angular/router';
-import { of } from 'rxjs';
-import { UserAccount, UserAccountDetails } from '../../../types/api/user-account .interface';
+import { UserRepository } from '../../repositories/user.repository';
+import { of, Subject } from 'rxjs';
+import { UserDetails } from '../../../types/user.interface';
 import { ApiUserDetails } from '../../../types/api/user-details.interface';
-import { UserDetailsUpdateRequest } from '../../../types/api/user-details.interface';
-import { UserType } from '../../../types/user-type.enum';
-import {UserService} from "./user-service.service";
 
 jest.mock('@angular/router');
 
 describe('UserService', () => {
   let service: UserService;
-  let httpService: jest.Mocked<HttpService>;
-  let router: jest.Mocked<Router>;
   let localStorageService: jest.Mocked<LocalStorageService>;
-  let authService: jest.Mocked<AuthServiceService>;
+  let userRepository: jest.Mocked<UserRepository>;
+  let router: jest.Mocked<Router>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         UserService,
-        { provide: HttpService, useValue: { get: jest.fn(), put: jest.fn() } },
         { provide: LocalStorageService, useValue: { getItem: jest.fn() } },
-        { provide: AuthServiceService, useValue: { getAccessToken: jest.fn() } },
-        { provide: Router, useValue: { navigate: jest.fn(), url: '/' } }
+        { provide: Router, useValue: { navigate: jest.fn(), url: '/' } },
+        { provide: UserRepository, useValue: { getUserDetailsByAccountId: jest.fn() } }
       ]
     });
 
     service = TestBed.inject(UserService);
-    httpService = TestBed.inject(HttpService) as any;
-    router = TestBed.inject(Router) as any;
     localStorageService = TestBed.inject(LocalStorageService) as any;
-    authService = TestBed.inject(AuthServiceService) as any;
+    userRepository = TestBed.inject(UserRepository) as any;
+    router = TestBed.inject(Router) as any;
 
     localStorageService.getItem.mockReturnValue('test-user-id');
   });
 
-  it('should fetch user details', (done) => {
-    const account: UserAccount = { id: '1', details: '99' } as any;
-    const details: ApiUserDetails = { name: 'Test' } as any;
-
-    httpService.get.mockImplementation((url) => {
-      if (url.includes('accounts')) return of(account);
-      if (url.includes('details')) return of(details);
-      return of({});
-    });
-
-
-    service.userDetails().subscribe((result) => {
-      expect(result).toBeDefined();
-      expect(httpService.get).toHaveBeenCalledTimes(2);
-      done();
-    });
-  });
-
-  it('should update user account', (done) => {
-    const payload: UserAccountDetails = { email: 'test@test.com' } as any;
-    httpService.put.mockReturnValue(of({ success: true }));
-
-    service.updateUserAccount(payload).subscribe((result) => {
-      expect(httpService.put).toHaveBeenCalledWith(expect.stringContaining('accounts'), expect.anything());
-      done();
-    });
-  });
-
-  it('should fetch user info', (done) => {
-    const account: UserAccount = { id: '1', details: '999' } as any;
-    const details: ApiUserDetails = { name: 'User' } as any;
-
-    httpService.get.mockImplementation((url) => {
-      if (url.includes('accounts')) return of(account);
-      if (url.includes('details')) return of(details);
-      return of({});
-    });
-
-    service.userInfo().subscribe((info) => {
-      expect(info).toBeDefined();
-      expect(httpService.get).toHaveBeenCalledTimes(2);
-      done();
-    });
-  });
-
-  it('should create user details form data', () => {
-    const request: UserDetailsUpdateRequest = {
-      firstName: 'Jane',
-      lastName: 'Doe',
-      roles: [UserType.MENTOR],
-      occupation: null,
-      occupationStartDate: null
+  it('should initialise user from local storage if no userDetails is provided', (done) => {
+    const userDetails: UserDetails = {
+      id: '1',
+      firstName: 'Test',
+      lastName: 'User',
+      email: 'test@example.com',
+      profilePic: '',
+      occupation: '',
+      occupationStartDate: '',
+      roles: [],
+      accountId: 'test-user-id',
+      joined: '',
+      isArchived: false,
+      isAdmin: false
     };
 
-    const formData = service.createUserDetailsRequest(request, request.roles);
-    expect(formData.has('first_name')).toBe(true);
-    expect(formData.has('last_name')).toBe(true);
-    expect(formData.has('roles')).toBe(true);
-  });
+    userRepository.getUserDetailsByAccountId.mockReturnValue(of(userDetails));
 
-  it('should fetch all user details and map them', (done) => {
-    const apiDetails: ApiUserDetails[] = [
-      { user_account: { id: '1' }, name: 'Alice' },
-      { user_account: { id: '2' }, name: 'Bob' }
-    ] as any;
+    const observable = service.initialiseData();
 
-    httpService.get.mockReturnValue(of(apiDetails));
-
-    service.getAllUserDetails().subscribe((result) => {
-      expect(httpService.get).toHaveBeenCalledWith('users/details');
-      expect(result.length).toBe(2);
+    observable.subscribe((result) => {
+      expect(result).toBeDefined();
+      expect(result).toEqual(userDetails);
       done();
     });
   });
 
-  it('should navigate to login if unauthorized in ngOnInit', () => {
-    localStorageService.getItem.mockReturnValue(null);
-    authService.getAccessToken.mockReturnValue(null);
+  it('should set mapped userDetails immediately if provided', (done) => {
+    const mockApiUserDetails: ApiUserDetails = {
+      id: 'user-123',
+      first_name: 'John',
+      last_name: 'Doe',
+      occupation: 'Engineer',
+      occupation_start_date: '2020-01-01',
+      profilePic: 'https://example.com/profile.jpg',
+      roles: ['MENTOR', 'ADMIN'],
+      user_account: {
+        id: 'account-456',
+        details: 'some-details',
+        email: 'T4t2d@example.com',
+        joined: '2022-01-01',
+        is_active: true,
+        is_staff: false,
+      }
+    };
 
-    service.ngOnInit();
+
+    service.initialiseData(mockApiUserDetails).subscribe((mapped) => {
+      expect(mapped.id).toBeDefined();
+      expect(mapped.firstName).toBe(mockApiUserDetails.first_name);
+      done();
+    });
+  });
+
+  it('should update data with partial fields', () => {
+    const partial: Partial<UserDetails> = { firstName: 'NewName' };
+
+    service.$userDetails.set({
+      id: '1',
+      firstName: 'Old',
+      lastName: 'Name',
+      email: '',
+      profilePic: '',
+      occupation: '',
+      occupationStartDate: '',
+      roles: [],
+      accountId: '',
+      joined: '',
+      isArchived: false,
+      isAdmin: false
+    });
+
+    service.updateData(partial);
+
+    expect(service.$userDetails().firstName).toBe('NewName');
+  });
+
+  it('should reload data if no partial update is provided', (done) => {
+    const userDetails: UserDetails = {
+      id: '1',
+      firstName: 'Reload',
+      lastName: 'Test',
+      email: '',
+      profilePic: '',
+      occupation: '',
+      occupationStartDate: '',
+      roles: [],
+      accountId: 'test-user-id',
+      joined: '',
+      isArchived: false,
+      isAdmin: false
+    };
+
+    userRepository.getUserDetailsByAccountId.mockReturnValue(of(userDetails));
+
+    service.updateData();
+
+    setTimeout(() => {
+      expect(service.$userDetails().firstName).toBe('Reload');
+      done();
+    }, 0);
+  });
+
+  it('should redirect to login on unauthorizedRedirect$', () => {
+    service.unauthorizedRedirect$.next();
 
     expect(router.navigate).toHaveBeenCalledWith(['/login']);
   });
-
 
 });

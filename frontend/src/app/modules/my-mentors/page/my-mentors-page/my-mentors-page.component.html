@@ -2,7 +2,8 @@
   [$userType]="userType"
   [$heading]="heading"
   [$noConnectionsMessage]="noMentorsMessage"
-  [$users]="mapUserCardInfo(users)"
+  [$users]="$mentors()"
+  (endMentorShip)="endMentorship($event)"
   (isHoveringOnUserCard)="isHoveringOnUserCard=$event"
 >
 </app-list-mentors>

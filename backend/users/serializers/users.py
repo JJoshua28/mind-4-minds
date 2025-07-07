@@ -9,10 +9,11 @@ class CustomUserSerializer(serializers.ModelSerializer):
     details = serializers.PrimaryKeyRelatedField(read_only=True)
     joined = serializers.DateTimeField(read_only=True)
     is_active = serializers.BooleanField(required=False, default=True)
+    is_staff = serializers.BooleanField(required=False, default=False)
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'password', 'details', 'is_active', 'joined']
+        fields = ['id', 'email', 'password', 'details', 'is_active', 'joined', 'is_staff']
 
     def create(self, validated_data):
         validated_data.pop('details', None)

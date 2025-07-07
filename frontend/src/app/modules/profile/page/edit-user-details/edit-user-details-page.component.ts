@@ -1,5 +1,5 @@
-import {Component, computed, inject, OnInit, signal, Signal} from '@angular/core';
-import {TextInputComponent} from "../../../../shared/component/text-input/text-input.component";
+import {Component, computed, inject, input, OnInit, signal, WritableSignal} from '@angular/core';
+
 import {
   AbstractControl, AsyncValidatorFn,
   FormBuilder,
@@ -11,31 +11,28 @@ import {
   Validators
 } from "@angular/forms";
 import {Router} from "@angular/router";
-import {DateInputComponent} from "../../../../shared/component/date-input/date-input.component";
 
 import {EditUserDetailsComponent} from "../../../../shared/component/edit-user-details/edit-user-details.component";
 import {
   UserFormControls
 } from "../../../../types/user details/user-form.interface";
 
-import {RegistrationService} from "../../../register/registration.service";
 import {UserService} from "../../../../shared/services/user/user-service.service";
 import {UserDetails} from "../../../../types/user.interface";
-import {toSignal} from "@angular/core/rxjs-interop";
+
 import {HttpService} from "../../../../shared/services/http.service";
-import {catchError, delay, map, Observable, of, take} from "rxjs";
+import {catchError, delay, map, Observable, of, take, tap} from "rxjs";
 import {UserAccountDetails, UserAccountPayload} from "../../../../types/api/user-account .interface";
 import {UserDetailsUpdateRequest} from "../../../../types/api/user-details.interface";
+import {UserRepository} from "../../../../shared/repositories/user.repository";
+
 
 @Component({
-  selector: 'app-edit-user-details-page',
+  selector: 'app-edit-user-details-page-page',
   standalone: true,
   imports: [
     ReactiveFormsModule,
     EditUserDetailsComponent
-  ],
-  providers: [
-    UserService,
   ],
   templateUrl: './edit-user-details-page.component.html',
   styleUrl: './edit-user-details-page.component.scss'
@@ -44,12 +41,16 @@ export class EditUserDetailsPageComponent implements OnInit {
   private readonly _router = inject(Router);
   private readonly _formBuilder = inject(FormBuilder);
 
-  protected readonly changeType = "edit";
-
-  private readonly userDetailsService: UserService = inject(UserService);
   private readonly _httpService = inject(HttpService);
+  private readonly _userRepository = inject(UserRepository);
+  private readonly _userService = inject(UserService);
 
-  $userDetails!: Signal<UserDetails>;
+  userDetailsId = input.required<string>();
+  changeType = input<"admin" | "user">("user");
+
+  $userDetails!: WritableSignal<UserDetails>;
+
+  $isReady = signal(false);
 
   $profilePic = computed(() => { return this.$userDetails()?.profilePic || "/assets/images/default.jpeg"})
 
@@ -58,10 +59,11 @@ export class EditUserDetailsPageComponent implements OnInit {
   userDetailsForm!: FormGroup<UserFormControls>;
 
   ngOnInit() {
-
-    this.userDetailsService.userDetails().subscribe(
+    this._userRepository.getUserDetailsById(this.userDetailsId() as string).pipe(
+      take(1)
+    ).subscribe(
       userDetails => {
-        this.$userDetails = signal(userDetails)
+        this.$userDetails = signal(userDetails);
 
         this.userDetailsForm = this._formBuilder.group({
           firstName: this._formBuilder.nonNullable.control(
@@ -90,16 +92,13 @@ export class EditUserDetailsPageComponent implements OnInit {
               Validators.pattern(this.passwordRegex)
             ]
           )
-        }, {validators: this.currentPasswordRequiredIfNewPassword() })
+        }, this.changeType() === "admin" ? {} : {validators: this.currentPasswordRequiredIfNewPassword() })
+
+        this.$isReady.set(true);
       }
-
-
     )
-
-
-
-
   }
+
 
   currentPasswordRequiredIfNewPassword(): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
@@ -140,11 +139,14 @@ export class EditUserDetailsPageComponent implements OnInit {
       if(email || password) {
         const updates:UserAccountDetails = {
           email: email || this.$userDetails().email,
-          isArchived: !this.$userDetails().isArchived,
+          isAdmin: this.$userDetails().isAdmin,
+          isArchived: this.$userDetails().isArchived,
         }
         if(password) updates.password = password;
 
-        this.userDetailsService.updateUserAccount(updates).subscribe();
+        this._userRepository.updateUserAccount(updates,this.$userDetails().accountId).pipe(
+          take(1)
+        ).subscribe();
       }
 
       if(rest) {
@@ -155,13 +157,23 @@ export class EditUserDetailsPageComponent implements OnInit {
           roles: roles
         } as UserDetailsUpdateRequest;
 
-        this.userDetailsService.updateUserDetails(request).subscribe();
+        this._userRepository.updateUserDetails(request, this.$userDetails().id).pipe(
+          take(1),
+          tap((user) => {
+            if(this._userService.$userDetails().id === this.userDetailsId())
+            {
+              this._userService.updateData(user);
+            }
+          })
+        ).subscribe(() => {
+          this.navigateToDetails();
+        });
       }
     }
   }
 
-  navigateTo() {
-    this._router.navigate(['/profile/user-details']);
+  navigateToDetails () {
+    this._router.navigate([`/user-details/${this.userDetailsId()}`]);
   }
 
 }

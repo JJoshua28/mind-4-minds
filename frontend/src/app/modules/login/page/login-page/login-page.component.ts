@@ -7,7 +7,8 @@ import {LocalStorageService} from "../../../../shared/services/local-storage.ser
 import {AuthServiceService, AuthToken} from "../../../../shared/services/auth-service.service";
 import {UserType} from "../../../../types/user-type.enum";
 import {UserService} from "../../../../shared/services/user/user-service.service";
-import {take} from "rxjs";
+import {switchMap, take} from "rxjs";
+import {UserRepository} from "../../../../shared/repositories/user.repository";
 
 @Component({
   selector: 'app-login-page',
@@ -15,9 +16,6 @@ import {take} from "rxjs";
   imports: [
     TextInputComponent,
     ReactiveFormsModule
-  ],
-  providers: [
-    UserService,
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
@@ -74,25 +72,24 @@ export class LoginPageComponent implements OnInit {
     const { email, password } = this.loginCredentials.value;
     this.loginCredentials.markAsUntouched();
 
-    this.getAuthenticationToken(email, password).subscribe({
-      next: (response) => {
+    this.getAuthenticationToken(email, password).pipe(
+      switchMap((response) => {
         const { access, refresh, user_id } = response as AuthToken;
 
         this._authService.setAccessToken(access);
         this._authService.setRefreshToken(refresh);
         this._localStorageService.setItem('user_id', user_id);
 
-        this._userService.userDetails(user_id).pipe(take(1)).subscribe({
-          next: (userDetails) => {
-            this.navigateToLandingPage(userDetails.roles);
-          }
-        });
+        return this._userService.initialiseData().pipe(take(1));
+      })
+    ).subscribe({
+      next: (userDetails) => {
+        this.navigateToLandingPage(userDetails.roles);
       },
       error: (error: any) => {
-        if(error?.error?.non_field_errors) {
+        if (error?.error?.non_field_errors) {
           this.errorMessage = error.error.non_field_errors;
-        }
-        else if (error?.error?.detail) {
+        } else if (error?.error?.detail) {
           this.errorMessage = error.error.detail;
         } else if (error?.message) {
           this.errorMessage = error.message;
@@ -102,4 +99,5 @@ export class LoginPageComponent implements OnInit {
       }
     });
   }
+
 }

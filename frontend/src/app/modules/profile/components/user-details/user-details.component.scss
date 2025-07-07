@@ -43,14 +43,24 @@ h4 {
 
 }
 
-.account-activity-button {
-  @extend %is-clickable;
+.is-deactive {
   color: red;
   width: 150px;
   font-weight: lighter;
   &:hover {
     font-weight: normal;
   }
+}
+
+.is-active {
+  &:hover {
+    color: $tertiary-colour;
+  }
+}
+
+
+.account-activity-button {
+  @extend %is-clickable;
 }
 
 @media (max-width: 1200px) {

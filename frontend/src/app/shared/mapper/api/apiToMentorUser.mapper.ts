@@ -7,16 +7,18 @@ import {MentorUser} from "../../../types/user.interface";
 
 export function mapMentorUserApiToUser(mentorApi: MentorUserApi): MentorUser {
   const user = mentorApi.user_details_record;
-  const userAccount = mentorApi.user_account;
+  const userAccount = mentorApi.user_details_record.user_account;
 
   return {
     id: user.id,
     firstName: user.first_name,
     lastName: user.last_name,
     occupation: user.occupation || null,
+    isAdmin: userAccount.is_staff,
     isArchived: !userAccount.is_active || false,
     email: userAccount.email,
     joined: userAccount.joined,
+    accountId: userAccount.id,
     roles: [UserType.MENTOR],
     occupationStartDate: user.occupation_start_date || null,
     profilePic: user.profilePic || '/assets/images/default.jpeg',

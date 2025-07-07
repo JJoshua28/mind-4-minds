@@ -14,5 +14,5 @@ export class EditInboxSnippetBarComponent {
   $tickCheckbox = input.required<boolean>();
 
   @Output() tickBoxClicked = new EventEmitter<void>();
-
+  @Output() binClicked = new EventEmitter<void>();
 }

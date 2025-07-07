@@ -1,4 +1,4 @@
-import {Component, inject, Signal, signal, WritableSignal} from '@angular/core';
+import {Component, inject, OnInit, Signal, signal, ViewChild, WritableSignal} from '@angular/core';
 import {CommunicationsSnippetComponent} from "../../../inbox/components/inbox-snippet/communications-snippet.component";
 import {
   EditInboxSnippetBarComponent
@@ -12,32 +12,59 @@ import {UserSnippetComponent} from "../../components/user-snippet/user-snippet.c
 import {UserType} from "../../../../types/user-type.enum";
 import {UserService} from "../../../../shared/services/user/user-service.service";
 import {toSignal} from "@angular/core/rxjs-interop";
+import {
+  ActionTypes,
+  ConfirmActionModalComponent
+} from "../../../../shared/component/confirm-action-modal/confirm-action-modal.component";
+import {map, switchMap, take} from "rxjs";
+import {UserRepository} from "../../../../shared/repositories/user.repository";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-manage-users',
   standalone: true,
   imports: [
     EditInboxSnippetBarComponent,
-    UserSnippetComponent
-  ],
-  providers: [
-    UserService,
+    UserSnippetComponent,
+    ConfirmActionModalComponent
   ],
   templateUrl: './manage-users.component.html',
   styleUrl: './manage-users.component.scss'
 })
-export class ManageUsersComponent {
-  private readonly userService = inject(UserService);
+export class ManageUsersComponent implements OnInit {
+  private readonly _router = inject(Router);
+
+  protected readonly userService = inject(UserService);
+  private readonly _userRepository = inject(UserRepository);
+
+  @ViewChild(ConfirmActionModalComponent) confirmActionModal!: ConfirmActionModalComponent;
+
   $checkedUsers: WritableSignal<Array<string>> = signal([])
 
-  $snippets: Signal<Array<UserDetails>> = toSignal(this.userService.getAllUserDetails()) as Signal<UserDetails[]>;
+  $snippets: WritableSignal<Array<UserDetails>> = signal([]);
 
-  selectedUser!: UserDetails;
+  protected readonly modalMessageTopic = "delete the selected users";
+  protected readonly modalActionType = ActionTypes.DELETE;
 
-  handleUserCheckboxClicked (userId: string): void {
+  ngOnInit() {
+    if(this.userService.$userDetails().isAdmin) {
+      this._userRepository.getAllUserDetails(this.userService.$userDetails().id).pipe(
+        take(1),
+        map((users) => users.filter((user) => user.id !== this.userService.$userDetails().id))
+      ).subscribe((users) => {
+        this.$snippets.set(users);
+      });
+    }
+  }
+
+  navigateToUserDetails(userId: string) {
+    this._router.navigate([`/user-details/${userId}`]);
+  }
+
+  handleUserCheckboxClicked (userAccountId: string): void {
     this.$checkedUsers.set(
-      this.$checkedUsers().includes(userId) ?
-        this.$checkedUsers().filter(id => id !== userId) : [...this.$checkedUsers(), userId]
+      this.$checkedUsers().includes(userAccountId) ?
+        this.$checkedUsers().filter(id => id !== userAccountId) : [...this.$checkedUsers(), userAccountId]
     );
   }
 
@@ -46,9 +73,19 @@ export class ManageUsersComponent {
 
     if(shouldUpdateAllUsers) this.$checkedUsers.set([]);
     else this.$checkedUsers.set(
-        this.$snippets().map((snippet) => snippet.id)
+        this.$snippets().map((snippet) => snippet.accountId)
       )
+  }
 
+  handleDeleteUsers() {
+    this._userRepository.deleteMultipleUsers(this.$checkedUsers()).pipe(
+      take(1),
+      switchMap(() => this._userRepository.getAllUserDetails(this.userService.$userAccountId())),
+      take(1)
+    ).subscribe((response) => {
+      this.$snippets.set(response);
+      this.$checkedUsers.set([]);
+    });
   }
 
 }

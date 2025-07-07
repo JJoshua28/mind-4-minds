@@ -1,81 +1,52 @@
-import {Component, signal, WritableSignal} from '@angular/core';
+import {Component, inject, OnInit, signal, WritableSignal} from '@angular/core';
 import {ListMentorsComponent} from "../../components/list-users/list-mentors.component";
 import {MentorUser} from "../../../../types/user.interface";
-import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
-import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
-import {NgClass} from "@angular/common";
+
 import {UserType} from "../../../../types/user-type.enum";
-import { MentorInfo, UserInfo} from "../../../../types/user details/user-info.interface";
+
+import {MenteeMentorLinkRepositoryService} from "../../../../shared/repositories/mentee-mentor-link.repository.service";
+import {UserService} from "../../../../shared/services/user/user-service.service";
+import {switchMap, take} from "rxjs";
 
 @Component({
   selector: 'app-my-mentors-page',
   standalone: true,
   imports: [
     ListMentorsComponent,
-    NgClass
+  ],
+  providers: [
   ],
   templateUrl: './my-mentors-page.component.html',
   styleUrl: './my-mentors-page.component.scss'
 })
-export class MyMentorsPageComponent {
+export class MyMentorsPageComponent implements OnInit {
+  private readonly _menteeMentorLinkRepository = inject(MenteeMentorLinkRepositoryService)
+  private readonly _userService = inject(UserService)
+
   protected readonly noMentorsMessage = "Reflect on what you want from a mentorship and find a mentor"
   protected readonly heading = "My mentors"
   protected isHoveringOnUserCard = false
   protected userType = UserType.MENTOR
 
 
-  $mentor: WritableSignal<MentorUser> = signal({
-    id: "1",
-    firstName: "vorname",
-    email: "vorname@gmail.com",
-    lastName: "nachname",
-    isArchived: false,
-    occupation: "carer",
-    joined: new Date(5).toDateString(),
-    roles: [UserType.MENTOR],
-    occupationStartDate: new Date(5).toDateString(),
-    profilePic: "https://cdn.britannica.com/54/252154-050-881EE55B/janelle-monae-glass-onion-knives-out-film-premiere.jpg",
-    mentorDetails: {
-      id: "1",
-      commitment: "Once a week for two weeks",
-      meetingPreferences: [MeetingPreferences.ONLINE_MESSAGING, MeetingPreferences.VIDEO_CALLS],
-      qualifications: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      experience: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      neurodivergentConditions: [NeurodivergenceConditions.ADHD, NeurodivergenceConditions.TOURETTES, NeurodivergenceConditions.AUTISM, NeurodivergenceConditions.DYSLEXIA, NeurodivergenceConditions.DYSCALCULIA],
-      description: "Hi, I am vorname. I have been caring for my Autistic son for 13 years now. \n" +
-        "I have experience helping him self-regulate and vibe.",
-      isAvailable: false,
-    }
-  })
+  $mentors: WritableSignal<MentorUser[]> = signal([])
 
-  mapUserCardInfo (users: MentorUser[]): (MentorInfo & UserInfo)[] {
-    return users.map(user => {
-      const {
-        firstName,
-        lastName,
-        email,
-        profilePic,
-        occupation,
-        occupationStartDate,
-
-      } = user;
-
-      const {isAvailable, id, ...mentorInfo} = user.mentorDetails;
-
-      return {
-        firstName,
-        lastName,
-        email,
-        profilePic,
-        occupation,
-        ...mentorInfo,
-        occupationStartDate,
-      }
+  ngOnInit(): void {
+    this._menteeMentorLinkRepository.getMenteesMentorsByUserId(this._userService.$userDetails().id).subscribe(mentors => {
+      this.$mentors.set(mentors)
     })
   }
 
-
-  users: MentorUser[] = [this.$mentor(), this.$mentor(), this.$mentor(),this.$mentor(),this.$mentor(),this.$mentor(),this.$mentor(),this.$mentor()];
-
+  endMentorship(mentorUserDetailsId: string) {
+    this._menteeMentorLinkRepository.deleteMentorsMenteeLink(mentorUserDetailsId, this._userService.$userDetails().id).pipe(
+      take(1),
+      switchMap(() => {
+        return this._menteeMentorLinkRepository.getMenteesMentors(this._userService.$userDetails().id)
+      }),
+      take(1)
+    ).subscribe(mentees => {
+      this.$mentors.set(mentees)
+    })
+  }
 
 }

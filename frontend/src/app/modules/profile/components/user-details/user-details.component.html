@@ -34,6 +34,7 @@
           <h6 class="mb-0">Edit Details</h6>
         </div>
         <div
+          [style.visibility]="this._userService.$userDetails().id === this.$userDetails().id? 'visible' : 'hidden'"
           (click)="logout()"
           class="d-flex gap-2 edit-button mt-1  align-items-center">
           <i class="bi bi-box-arrow-right"></i>
@@ -42,7 +43,9 @@
       </div>
     </div>
     <h6
+      [ngClass]="{ 'is-deactive': !$isArchived(), 'is-active': $isArchived() }"
       (click)="toggleAccountStatus()"
-      class="mb-0 mt-5 mx-0 account-activity-button">{{ !$userStatus()? "Deactivate" : "Active"}} account</h6>
+      class="mb-0 mt-5 mx-0 account-activity-button">{{ $isArchived()? "Activate" : "Deactivate"}} account
+    </h6>
   </div>
 }

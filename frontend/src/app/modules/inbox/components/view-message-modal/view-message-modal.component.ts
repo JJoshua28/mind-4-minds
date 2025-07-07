@@ -1,61 +1,90 @@
-import {Component, ElementRef, input, signal, ViewChild, WritableSignal} from '@angular/core';
+import {
+  Component,
+  ElementRef, EventEmitter,
+  inject,
+  input,
+  OnInit,
+  Output,
+  Signal,
+  signal,
+  ViewChild,
+  WritableSignal
+} from '@angular/core';
 import {User} from "../../../../types/user.interface";
-import {NgClass} from "@angular/common";
-import {MeetingPreferences} from "../../../../types/user details/mentor/mentor.enum";
-import {NeurodivergenceConditions} from "../../../../types/user details/neurodivergence.enum";
-import {Snippet} from "../inbox-snippet/communications-snippet.component";
+
 import {UserType} from "../../../../types/user-type.enum";
+import {UserRepository} from "../../../../shared/repositories/user.repository";
+import {map, of, switchMap, take, tap} from "rxjs";
+import {MenteeDetailsComponent} from "../../../../shared/component/mentee-details/mentee-details.component";
+import {ActionType} from "../../../../types/action-type.enum";
+
+import {MenteeRepository} from "../../../../shared/repositories/mentee.repository";
+import {MenteeInfo} from "../../../../types/user details/user-info.interface";
+import {Requests} from "../../../../types/requests.interface";
 
 @Component({
   selector: 'app-view-message-modal',
   standalone: true,
   imports: [
-    NgClass
+
+    MenteeDetailsComponent
   ],
   templateUrl: './view-message-modal.component.html',
   styleUrl: './view-message-modal.component.scss'
 })
-export class ViewMessageModalComponent {
+export class ViewMessageModalComponent implements OnInit{
+  private readonly userRepository = inject(UserRepository)
+  private readonly menteeRepository = inject(MenteeRepository)
+
   @ViewChild('modal') modal!: ElementRef<HTMLDialogElement>;
 
-  isHidden: WritableSignal<boolean>= signal(true);
+  @Output() requestDeclined = new EventEmitter<void>()
+  @Output() requestAccepted = new EventEmitter<void>()
+  @Output() modalClosed = new EventEmitter<void>()
+
   $hasActions = input<boolean>(false)
 
-  $message = input.required<Snippet>()
+  $message = input.required<Requests>()
 
-  $user: WritableSignal<User> = signal({
-    id: "1",
-    firstName: "vorname",
-    email: "vorname@gmail.com",
-    lastName: "nachname",
-    isArchived:false,
-    roles: [UserType.MENTOR],
-    occupation: "carer",
-    joined: new Date(5).toDateString(),
-    occupationStartDate: new Date(5).toDateString(),
-    profilePic: "https://cdn.britannica.com/54/252154-050-881EE55B/janelle-monae-glass-onion-knives-out-film-premiere.jpg",
-    mentorDetails: {
-      id: "1",
-      commitment: "Once a week for two weeks",
-      meetingPreferences: [MeetingPreferences.ONLINE_MESSAGING, MeetingPreferences.VIDEO_CALLS],
-      qualifications: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      experience: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      neurodivergentConditions: [NeurodivergenceConditions.ADHD, NeurodivergenceConditions.TOURETTES, NeurodivergenceConditions.AUTISM, NeurodivergenceConditions.DYSLEXIA, NeurodivergenceConditions.DYSCALCULIA],
-      description: "Hi, I am vorname. I have been caring for my Autistic son for 13 years now. \n" +
-        "I have experience helping him self-regulate and vibe.",
-      isAvailable: false,
-    }
-  })
+  $user!: WritableSignal<User>;
+
+  $mentee!: Signal<MenteeInfo>
+
+  $isReady = signal(false)
+
+  actionType = ActionType;
+
+  ngOnInit() {
+    this.userRepository.getUserById(this.$message().senderId).pipe(
+      take(1),
+      tap((user: User) => {
+        this.$user = signal(user);
+      }),
+      switchMap((user: User) => {
+        if (user.roles?.includes(UserType.MENTEE)) {
+          return this.menteeRepository.menteeInfo(user.id).pipe(
+            tap((mentee: MenteeInfo) => {
+              this.$mentee = signal(mentee);
+            }),
+            map(() => null)
+          );
+        } else {
+          return of(null);
+        }
+      }),
+      take(1)
+    ).subscribe(() => {
+      this.$isReady.set(true)
+    });
+  }
+
 
 
   show () {
-    this.isHidden.set(!this.isHidden());
     this.modal.nativeElement.showModal()
   }
 
   close () {
-    this.isHidden.set(!this.isHidden());
-
     this.modal.nativeElement.close();
   }
 

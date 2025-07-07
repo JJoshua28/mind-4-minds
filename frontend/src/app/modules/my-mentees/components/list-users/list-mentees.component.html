@@ -1,20 +1,20 @@
 <div class=" main-content-padding w-75 mt-5">
   <div class="w-100">
-    <h3>{{$heading()}}</h3>
+    <h3>{{$heading()}} ({{$users().length}})</h3>
   </div>
   <div class="d-flex w-100 flex-wrap mt-4 justify-content-start gap-3" >
     @for (user of $users(); track index; let index = $index) {
       <app-user-card
         [$userType]="$userType()"
         #card
-        [$userCardInfo]="mapUserCardInfo(user)"
+        [$userCardInfo]="menteeDetailsToInfo(user)"
         (cardContainerClicked)="$selectedUser.set(user); viewUserModal.show()"
       >
         <div
           class="w-100 d-flex justify-content-end mt-3"
         >
           <button
-            (click)="$event.stopPropagation(); confirmActionModal.show()"
+            (click)="$event.stopPropagation(); $selectedUser.set(user); confirmActionModal.show()"
             [ngClass]="{'container-hovered': card.$isHovering()}"
             class="leave-mentor-button text-capitalize fw-bold"
           >End Mentorship</button>
@@ -27,13 +27,14 @@
   </div>
 </div>
 <app-confirm-action-modal
+  (hasConfirmedAction)="endMentorShip.emit($selectedUser().id)"
   [$type]="actionType"
   [$messageTopic]="modalMessageTopic"
 />
 
 @if ($users().length > 0  ) {
   <app-view-mentee-modal
-    [$userInfo]="$selectedUser()"
+    [$userInfo]="menteeDetailsToInfo($selectedUser())"
     [$menteeInfo]="$menteeInfo()"
   />
 }

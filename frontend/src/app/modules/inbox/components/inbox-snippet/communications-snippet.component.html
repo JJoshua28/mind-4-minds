@@ -1,6 +1,6 @@
 <div
   class="d-flex flex-row  align-items-start gap-3 py-3 text-capitalize h-auto ps-1 snippet-container"
-  (click)="handleMessageClick()"
+  (click)="messageClicked.emit(); $event.stopPropagation()"
 >
   <input
     type="checkbox"
@@ -30,7 +30,7 @@
       >{{$message().subject}}</h6>
     </div>
     <div class="w-100">
-      <p class="fixed-text-container mb-0">{{$message().message}}</p>
+      <p class="fixed-text-container mb-0">{{$message().body}}</p>
     </div>
   </div>
 </div>

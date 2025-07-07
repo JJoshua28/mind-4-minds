@@ -15,7 +15,7 @@ import {atLeastOneTrueValidator} from "../../../../shared/helpers/atLeastOneSele
 import {MenteeInfo, MentorInfo} from "../../../../types/user details/user-info.interface";
 
 @Component({
-  selector: 'app-register-mentee-details-page',
+  selector: 'app-register-mentee-page',
   standalone: true,
   imports: [
     EditMenteeDetailsComponent
@@ -32,7 +32,7 @@ export class RegisterMenteeDetailsPageComponent {
   meetingPreferenceOptions = Object.values(MeetingPreferences);
   neurodivergentConditionOptions = Object.values(NeurodivergenceConditions);
 
-  mentee: MenteeInfo = this.registrationService.menteeDetails;
+  mentee: MenteeInfo = this.registrationService.menteeDetails();
 
   $menteeDetailsForm: WritableSignal<FormGroup<MenteeDetailsFormControls>> = signal(this._formBuilder.group({
     description: this._formBuilder.nonNullable.control(this.mentee?.description || "", [Validators.required]),

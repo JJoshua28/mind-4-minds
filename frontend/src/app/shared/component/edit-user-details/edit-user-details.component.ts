@@ -13,10 +13,10 @@ import {DateInputComponent} from "../date-input/date-input.component";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import {UserFormControls} from "../../../types/user details/user-form.interface";
 
-
 const editType = {
-  EDIT: 'edit',
-  REGISTER: 'register'
+  USER: 'user',
+  ADMIN: 'admin',
+  REGISTER: 'register',
 } as const;
 
 type EditType = typeof editType[keyof typeof editType];
@@ -44,7 +44,7 @@ export class EditUserDetailsComponent implements OnInit {
   $userDetailsForm = input.required<FormGroup<UserFormControls>>();
 
   ngOnInit() {
-    this.$shouldDisplayCurrentPassword = signal(this.$changeType() === "edit")
+    this.$shouldDisplayCurrentPassword = signal(this.$changeType() === "user")
     this.filePreviewUrl = signal(this.$currentProfilePic())
   }
 

@@ -18,6 +18,7 @@
             <button
               [ngClass]="{'container-hovered': card.$isHovering()}"
               class="button-link text-capitalize fw-bold"
+              (click)="$event.stopPropagation(); sendMentorRequest(user);"
             >connect</button>
           </div>
         </app-user-card>

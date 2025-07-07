@@ -1,7 +1,11 @@
 <div class="container mb-5 overflow-visible">
-  <app-requests-and-notification-bar />
+  <app-requests-and-notification-bar
+    [$numberOfRequests]="$snippets().length"
+    [$hasRequests]="$hasNewRequests()"
+  />
 
   <app-edit-inbox-snippet-bar
+    (binClicked)="deleteMultipleMessages()"
     [$tickCheckbox]="$checkedMessages().length > 0"
     (tickBoxClicked)="handleCheckAllClicked()"
   />
@@ -10,16 +14,23 @@
     @for (snippet of $snippets(); track snippet.id) {
       <app-inbox-snippet
         [$message]="snippet"
-        (messageClicked)="selectedMessage = snippet; viewSnippetModal.show()"
+        (messageClicked)="handleMessageClicked(snippet)"
         (messageCheckboxClicked)="handleCheckMessageEvent($event)"
       />
+
+    } @empty{
+      <h3 class="text-center">Inbox is empty</h3>
     }
   </div>
 
-  @if (selectedMessage) {
-    <app-view-message-modal
-      [$hasActions]="false"
-      [$message]="selectedMessage"
-    />
+  @if($snippets().length > 0) {
+  <app-view-message-modal
+    [$hasActions]="false"
+    (modalClosed)="updateMessageStatus(selectedMessage)"
+    (requestDeclined)="deleteMessage(selectedMessage.id)"
+    (requestAccepted)="handleAction(); updateMessageAction()"
+    [$message]="selectedMessage"
+  />
   }
+
 </div>

@@ -39,7 +39,7 @@ export class RegisterMentorDetailsPageComponent implements OnInit, OnDestroy {
   meetingPreferenceOptions = Object.values(MeetingPreferences);
   neurodivergentConditionOptions = Object.values(NeurodivergenceConditions);
 
-  mentorDetails: MentorInfo = this.registrationService.mentorDetails;
+  mentorDetails: MentorInfo = this.registrationService.mentorDetails();
 
   $user!:Signal<UserInfo & MentorInfo>;
 
@@ -76,12 +76,12 @@ export class RegisterMentorDetailsPageComponent implements OnInit, OnDestroy {
       } as MentorInfo;
 
       const userInfo = {
-        firstName: this.registrationService.userDetails?.firstName,
-        lastName: this.registrationService.userDetails?.lastName,
-        email: this.registrationService.userDetails?.email,
-        occupation: this.registrationService.userDetails?.occupation || null,
-        occupationStartDate: this.registrationService.userDetails?.occupationStartDate || null,
-        profilePic: this.registrationService.userDetails?.profilePic && URL.createObjectURL(this.registrationService?.userDetails?.profilePic as File) || "https://upload.wikimedia.org/wikipedia/commons/b/b5/Windows_10_Default_Profile_Picture.svg",
+        firstName: this.registrationService.userDetails()?.firstName,
+        lastName: this.registrationService.userDetails()?.lastName,
+        email: this.registrationService.userDetails()?.email,
+        occupation: this.registrationService.userDetails()?.occupation || null,
+        occupationStartDate: this.registrationService.userDetails()?.occupationStartDate || null,
+        profilePic: this.registrationService.userDetails()?.profilePic && URL.createObjectURL(this.registrationService?.userDetails()?.profilePic as File) || "https://upload.wikimedia.org/wikipedia/commons/b/b5/Windows_10_Default_Profile_Picture.svg",
       } as UserInfo;
       return {
         ...userInfo,

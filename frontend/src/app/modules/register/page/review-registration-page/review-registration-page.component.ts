@@ -33,19 +33,19 @@ export class ReviewRegistrationPageComponent {
   )
 
   $userInfo: Signal<UserInfo> = signal({
-    firstName: this.registrationService.userDetails?.firstName,
-    lastName: this.registrationService.userDetails?.lastName,
-    email: this.registrationService.userDetails?.email,
-    occupation: this.registrationService.userDetails?.occupation,
-    occupationStartDate: this.registrationService.userDetails?.occupationStartDate || null,
-    profilePic: this.registrationService.userDetails?.storageProfilePic || "",
+    firstName: this.registrationService.userDetails()?.firstName,
+    lastName: this.registrationService.userDetails()?.lastName,
+    email: this.registrationService.userDetails()?.email,
+    occupation: this.registrationService.userDetails()?.occupation,
+    occupationStartDate: this.registrationService.userDetails()?.occupationStartDate || null,
+    profilePic: this.registrationService.userDetails()?.storageProfilePic || "",
   })
 
   shouldLoadMenteeDetail = this.registrationService.roles.includes(UserType.MENTEE)
   shouldLoadMentorDetail = this.registrationService.roles.includes(UserType.MENTOR)
 
-  $menteeInfo: Signal<MenteeInfo> = signal(this.registrationService.menteeDetails)
-  $mentorInfo: Signal<MentorInfo> = signal(this.registrationService.mentorDetails)
+  $menteeInfo: Signal<MenteeInfo> = signal(this.registrationService.menteeDetails())
+  $mentorInfo: Signal<MentorInfo> = signal(this.registrationService.mentorDetails())
 
   mentorUserType: UserType = UserType.MENTOR;
   menteeUserType: UserType = UserType.MENTEE;

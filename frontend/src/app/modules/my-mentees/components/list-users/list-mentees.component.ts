@@ -19,6 +19,8 @@ import {
   ConfirmActionModalComponent
 } from "../../../../shared/component/confirm-action-modal/confirm-action-modal.component";
 import {ViewMenteeModalComponent} from "../../../../shared/component/view-mentee-modal/view-mentee-modal.component";
+import {MenteeDetails} from "../../../../types/user details/mentee.interface";
+import {MenteeUser} from "../../../../types/user.interface";
 
 @Component({
   selector: 'app-list-mentees',
@@ -34,27 +36,28 @@ import {ViewMenteeModalComponent} from "../../../../shared/component/view-mentee
 })
 export class ListMenteesComponent implements OnChanges {
   @Output() isHoveringOnUserCard = new EventEmitter<boolean>();
+  @Output() endMentorShip = new EventEmitter<string>();
 
   @ViewChild(ViewMenteeModalComponent) viewUserModal!: ViewMenteeModalComponent;
   @ViewChild(ConfirmActionModalComponent) confirmActionModal!: ConfirmActionModalComponent;
 
   $heading = input.required<string>();
-  $users = input.required<(UserInfo & MenteeInfo)[]>();
+  $users = input.required<MenteeUser[]>();
   $userType = input.required<UserType>();
 
   $noConnectionsMessage = input.required<string>();
 
-  $selectedUser!: WritableSignal<(UserInfo & MenteeInfo)>;
+  $selectedUser!: WritableSignal<MenteeUser>;
 
   $menteeInfo: Signal<MenteeInfo>  = computed(() => {
     const {
-      description,
+      menteeDetails:{description,
       neurodivergentConditions,
       expectations,
       goals,
       learningPreferences,
       commitment,
-      meetingPreferences
+      meetingPreferences}
     } = this.$selectedUser();
 
     return {
@@ -68,26 +71,36 @@ export class ListMenteesComponent implements OnChanges {
     }
   })
 
-  mapUserCardInfo (user: UserInfo & MenteeInfo) {
+  menteeDetailsToInfo(menteeDetails: MenteeUser): (MenteeInfo & UserInfo) {
     const {
+      menteeDetails: {description, goals,
+        learningPreferences,
+      expectations,
+      commitment,
+      meetingPreferences,
+      neurodivergentConditions},
+      occupation,
+      occupationStartDate,
+      profilePic,
       firstName,
       lastName,
-      profilePic,
-      description,
-      occupation,
-      neurodivergentConditions,
-      occupationStartDate,
-
-    } = user;
+      email
+    } = menteeDetails;
 
     return {
+      description,
+      goals,
+      learningPreferences,
+      expectations,
+      commitment,
+      meetingPreferences,
+      neurodivergentConditions,
+      occupation,
+      occupationStartDate,
+      profilePic,
       firstName,
       lastName,
-      profilePic,
-      description,
-      occupation,
-      neurodivergentConditions,
-      occupationStartDate,
+      email
     }
   }
 
@@ -96,7 +109,7 @@ export class ListMenteesComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes["$users"]) {
-      this.$selectedUser = signal(changes["$users"].currentValue[0]);
+      this.$selectedUser = signal((changes["$users"].currentValue[0]));
     }
   }
 }

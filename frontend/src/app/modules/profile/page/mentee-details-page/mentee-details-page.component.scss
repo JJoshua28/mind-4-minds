@@ -1,0 +1,26 @@
+@import 'bootstrap/scss/bootstrap';
+
+.content-container {
+  width: 85%;
+  margin-right: 3.5rem;
+  justify-content: flex-end;
+}
+
+main {
+  justify-content: flex-end;
+  margin-bottom: 8rem;
+}
+
+
+
+@include media-breakpoint-down(sm) {
+  .content-container {
+    margin-right: 0rem;
+    justify-content:  flex-start;
+  }
+  main {
+    padding-left: 5%;
+    padding-right: 5%;
+    justify-content: flex-start;
+  }
+}

@@ -36,6 +36,9 @@ export class AuthServiceService {
 
   refreshToken() {
     const refresh = this.getRefreshToken();
+    if (!refresh) {
+      throw new Error('No refresh token available.');
+    }
     return this.httpService.post('token/refresh', { refresh });
   }
 

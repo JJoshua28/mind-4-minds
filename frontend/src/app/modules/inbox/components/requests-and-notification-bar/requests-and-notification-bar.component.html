@@ -13,7 +13,7 @@
           style="line-height: 1;"
           [hidden]="!$hasRequests()"
         ></i>
-        <h5 class="mb-0 py-2 text-capitalize">request</h5>
+        <h5 class="mb-0 py-2 text-capitalize">request ({{$numberOfRequests()}})</h5>
       </div>
     </li>
 
@@ -29,7 +29,7 @@
           style="line-height: 1;"
           [hidden]="!$hasNotifications()"
         ></i>
-        <h5 class="mb-0 py-2 text-capitalize">notifications</h5>
+        <h5 class="mb-0 py-2 text-capitalize">notifications ({{$numberOfNotifications()}})</h5>
       </div>
     </li>
 

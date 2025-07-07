@@ -1,6 +1,7 @@
 <app-list-mentees
+  (endMentorShip)="endMentorship($event)"
   [$userType]="userType"
   [$heading]="heading"
   [$noConnectionsMessage]="noMentorsMessage"
-  [$users]="users"
+  [$users]="$mentees()"
   (isHoveringOnUserCard)="isHoveringOnUserCard=$event"></app-list-mentees>
