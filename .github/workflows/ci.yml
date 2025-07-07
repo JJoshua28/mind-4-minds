@@ -58,16 +58,13 @@ jobs:
         run: |
           echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
         working-directory: ./backend
-    
 
-      - name: Run Django tests
-        run: |
-          python manage.py makemigrations
-          python manage.py migrate
-          python manage.py test
-        working-directory: ./backend
+
+      - name: Run tests using SQLite
+        run: python manage.py test
 
         env:
+          USE_SQLITE_FOR_TESTS: "1"
           DJANGO_SETTINGS_MODULE: mind_for_minds.settings
           DEBUG: "1"
 
