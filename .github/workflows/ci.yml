@@ -48,9 +48,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Django and other deps manually
+      - name: Install pip and dependencies
         run: |
-          pip install Django djangorestframework djangorestframework-simplejwt django-cors-headers python-decouple psycopg2-binary django_filters
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
         working-directory: ./backend
 
       - name: Write .env file from GitHub secrets
