@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ViewMentorModalComponent } from './view-mentor-modal.component';
-import {ComponentRef, signal} from "@angular/core";
+import {ComponentRef} from "@angular/core";
 
 import {MeetingPreferences} from "../../../types/user details/mentor/mentor.enum";
 import {NeurodivergenceConditions} from "../../../types/user details/neurodivergence.enum";
@@ -21,7 +21,7 @@ describe('ViewUserModalComponent', () => {
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
 
-    componentRef.setInput('$userInfo', {
+    componentRef.setInput('$_userInfo', {
       firstname: "vorname",
       email: "vorname@gmail.com",
       surname: "nachname",

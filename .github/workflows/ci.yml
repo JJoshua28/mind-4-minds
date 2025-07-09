@@ -56,14 +56,15 @@ jobs:
 
       - name: Write .env file from GitHub secrets
         run: |
-          echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .env
+          echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" > .env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "ENV=dev" >> .env
         working-directory: ./backend
-
 
       - name: Run tests using SQLite
         run: python manage.py test
         working-directory: ./backend
-
 
         env:
           USE_SQLITE_FOR_TESTS: "1"

@@ -21,7 +21,7 @@ describe('ViewUserModalComponent', () => {
     component = fixture.componentInstance;
     componentRef = fixture.componentRef;
 
-    componentRef.setInput('$userInfo', {
+    componentRef.setInput('$_userInfo', {
       firstname: "vorname",
       email: "vorname@gmail.com",
       surname: "nachname",
