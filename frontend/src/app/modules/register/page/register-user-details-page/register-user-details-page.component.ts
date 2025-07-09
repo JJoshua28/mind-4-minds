@@ -8,6 +8,7 @@ import {UserType} from "../../../../types/user-type.enum";
 import {RegistrationService, RegistrationUserDetails} from "../../registration.service";
 
 import {EditUserDetailsComponent} from "../../../../shared/component/edit-user-details/edit-user-details.component";
+import {environment} from "../../../../../environments/environment";
 
 @Component({
   selector: 'app-register-user-details-page',
@@ -23,8 +24,9 @@ export class RegisterUserDetailsPageComponent {
 
   registrationService: RegistrationService =inject(RegistrationService);
 
-  $profilePicToPreview = signal(this.registrationService.userDetails()?.storageProfilePic || "/assets/images/default.jpeg");
+  private readonly defaultProfilePic = environment.defaultProfilePic;
 
+  $profilePicToPreview = signal(this.registrationService.userDetails()?.storageProfilePic || this.defaultProfilePic);
 
   passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/;
 

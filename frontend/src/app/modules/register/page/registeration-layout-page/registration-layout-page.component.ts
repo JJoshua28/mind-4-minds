@@ -5,6 +5,7 @@ import {Router, RouterOutlet} from "@angular/router";
 import {RegistrationService} from "../../registration.service";
 import {Subscription} from "rxjs";
 import {UserType} from "../../../../types/user-type.enum";
+import {environment} from "../../../../../environments/environment";
 
 @Component({
 selector: 'app-registration-layout-page',
@@ -17,23 +18,25 @@ templateUrl: './registration-layout-page.component.html',
 styleUrl: './registration-layout-page.component.scss'
 })
 export class RegistrationLayoutPageComponent implements OnInit, OnDestroy {
-private readonly _router: Router = inject(Router);
-private readonly subscriptions: Subscription = new Subscription();
-private readonly registrationService: RegistrationService = inject(RegistrationService);
+  private readonly _router: Router = inject(Router);
+  private readonly subscriptions: Subscription = new Subscription();
+  private readonly registrationService: RegistrationService = inject(RegistrationService);
 
-registrationOrder: string[] =  [
-  "login",
-  "/register/roles",
-  "/register/user-details-page",
-  "/register/review-registration"
-]
+  registrationOrder: string[] =  [
+    "login",
+    "/register/roles",
+    "/register/user-details-page",
+    "/register/review-registration"
+  ]
 
-userRegistrationOrder: string[] =  [
-  "login",
-  "/register/roles",
-]
+  userRegistrationOrder: string[] =  [
+    "login",
+    "/register/roles",
+  ]
 
-ngOnInit() {
+  protected readonly logo = environment.logo;
+
+  ngOnInit() {
   if(this.registrationService.roles.length > 0) {
     this.createRegistrationSteps(this.registrationService.roles);
   }

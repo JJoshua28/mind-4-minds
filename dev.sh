@@ -1,7 +1,11 @@
 #!/bin/bash
-# Run backend and frontend concurrently from the root
 
-# Start the backend
+if grep -q '^ENV=' backend/.env; then
+    sed -i '' 's/^ENV=.*/ENV=dev/' backend/.env
+else
+    echo "ENV=dev" >> backend/.env
+fi
+
 source .venv1/bin/activate
 python backend/manage.py runserver &
 BACKEND_PID=$!

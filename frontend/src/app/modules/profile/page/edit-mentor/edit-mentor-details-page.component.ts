@@ -38,6 +38,7 @@ import {MentorRepository} from "../../../../shared/repositories/mentor.repositor
 
 import {MentorDetailsApi} from "../../../../types/api/mentor-details.interface";
 import {UserService} from "../../../../shared/services/user/user-service.service";
+import {environment} from "../../../../../environments/environment";
 
 @Component({
   selector: 'app-edit-mentor-details-page',
@@ -62,7 +63,6 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
   @ViewChild(PreviewMentorCardComponent) previewMentorModal!: PreviewMentorCardComponent;
 
   private readonly subscriptions: Subscription = new Subscription();
-
 
   userDetailsId = input.required<string>();
 
@@ -135,7 +135,7 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
         email: this.userDetails?.email,
         occupation: this.userDetails?.occupation || null,
         occupationStartDate: this.userDetails?.occupationStartDate || null,
-        profilePic: this.userDetails?.profilePic || "../../../../../assets/images/default.jpeg"
+        profilePic: this.userDetails?.profilePic || null
       } as UserInfo;
 
       return {

@@ -6,6 +6,7 @@ import { MentorInfo, UserInfo } from "../../../types/user details/user-info.inte
 import {MenteeDetailsComponent} from "../mentee-details/mentee-details.component";
 import {MentorDetailsComponent} from "../mentor-details/mentor-details.component";
 import { experienceDuration } from '../../helpers/experienceDurations';
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-view-mentor-modal',
@@ -23,11 +24,16 @@ export class ViewMentorModalComponent {
 
   $canConnectToMentor = input<boolean>(false)
 
-  $userInfo = input.required<UserInfo>()
+  $_userInfo = input.required<UserInfo>()
   $mentorInfo = input.required<MentorInfo>()
 
+  protected readonly $userInfo = computed(() => ({
+    ...this.$_userInfo(),
+    profilePic: this.$_userInfo().profilePic  ? this.$_userInfo().profilePic : environment.defaultProfilePic
+  }));
+
   $occupationStartDate: Signal<Date> = computed(() => {
-    return new Date(this.$userInfo()?.occupationStartDate as string);
+    return new Date(this.$_userInfo()?.occupationStartDate as string);
   })
 
   protected readonly experienceDuration = experienceDuration;

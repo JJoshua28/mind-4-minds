@@ -7,7 +7,7 @@
       <app-user-card
         [$userType]="$userType()"
         #card
-        [$userCardInfo]="menteeDetailsToInfo(user)"
+        [$_userCardInfo]="menteeDetailsToInfo(user)"
         (cardContainerClicked)="$selectedUser.set(user); viewUserModal.show()"
       >
         <div
@@ -34,7 +34,7 @@
 
 @if ($users().length > 0  ) {
   <app-view-mentee-modal
-    [$userInfo]="menteeDetailsToInfo($selectedUser())"
+    [$_userInfo]="menteeDetailsToInfo($selectedUser())"
     [$menteeInfo]="$menteeInfo()"
   />
 }

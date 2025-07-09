@@ -8,7 +8,7 @@
         <app-user-card
           [$userType]="UserType.MENTOR"
           #card
-          [$userCardInfo]="mentorUserMapInfo(user)"
+          [$_userCardInfo]="mentorUserMapInfo(user)"
           (cardContainerClicked)="onCardClick(user)"
 
         >
@@ -31,7 +31,7 @@
   @if (hasSelectedUser) {
     @let user = $selectedUser();
     <app-view-mentor-modal
-      [$userInfo]="user"
+      [$_userInfo]="user"
       [$mentorInfo]="$mentorInfo()"
       [$canConnectToMentor]="true"
     />

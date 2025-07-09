@@ -4,6 +4,10 @@ import {NeurodivergenceConditions} from "../../../types/user details/neurodiverg
 import {MentorDetailsApi, MentorUserApi} from "../../../types/api/mentor-details.interface";
 import {MentorUser} from "../../../types/user.interface";
 import {UserType} from "../../../types/user-type.enum";
+import {environment} from "../../../../environments/environment";
+
+const defaultImage = environment.defaultProfilePic;
+
 
 export function mapMentorDetails(apiData: MentorDetailsApi): MentorDetails {
   return {
@@ -32,7 +36,7 @@ export function mapMentorUser(mentorDetails: MentorUserApi): MentorUser {
     roles: user_details_record.roles as UserType[],
     accountId: user_details_record.user_account.id,
     occupationStartDate: mentorDetails.user_details_record.occupation_start_date,
-    profilePic: mentorDetails.user_details_record.profilePic || '/assets/images/default.jpeg',
+    profilePic: mentorDetails.user_details_record.profilePic || defaultImage,
     mentorDetails: mapMentorDetails(mentorDetails)
   };
 }

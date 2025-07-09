@@ -11,7 +11,8 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "start": "./start.sh"
+    "dev": "./dev.sh",
+    "build": "./build.sh"
   },
   "dependencies": {
     "ansi-regex": "^5.0.1",

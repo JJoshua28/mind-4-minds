@@ -3,12 +3,8 @@ import {
   computed, EventEmitter,
   inject,
   input,
-  OnChanges,
-  OnInit, Output,
+  Output,
   Signal,
-  signal,
-  SimpleChanges,
-  WritableSignal
 } from '@angular/core';
 import {Router} from "@angular/router";
 import {experienceDuration} from "../../../../shared/helpers/experienceDurations";
@@ -16,11 +12,12 @@ import {experienceDuration} from "../../../../shared/helpers/experienceDurations
 import {UserInfo} from "../../../../types/user details/user-info.interface";
 import {UserService} from "../../../../shared/services/user/user-service.service";
 import {map, take, tap} from "rxjs";
-import {toSignal} from "@angular/core/rxjs-interop";
+
 import {AuthServiceService} from "../../../../shared/services/auth-service.service";
 import {UserRepository} from "../../../../shared/repositories/user.repository";
 import {NgClass} from "@angular/common";
 import {UserDetails} from "../../../../types/user.interface";
+import {environment} from "../../../../../environments/environment";
 
 @Component({
   selector: ' app-user-details',
@@ -39,6 +36,9 @@ export class UserDetailsComponent {
   private readonly _userRepository = inject(UserRepository);
   private readonly _authService = inject(AuthServiceService);
   protected readonly _userService = inject(UserService);
+
+  private readonly defaultProfilePic = environment.defaultProfilePic;
+
 
   $accountId = computed(() => this.$userDetails().accountId);
 
@@ -60,7 +60,7 @@ export class UserDetailsComponent {
   });
 
 
-  $profilePic = computed(() => { return this.$user()?.profilePic || "/assets/images/default.jpeg"
+  $profilePic = computed(() => { return this.$user()?.profilePic || this.defaultProfilePic
   })
 
   $occupationStartDate: Signal<Date> = computed(() => {

@@ -9,6 +9,7 @@ import {UserType} from "../../../../types/user-type.enum";
 import {UserService} from "../../../../shared/services/user/user-service.service";
 import {switchMap, take} from "rxjs";
 import {UserRepository} from "../../../../shared/repositories/user.repository";
+import {environment} from "../../../../../environments/environment";
 
 @Component({
   selector: 'app-login-page',
@@ -30,6 +31,8 @@ export class LoginPageComponent implements OnInit {
   private readonly _userService = inject(UserService);
 
   protected errorMessage!: string | null;
+
+  protected logo = environment.logo
 
   loginCredentials: FormGroup = this._formBuilder.group({
     email: ['', [Validators.required, Validators.email]],

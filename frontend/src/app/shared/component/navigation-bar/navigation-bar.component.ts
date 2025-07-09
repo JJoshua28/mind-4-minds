@@ -6,6 +6,7 @@ import {UserType} from "../../../types/user-type.enum";
 import {filter, map, Subscription} from "rxjs";
 import {toObservable, toSignal} from "@angular/core/rxjs-interop";
 import {RequestsRepositoryService} from "../../repositories/requests.repository.service";
+import {environment} from "../../../../environments/environment";
 
 enum NavigationItems {
   inbox='inbox',
@@ -39,10 +40,12 @@ export class NavigationBarComponent implements OnInit, OnDestroy {
   protected userService = inject(UserService);
   private readonly _requestsService = inject(RequestsRepositoryService);
 
+  protected readonly logo = environment.logo;
+
   $hasNewInboxMessage: WritableSignal<boolean> = signal<boolean>(false);
 
   $navigationItems: WritableSignal<SecondLevelNavigationItems[]> = signal(this.generateRoles(this.userService.$userDetails().roles));
-
+  //
   constructor() {
     toObservable(this.userService.$userDetails).subscribe((user) => {
       this.$navigationItems.set(this.generateRoles(user.roles));

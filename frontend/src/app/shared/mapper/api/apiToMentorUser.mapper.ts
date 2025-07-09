@@ -3,11 +3,15 @@ import {NeurodivergenceConditions} from "../../../types/user details/neurodiverg
 import {UserType} from "../../../types/user-type.enum";
 import {MentorUserApi} from "../../../types/api/mentor-details.interface";
 import {MentorUser} from "../../../types/user.interface";
+import {environment} from "../../../../environments/environment";
 
 
 export function mapMentorUserApiToUser(mentorApi: MentorUserApi): MentorUser {
   const user = mentorApi.user_details_record;
   const userAccount = mentorApi.user_details_record.user_account;
+
+  const defaultImage = environment.defaultProfilePic;
+
 
   return {
     id: user.id,
@@ -21,7 +25,7 @@ export function mapMentorUserApiToUser(mentorApi: MentorUserApi): MentorUser {
     accountId: userAccount.id,
     roles: [UserType.MENTOR],
     occupationStartDate: user.occupation_start_date || null,
-    profilePic: user.profilePic || '/assets/images/default.jpeg',
+    profilePic: user.profilePic || defaultImage,
     mentorDetails: {
       id: mentorApi.id,
       commitment: mentorApi.commitment,

@@ -22,9 +22,10 @@ import {UserDetails} from "../../../../types/user.interface";
 
 import {HttpService} from "../../../../shared/services/http.service";
 import {catchError, delay, map, Observable, of, take, tap} from "rxjs";
-import {UserAccountDetails, UserAccountPayload} from "../../../../types/api/user-account .interface";
+import {UserAccountDetails} from "../../../../types/api/user-account .interface";
 import {UserDetailsUpdateRequest} from "../../../../types/api/user-details.interface";
 import {UserRepository} from "../../../../shared/repositories/user.repository";
+import {environment} from "../../../../../environments/environment";
 
 
 @Component({
@@ -45,6 +46,8 @@ export class EditUserDetailsPageComponent implements OnInit {
   private readonly _userRepository = inject(UserRepository);
   private readonly _userService = inject(UserService);
 
+  private readonly defaultProfilePic = environment.defaultProfilePic;
+
   userDetailsId = input.required<string>();
   changeType = input<"admin" | "user">("user");
 
@@ -52,7 +55,7 @@ export class EditUserDetailsPageComponent implements OnInit {
 
   $isReady = signal(false);
 
-  $profilePic = computed(() => { return this.$userDetails()?.profilePic || "/assets/images/default.jpeg"})
+  $profilePic = computed(() => { return this.$userDetails()?.profilePic || this.defaultProfilePic})
 
   passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/;
 

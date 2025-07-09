@@ -20,14 +20,14 @@
         @if(shouldLoadMenteeDetail) {
           <app-user-card
             [$userType]="menteeUserType"
-            [$userCardInfo]="$menteeCardInfo()"
+            [$_userCardInfo]="$menteeCardInfo()"
             (cardContainerClicked)="viewMenteeModal.show()"
           />
         }
         @if (shouldLoadMentorDetail) {
           <app-user-card
             [$userType]="mentorUserType"
-            [$userCardInfo]="$mentorCardInfo()"
+            [$_userCardInfo]="$mentorCardInfo()"
             (cardContainerClicked)="viewMentorModal.show()"
           />
         }
@@ -54,14 +54,14 @@
 
 @if (shouldLoadMentorDetail) {
   <app-view-mentor-modal
-    [$userInfo]="$userInfo()"
+    [$_userInfo]="$userInfo()"
     [$mentorInfo]="$mentorInfo()"
   />
 }
 
 @if (shouldLoadMenteeDetail) {
   <app-view-mentee-modal
-    [$userInfo]="$userInfo()"
+    [$_userInfo]="$userInfo()"
     [$menteeInfo]="$menteeInfo()"
   />
 }

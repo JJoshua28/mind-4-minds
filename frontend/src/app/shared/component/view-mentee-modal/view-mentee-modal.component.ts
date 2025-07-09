@@ -4,8 +4,9 @@ import {NgClass} from "@angular/common";
 import {MenteeInfo, UserInfo} from "../../../types/user details/user-info.interface";
 
 import {MenteeDetailsComponent} from "../mentee-details/mentee-details.component";
-import {MentorDetailsComponent} from "../mentor-details/mentor-details.component";
+
 import { experienceDuration } from '../../helpers/experienceDurations';
+import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-view-mentee-modal',
@@ -13,7 +14,6 @@ import { experienceDuration } from '../../helpers/experienceDurations';
   imports: [
     NgClass,
     MenteeDetailsComponent,
-    MentorDetailsComponent
   ],
   templateUrl: './view-mentee-modal.component.html',
   styleUrl: './view-mentee-modal.component.scss'
@@ -25,7 +25,13 @@ export class ViewMenteeModalComponent {
   isHidden: WritableSignal<boolean>= signal(true);
   $canConnectToMentor = input<boolean>(false)
 
-  $userInfo = input.required<UserInfo>()
+  $_userInfo = input.required<UserInfo>()
+
+  protected readonly $userInfo = computed(() => ({
+    ...this.$_userInfo(),
+    profilePic: this.$_userInfo().profilePic  ? this.$_userInfo().profilePic : environment.defaultProfilePic
+  }));
+
   $menteeInfo = input.required<MenteeInfo>()
 
   $occupationStartDate: Signal<Date> = computed(() => {
