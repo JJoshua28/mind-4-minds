@@ -30,9 +30,11 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'localhost:4200',
+    '34.252.27.219',
     '127.0.0.1:4200',
-    'https://mind-4-minds.web.app',
-    'https://mind-4-minds-preview.web.app',
+    '127.0.0.1',
+    'mind-4-minds.web.app',
+    'mind-4-minds-preview.web.app',
 ]
 
 # Application definition
@@ -70,13 +72,18 @@ CORS_ALLOW_ALL_ORIGINS = True if config("ENV") == "dev" else False
 CORS_ORIGIN_WHITELIST = [
 'http://localhost:4200',
 'http://127.0.0.1:4200'
+'http://127.0.0.1',
+'https://34.252.27.219',
+'http://34.252.27.219',
 'https://mind-4-minds-preview.web.app',
 'https://mind-4-minds.web.app',
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
+    'http://127.0.0.1',
     'http://127.0.0.1:4200',
+    'http://34.252.27.219',
     'https://mind-4-minds-preview.web.app',
     'https://mind-4-minds.web.app'
 ]
@@ -84,6 +91,8 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
     'http://127.0.0.1:4200',
+    'http://127.0.0.1',
+    'http://34.252.27.219',
     'https://mind-4-minds.web.app'
 ]
 
