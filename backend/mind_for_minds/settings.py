@@ -131,8 +131,8 @@ DATABASES = {
             'NAME': 'mind_for_minds_db',
             'USER': config("DB_USER"),
             'PASSWORD': config("DB_PASSWORD"),
-            'HOST': 'localhost',
-            'PORT': '5432',
+            'HOST': config("DB_HOST"),
+            'PORT': config("DB_PORT"),
         }
     }
 
