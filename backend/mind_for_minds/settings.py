@@ -26,7 +26,14 @@ SECRET_KEY = config("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if config("ENV") == "dev" else False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'localhost:4200', '127.0.0.1:4200', 'https://mind-4-minds.web.app']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'localhost:4200',
+    '127.0.0.1:4200',
+    'https://mind-4-minds.web.app',
+    'https://mind-4-minds-preview.web.app',
+]
 
 # Application definition
 
@@ -63,16 +70,20 @@ CORS_ALLOW_ALL_ORIGINS = True if config("ENV") == "dev" else False
 CORS_ORIGIN_WHITELIST = [
 'http://localhost:4200',
 'http://127.0.0.1:4200'
+'https://mind-4-minds-preview.web.app',
 'https://mind-4-minds.web.app',
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
+    'http://127.0.0.1:4200',
+    'https://mind-4-minds-preview.web.app',
     'https://mind-4-minds.web.app'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
+    'http://127.0.0.1:4200',
     'https://mind-4-minds.web.app'
 ]
 
