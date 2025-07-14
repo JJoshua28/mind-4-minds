@@ -56,9 +56,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -68,16 +68,6 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'mind_for_minds.urls'
 
 CORS_ALLOW_ALL_ORIGINS = True if config("ENV") == "dev" else False
-
-CORS_ORIGIN_WHITELIST = [
-'http://localhost:4200',
-'http://127.0.0.1:4200'
-'http://127.0.0.1',
-'https://34.252.27.219',
-'http://34.252.27.219',
-'https://mind-4-minds-preview.web.app',
-'https://mind-4-minds.web.app',
-]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
