@@ -55,7 +55,6 @@
                 }
               ],
               "outputHashing": "all",
-              "deployUrl": "/static/",
               "baseHref": "/",
               "fileReplacements": [
                 {
