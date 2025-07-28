@@ -86,6 +86,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://mind-4-minds.web.app'
 ]
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
