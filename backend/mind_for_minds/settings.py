@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'mind-4-minds.web.app',
     'mind-4-minds-preview.web.app',
+    'mind-for-minds.duckdns.org'
 ]
 
 # Application definition
