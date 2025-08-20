@@ -25,9 +25,7 @@ from django.conf.urls.static import static
 from users.views.token_authentication import CustomTokenObtainPairView
 from .views import FrontendAppView
 
-print("hi")
 print(settings.STATICFILES_DIRS[0])
-print("bye")
 urlpatterns = [
     path('api/token', CustomTokenObtainPairView.as_view(), name='custom_token_obtain_pair'),
     path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
