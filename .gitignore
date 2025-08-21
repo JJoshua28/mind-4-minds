@@ -37,6 +37,7 @@ frontend/.angular/cache
 /libpeerconnection.log
 testem.log
 /typings
+.firebase
 
 # System files
 .DS_Store
