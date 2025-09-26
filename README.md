@@ -6,6 +6,8 @@ Feel free to use the [production ready](https://mind-4-minds.web.app/) version o
 
 ## Mentor Tutorial
 
+[Watch the mentor tutorial](tutorials/mentor%20tutorial.mov)
+
 
 ## Mentee Tutorial
 
