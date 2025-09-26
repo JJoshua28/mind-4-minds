@@ -21,11 +21,21 @@ DB_PORT="5432"
 
 echo "🚀 Setting up local development environment..."
 
+# Create a virtual environment first (recommended)
+python3 -m venv .venv1
+source .venv1/bin/activate
+
+
 # ==============================
 # Generate .env if missing
 # ==============================
 
+
+
 cd backend
+
+pip install --upgrade pip
+pip install -r backend/requirements.txt
 
 if [ ! -f "$ENV_FILE" ]; then
   echo "⚙️  Creating $ENV_FILE..."
@@ -67,6 +77,7 @@ psql -U $(whoami) -d postgres -tc "SELECT 1 FROM pg_database WHERE datname='$DB_
 # Activate venv & run migrations
 # ==============================
 echo "🐍 Activating virtual environment..."
+pwd
 source .venv1/bin/activate
 cd backend
 

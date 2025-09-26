@@ -48,3 +48,5 @@ Thumbs.db
 /backend/templates
 /backend/profile_pics
 /backend/profile_pics/profile_pics
+
+.venv1
