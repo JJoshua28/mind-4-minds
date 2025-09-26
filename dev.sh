@@ -1,5 +1,7 @@
 #!/bin/bash
 
+npm i
+
 if grep -q '^ENV=' backend/.env; then
     sed -i '' 's/^ENV=.*/ENV=dev/' backend/.env
 else
@@ -12,6 +14,7 @@ BACKEND_PID=$!
 
 # Start the frontend
 cd frontend
+npm install
 ng serve &
 
 # Wait for both processes
