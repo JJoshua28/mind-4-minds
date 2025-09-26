@@ -30,12 +30,10 @@ source .venv1/bin/activate
 # Generate .env if missing
 # ==============================
 
-
-
-cd backend
-
 pip install --upgrade pip
 pip install -r backend/requirements.txt
+
+cd backend
 
 if [ ! -f "$ENV_FILE" ]; then
   echo "⚙️  Creating $ENV_FILE..."
