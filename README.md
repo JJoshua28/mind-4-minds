@@ -18,41 +18,46 @@ Mentors will receive request for mentorship from mentees and can:
 - End a mentorship with a mentee
 - Remove themselves from the list of active mentors
 
-[Watch the mentor tutorial](tutorials/mentor%20tutorial.mov)
+[Watch the mentor tutorial](tutorials/mentor_tutorial.mov)
 
 <details>
   <summary>Click to see screenshots from a mentor's POV</summary>
 
 The mentor's current mentees
-![img.png](screenshots/mentor's mentees.png)
+![img.png](screenshots/mentor_s_mentees.png)
 
 The mentor's inbox
-![img.png](screenshots/mentors inbox.png)
+![img.png](screenshots/mentors_inbox.png)
 
 A mentorship request
 
-![img.png](screenshots/Mentorship request.png)
+![img.png](screenshots/Mentorship_request.png)
 
 Mentor details
-![img.png](screenshots/mentor details.png)
+![img.png](screenshots/mentor_details.png)
 </details>
 
 ## Mentee Tutorial
 
-[Watch the mentee tutorial](tutorials/mentee%20tutorial.mov)
+Mentees will search for mentors and make mentorship requests to mentors. They can also:
+
+- View the mentor's mentorship details
+- End a mentorship with a mentor
+
+[Watch the mentee tutorial](tutorials/mentee_tutorial.mov)
 
 <details>
   <summary>Click to see screenshots from a mentee's POV</summary>
 
 The mentee's current mentors
-![img.png](screenshots/mentee's mentors.png)
+![img.png](screenshots/mentee_s_mentors.png)
 
 Mentee searching for a mentor
-![img.png](screenshots/mentee searching for a mentor.png)
+![img.png](screenshots/mentee_searching_for_a_mentor.png)
 
 Mentee details
 
-![img.png](screenshots/mentee details.png)
+![img.png](screenshots/mentee_details.png)
 
 </details>
 
