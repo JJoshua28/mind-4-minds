@@ -12,7 +12,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "./dev.sh",
-    "build": "./build.sh"
+    "build": "./build.sh",
+    "start": "./start.sh"
   },
   "dependencies": {
     "ansi-regex": "^5.0.1",

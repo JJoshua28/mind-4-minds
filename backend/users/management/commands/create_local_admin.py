@@ -10,7 +10,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--email",
             type=str,
-            default="admin@local.dev",
+            default="admin@admin.com",
             help="Email of the admin user (default: admin@local.dev)"
         )
         parser.add_argument(
@@ -22,13 +22,13 @@ class Command(BaseCommand):
         parser.add_argument(
             "--first-name",
             type=str,
-            default="Local",
+            default="admin",
             help="First name of the admin user"
         )
         parser.add_argument(
             "--last-name",
             type=str,
-            default="Admin",
+            default="admin",
             help="Last name of the admin user"
         )
 
@@ -62,7 +62,7 @@ class Command(BaseCommand):
             defaults={
                 "first_name": first_name,
                 "last_name": last_name,
-                "roles": ["Admin"],
+                "roles": ["admin"],
             }
         )
 
@@ -70,3 +70,4 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("✅ Linked UserDetails created"))
         else:
             self.stdout.write(self.style.WARNING("⚠️ UserDetails already exists"))
+
