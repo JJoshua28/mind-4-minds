@@ -13,8 +13,8 @@ else
 fi
 
 # Start the backend
-source .venv1/bin/activate
-python backend/manage.py runserver &
+cd backend
+pipenv run python manage.py runserver &
 BACKEND_PID=$!
 
 # Wait for both processes
