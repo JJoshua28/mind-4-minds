@@ -3,13 +3,13 @@
 
 # Build the frontend
 cd frontend
-ng build --configuration production
+./node_modules/.bin/ng build --configuration production
 cd ..
 
-if grep -q '^ENV=' backend/.env; then
-    sed -i '' 's/^ENV=.*/ENV=prod/' backend/.env
+if [ -f backend/.env ]; then
+    sed -i 's/^ENV=.*/ENV=prod/' backend/.env
 else
-    echo "ENV=prod" >> backend/.env
+    echo "ENV=prod" > backend/.env
 fi
 
 # Start the backend
