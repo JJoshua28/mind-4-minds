@@ -26,6 +26,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Check frontend dependencies
+        run: |
+          ls -la frontend 
+          ls -la frontend/node_modules/.bin/ng
+
       - name: Run tests (Jest)
         run: npm run test -- --coverage
         working-directory: ./frontend
