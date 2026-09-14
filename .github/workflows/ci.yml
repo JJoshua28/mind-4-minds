@@ -47,6 +47,21 @@ jobs:
   backend-unit-tests:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: mind_for_minds
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: mind_for_minds_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -63,11 +78,11 @@ jobs:
         run: pipenv install --dev --deploy
         working-directory: ./backend
 
-      - name: Write .env file from GitHub secrets
+      - name: Write .env file
         run: |
-          echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" > .env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DJANGO_SECRET_KEY=test-only-django-secret-key" > .env
+          echo "DB_USER=mind_for_minds" >> .env
+          echo "DB_PASSWORD=test_password" >> .env
           echo "DB_HOST=localhost" >> .env
           echo "DB_PORT=5432" >> .env
           echo "ENV=dev" >> .env
