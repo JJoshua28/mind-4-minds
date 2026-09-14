@@ -21,6 +21,10 @@ yarn-error.log
 .settings/
 *.sublime-workspace
 
+#Python
+__pycache__/
+*.py[cod]
+
 # Visual Studio Code
 frontend/.vscode/tasks.json
 !.vscode/settings.json

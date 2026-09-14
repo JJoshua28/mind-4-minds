@@ -7,13 +7,12 @@ if grep -q '^ENV=' backend/.env; then
 else
     echo "ENV=dev" >> backend/.env
 fi
-
-source .venv1/bin/activate
-python backend/manage.py runserver &
+cd backend
+pipenv run python manage.py runserver &
 BACKEND_PID=$!
 
 # Start the frontend
-cd frontend
+cd ../frontend
 npm install
 ng serve &
 

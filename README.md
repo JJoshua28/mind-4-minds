@@ -63,27 +63,94 @@ Mentee details
 
 ## Local Development
 To run the app locally, you must have installed:
-- Python 3
+- Python 3.14
 - Node.js
-- Postgres
+- Pipenv
+- PostgreSQL
 
-All admin requests must be approved by an approved admin user:
-Here are the credentials for the local initial approved administrator:
-- email: admin@admin.com
-- password: admin@123
+## Backend setup
+
+Create a PostgresSQL user:
+```bash
+sudo -u postgres createuser --interactive --pwprompt
+```
+
+Then provide the following when prompted:
+
+```bash
+Enter name of role to add: mind_for_minds
+Enter password for new role: <choose a password>
+Enter it again: <repeat password>
+Shall the new role be a superuser? (y/n) n
+```
+Create the PostgresSQL database:
+
+```bash
+sudo -u postgres createdb -O mind_for_minds mind_for_minds_db
+```
+After creating the db run:
+
+```bash
+sudo -u postgres psql -c "ALTER ROLE mind_for_minds CREATEDB;"
+```
+
+Create a .env file inside the backend directory with the following values:
+
+- ENV=dev
+- SECRET_KEY=your-generated-django-secret-key
+- DB_USER=mind_for_minds
+- DB_PASSWORD=your-postgres-password
+- DB_HOST=localhost
+- DB_PORT=5432
+
+DB_PASSWORD should be the password for the mind_for_minds PostgreSQL user.
+
+Install the backend dependencies:
+```bash
+cd backend
+```
+```bash
+pipenv install --dev
+```
+
+Generate a Django secret key with:
+
+```bash
+pipenv run python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+
+Copy the generated value into SECRET_KEY in .env.
+
+Apply the database migrations:
+
+```bash
+pipenv run python manage.py migrate
+```
+
+Run the backend tests with:
+
+```bash
+pipenv run pytest
+```
 
 ## Local Server
 To run the application locally, run `npm run dev`
 
 To the run the frontend locally, run the following commands in the terminal:
-- `cd frontend`
-- `ng serve` 
+```bash
+cd frontend
+```
+```bash
+ng serve
+```
 
 To run the backend locally, run the following commands in the terminal:
-- `source venv1/bin/activate`
-- `cd backend`
-- `python manage.py runserver`
-
+```bash
+cd backend
+```
+```bash
+pipenv run python manage.py runserver
+```
 
 ## Some features are currently not implemented
 This includes:
