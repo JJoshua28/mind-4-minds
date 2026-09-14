@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 # Check if psql is installed
 if ! command -v psql >/dev/null 2>&1; then
   echo "❌ Postgres (psql) is not installed. Please install it first."
@@ -6,63 +9,25 @@ if ! command -v psql >/dev/null 2>&1; then
   exit 1
 fi
 
-#!/bin/bash
-set -e
-
 # ==============================
 # Configuration
 # ==============================
-ENV_FILE=".env"
+#Use .env variables
 DB_NAME="mind_for_minds_db"
-DB_USER="django_user"
-DB_PASSWORD="Mind_for_minds_app!!15"
-DB_HOST="localhost"
-DB_PORT="5432"
+source backend/.env
 
 echo "🚀 Setting up local development environment..."
 
-# Create a virtual environment first (recommended)
-python3 -m venv .venv1
-source .venv1/bin/activate
-
-
-# ==============================
-# Generate .env if missing
-# ==============================
-
-pip install --upgrade pip
-pip install -r backend/requirements.txt
-
+# Install the backend project dependencies
 cd backend
-
-if [ ! -f "$ENV_FILE" ]; then
-  echo "⚙️  Creating $ENV_FILE..."
-  DJANGO_SECRET_KEY=$(python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())')
-
-  cat > "$ENV_FILE" <<EOL
-DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
-DB_USER=$DB_USER
-DB_PASSWORD=$DB_PASSWORD
-DB_HOST=$DB_HOST
-DB_PORT=$DB_PORT
-ENV=dev
-EOL
-
-  echo "✅ .env file created."
-else
-  echo "⚠️  $ENV_FILE already exists. Skipping creation."
-fi
+pipenv install --dev
 
 cd ..
 
-# ==============================
-# Ensure Postgres DB exists
-# ==============================
-echo "📦 Ensuring Postgres database exists..."
 
 # Create the app user if missing
 psql -U $(whoami) -d postgres -tc "SELECT 1 FROM pg_roles WHERE rolname='$DB_USER'" | grep -q 1 || \
-  psql -U $(whoami) -d postgres -c "CREATE USER django_user WITH PASSWORD '$DB_PASSWORD';"
+  psql -U $(whoami) -d postgres -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASSWORD';"
 
 psql -U $(whoami) -d postgres -c "ALTER ROLE $DB_USER CREATEDB;"
 
@@ -72,21 +37,18 @@ psql -U $(whoami) -d postgres -tc "SELECT 1 FROM pg_database WHERE datname='$DB_
 
 
 # ==============================
-# Activate venv & run migrations
+# Run migrations
 # ==============================
-echo "🐍 Activating virtual environment..."
-pwd
-source .venv1/bin/activate
 cd backend
 
 echo "📂 Running migrations..."
-python manage.py migrate
+pipenv run python manage.py migrate
 
 # ==============================
 # Create default admin
 # ==============================
 echo "👤 Ensuring local admin exists..."
-python manage.py create_local_admin \
+pipenv run python manage.py create_local_admin \
   --email admin@admin.com \
   --password admin@123 \
   --first-name admin \
