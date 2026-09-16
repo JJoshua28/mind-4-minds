@@ -14,7 +14,7 @@ BACKEND_PID=$!
 # Start the frontend
 cd ../frontend
 npm install
-ng serve &
+./node_modules/.bin/ng serve &
 
 # Wait for both processes
 wait $BACKEND_PID
