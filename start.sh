@@ -22,24 +22,10 @@ echo "🚀 Setting up local development environment..."
 cd backend
 pipenv install --dev
 
-cd ..
-
-
-# Create the app user if missing
-psql -U $(whoami) -d postgres -tc "SELECT 1 FROM pg_roles WHERE rolname='$DB_USER'" | grep -q 1 || \
-  psql -U $(whoami) -d postgres -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASSWORD';"
-
-psql -U $(whoami) -d postgres -c "ALTER ROLE $DB_USER CREATEDB;"
-
-# Create the database if missing
-psql -U $(whoami) -d postgres -tc "SELECT 1 FROM pg_database WHERE datname='$DB_NAME'" | grep -q 1 || \
-  psql -U $(whoami) -d postgres -c "CREATE DATABASE $DB_NAME OWNER $DB_USER;"
-
 
 # ==============================
 # Run migrations
 # ==============================
-cd backend
 
 echo "📂 Running migrations..."
 pipenv run python manage.py migrate
