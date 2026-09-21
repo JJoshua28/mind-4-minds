@@ -44,7 +44,7 @@ class Command(BaseCommand):
             email=email,
             defaults={
                 "is_staff": True,
-                "is_superuser": False,
+                "is_superuser": True,
                 "is_active": True,
             },
         )
