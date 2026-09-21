@@ -9,13 +9,17 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 User = get_user_model()
 
 class CustomUserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.exclude(is_superuser=True).exclude(is_active=False)
     serializer_class = CustomUserSerializer
     lookup_field = 'id'
 
     def get_permissions(self):
         if self.action == 'create':
-            return [AllowAny()]
+            permission_classes = [AllowAny]
+        elif self.action == 'destroy':
+            permission_classes = [IsAdminUser]
+        else:
+            permission_classes = [IsAuthenticated]
         return [permission() for permission in self.permission_classes]
 
     @action(detail=False, methods=["POST"], url_path="delete-all", permission_classes=[IsAdminUser])

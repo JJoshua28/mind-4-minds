@@ -1,7 +1,8 @@
 import uuid
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.db import models
+from django.db import models#
+from django.contrib.postgres.fields import ArrayField
 
 from .helpers.random_profile_pic_name import profile_pic_upload_to
 
@@ -20,8 +21,8 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
@@ -42,13 +43,20 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     joined = models.DateTimeField(auto_now_add=True)
 
+    roles = ArrayField(models.CharField(choices=UserType), size=3)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    occupation = models.CharField(max_length=100, null=True, blank=True)
+    occupation_start_date = models.DateField(null=True, blank=True)
+    profile_pic = models.ImageField(upload_to=profile_pic_upload_to, null=True, blank=True)
+
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.email
+        return f"{self.email} {self.first_name} {self.last_name} is_staff: {self.is_staff} is_active: {self.is_active} {self.roles}"
 
 
 class UserType(models.TextChoices):
