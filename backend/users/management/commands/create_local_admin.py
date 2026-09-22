@@ -31,6 +31,12 @@ class Command(BaseCommand):
             default="admin",
             help="Last name of the admin user"
         )
+        parser.add_argument(
+            "--roles",
+            type=str,
+            default=["ADMIN"],
+            help="Roles associated to this user"
+        )
 
     def handle(self, *args, **options):
         User = get_user_model()
@@ -38,6 +44,7 @@ class Command(BaseCommand):
         password = options["password"]
         first_name = options["first_name"]
         last_name = options["last_name"]
+        roles = [options["roles"]]
 
         # Check if user exists
         user, created = User.objects.get_or_create(
@@ -46,6 +53,7 @@ class Command(BaseCommand):
                 "is_staff": True,
                 "is_superuser": True,
                 "is_active": True,
+                "roles":roles
             },
         )
 
@@ -62,7 +70,7 @@ class Command(BaseCommand):
             defaults={
                 "first_name": first_name,
                 "last_name": last_name,
-                "roles": ["admin"],
+                "roles": roles,
             }
         )
 
