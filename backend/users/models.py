@@ -7,6 +7,11 @@ from django.contrib.postgres.fields import ArrayField
 from .helpers.random_profile_pic_name import profile_pic_upload_to
 
 
+class UserType(models.TextChoices):
+    MENTOR = 'MENTOR'
+    MENTEE = 'MENTEE'
+    ADMIN = 'ADMIN'
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -59,11 +64,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return f"{self.email} {self.first_name} {self.last_name} is_staff: {self.is_staff} is_active: {self.is_active} {self.roles}"
 
 
-class UserType(models.TextChoices):
-    MENTOR = 'MENTOR'
-    MENTEE = 'MENTEE'
-    ADMIN = 'ADMIN'
-
 class UserDetails(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(
@@ -80,7 +80,7 @@ class UserDetails(models.Model):
 
 class MenteeDetails(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user_details = models.OneToOneField(UserDetails, on_delete=models.CASCADE, related_name='mentee_details')
+    user_details = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='mentee_details')
     description = models.TextField()
     goals = models.JSONField(default=list)
     learning_preferences = models.JSONField(default=list)
@@ -92,7 +92,7 @@ class MenteeDetails(models.Model):
 
 class MentorDetails(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        user_details = models.OneToOneField(UserDetails, on_delete=models.CASCADE, related_name='mentor_details')
+        user_details = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='mentor_details')
         description = models.TextField()
         qualifications = models.TextField()
         experience = models.TextField(default="")
