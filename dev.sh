@@ -3,7 +3,7 @@
 npm i
 
 if grep -q '^ENV=' backend/.env; then
-    sed -i '' 's/^ENV=.*/ENV=dev/' backend/.env
+    sed -i 's/^ENV=.*/ENV=dev/' backend/.env
 else
     echo "ENV=dev" >> backend/.env
 fi
