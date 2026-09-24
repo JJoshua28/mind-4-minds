@@ -20,7 +20,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAdminUser]
         else:
             permission_classes = [IsAuthenticated]
-        return [permission() for permission in self.permission_classes]
+        return [permission() for permission in permission_classes]
 
     @action(detail=False, methods=["POST"], url_path="delete-all", permission_classes=[IsAdminUser])
     def delete_all(self, request):

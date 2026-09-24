@@ -15,16 +15,15 @@ import {
   tap
 } from "rxjs";
 
-import {UserDetails} from "../../../types/user.interface";
-
 import {UserInfo} from "../../../types/user details/user-info.interface";
 
 import {UserRepository} from "../../repositories/user.repository";
 import {ApiUserDetails} from "../../../types/api/user-details.interface";
-import {mapApiUserDetailsToUserDetails} from "../../mapper/api/apiToUser.mapper";
+import {mapApiUserInfo} from "../../mapper/api/apiToUser.mapper";
 import {Router} from "@angular/router";
 import {toObservable} from "@angular/core/rxjs-interop";
 import {isPlatformBrowser} from "@angular/common";
+import {UserAccount} from "../../../types/api/user-account .interface";
 
 
 @Injectable({
@@ -41,11 +40,9 @@ export class UserService {
 
   readonly $userAccountId:WritableSignal<string> = signal(this._localStorageService.getItem("user_id") || "");
 
-  readonly userAccountId$!: Observable<string>;
-
   readonly unauthorizedRedirect$ = new Subject<void>();
 
-  readonly $userDetails: WritableSignal<UserDetails> = signal<UserDetails>({
+  readonly $userAccount: WritableSignal<UserInfo> = signal<UserInfo>({
     id: '',
     firstName: '',
     lastName: '',
@@ -54,7 +51,6 @@ export class UserService {
     occupation: '',
     occupationStartDate: '',
     roles: [],
-    accountId: this.$userAccountId(),
     joined: '',
     isArchived: false,
     isAdmin: false
@@ -73,7 +69,7 @@ export class UserService {
          switchMap(() => this._userRepository.getUserDetailsByAccountId(this.$userAccountId())),
        ).subscribe(
          ( userDetails) => {
-           this.$userDetails.set(userDetails);
+           this.$userAccount.set(userDetails);
          }
        ))
      }
@@ -96,11 +92,11 @@ export class UserService {
   }
 
 
-  initialiseData (userDetails?: ApiUserDetails){
+  initialiseData (userDetails?: UserAccount){
      if(userDetails)
      {
-       const mappedUserDetails = mapApiUserDetailsToUserDetails(userDetails);
-       this.$userDetails.set(mappedUserDetails);
+       const mappedUserDetails = mapApiUserInfo(userDetails);
+       this.$userAccount.set(mappedUserDetails);
 
        return of(mappedUserDetails)
      }
@@ -110,9 +106,9 @@ export class UserService {
 
        return interval(30000).pipe(
          startWith(0),
-         switchMap(() => this._userRepository.getUserDetailsByAccountId(this.$userAccountId())),
+         switchMap(() => this._userRepository.getUserById(this.$userAccountId())),
          tap((userDetails) => {
-           this.$userDetails.set(userDetails);
+           this.$userAccount.set(userDetails);
          }),
        )
 
@@ -120,10 +116,10 @@ export class UserService {
 
    }
 
-  updateData (userDetailsToUpdate?: Partial<UserDetails>) {
+  updateData (userDetailsToUpdate?: Partial<UserInfo>) {
     if(userDetailsToUpdate)
     {
-      this.$userDetails.update(userDetails => {
+      this.$userAccount.update(userDetails => {
         return {...userDetails, ...userDetailsToUpdate};
       });
 
@@ -134,7 +130,7 @@ export class UserService {
       take(1)
     ).subscribe(
       (userDetails) => {
-        this.$userDetails.set(userDetails);
+        this.$userAccount.set(userDetails);
     })
 
   }

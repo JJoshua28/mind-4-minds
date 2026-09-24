@@ -90,7 +90,7 @@ describe('UserService', () => {
   it('should update data with partial fields', () => {
     const partial: Partial<UserDetails> = { firstName: 'NewName' };
 
-    service.$userDetails.set({
+    service.$userAccount.set({
       id: '1',
       firstName: 'Old',
       lastName: 'Name',
@@ -107,7 +107,7 @@ describe('UserService', () => {
 
     service.updateData(partial);
 
-    expect(service.$userDetails().firstName).toBe('NewName');
+    expect(service.$userAccount().firstName).toBe('NewName');
   });
 
   it('should reload data if no partial update is provided', (done) => {
@@ -131,7 +131,7 @@ describe('UserService', () => {
     service.updateData();
 
     setTimeout(() => {
-      expect(service.$userDetails().firstName).toBe('Reload');
+      expect(service.$userAccount().firstName).toBe('Reload');
       done();
     }, 0);
   });

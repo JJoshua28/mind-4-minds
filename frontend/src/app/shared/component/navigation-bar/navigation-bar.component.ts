@@ -44,17 +44,17 @@ export class NavigationBarComponent implements OnInit, OnDestroy {
 
   $hasNewInboxMessage: WritableSignal<boolean> = signal<boolean>(false);
 
-  $navigationItems: WritableSignal<SecondLevelNavigationItems[]> = signal(this.generateRoles(this.userService.$userDetails().roles));
+  $navigationItems: WritableSignal<SecondLevelNavigationItems[]> = signal(this.generateRoles(this.userService.$userAccount().roles));
   //
   constructor() {
-    toObservable(this.userService.$userDetails).subscribe((user) => {
+    toObservable(this.userService.$userAccount).subscribe((user) => {
       this.$navigationItems.set(this.generateRoles(user.roles));
     });
   }
 
   ngOnInit(): void {
     this._subscriptions.add(
-      this._requestsService.hasNewRequests(this.userService.$userDetails().id).subscribe(hasNewRequests => {
+      this._requestsService.hasNewRequests(this.userService.$userAccount().id).subscribe(hasNewRequests => {
         this.$hasNewInboxMessage.set(hasNewRequests);
       })
     )
@@ -75,7 +75,7 @@ export class NavigationBarComponent implements OnInit, OnDestroy {
         navigationRoute = 'find-a-mentor';
         break;
       case NavigationItems.profile:
-        navigationRoute = `user-details/${this.userService.$userDetails().id}`;
+        navigationRoute = `user-details/${this.userService.$userAccount().id}`;
         break;
       case NavigationItems.MY_MENTORS:
         navigationRoute = 'my-mentors';
@@ -95,15 +95,15 @@ export class NavigationBarComponent implements OnInit, OnDestroy {
   navigateHome() {
       let landingPage = ""
 
-      if (this.userService.$userDetails().roles.includes(UserType.MENTEE)) {
+      if (this.userService.$userAccount().roles.includes(UserType.MENTEE)) {
         landingPage = "my-mentors"
-      } else if (this.userService.$userDetails().roles.includes(UserType.MENTOR)) {
+      } else if (this.userService.$userAccount().roles.includes(UserType.MENTOR)) {
         landingPage = "my-mentees"
-      } else if (this.userService.$userDetails().roles.includes(UserType.ADMIN)) {
+      } else if (this.userService.$userAccount().roles.includes(UserType.ADMIN)) {
         landingPage = "users"
       }
       else {
-        landingPage = `/user-details/${this.userService.$userDetails().id}`
+        landingPage = `/user-details/${this.userService.$userAccount().id}`
       }
       this._router.navigate([`/${landingPage}`]);
   }

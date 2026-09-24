@@ -10,7 +10,7 @@ from ..serializers.mentee_details import MenteeDetailsSerializer
 from ..filters.mentor_details import MentorDetailsFilter
 
 class MentorDetailsViewSet(viewsets.ModelViewSet):
-    queryset = MentorDetails.objects.filter(user_details__user__is_active=True)
+    queryset = MentorDetails.objects.filter(user_details__is_active=True)
     serializer_class = MentorDetailsSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = MentorDetailsFilter

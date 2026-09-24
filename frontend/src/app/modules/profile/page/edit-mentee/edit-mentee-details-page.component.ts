@@ -81,7 +81,6 @@ export class EditMenteeDetailsPageComponent implements OnInit, OnDestroy {
               joined: menteeUser.joined,
               isArchived: menteeUser.isArchived,
               isAdmin: menteeUser.isAdmin,
-              accountId: menteeUser.accountId
             };
 
             this.menteeDetails = menteeUser.menteeDetails;
@@ -164,7 +163,7 @@ export class EditMenteeDetailsPageComponent implements OnInit, OnDestroy {
         take(1),
       ).subscribe(() => this.navigateToDetails()) :
 
-      this.userRepository.updateUserDetails({
+      this.userRepository.updateUserAccount({
         ...userDetailsToUpdate,
         roles: [...this.userDetails.roles, UserType.MENTEE]
       },
@@ -173,7 +172,6 @@ export class EditMenteeDetailsPageComponent implements OnInit, OnDestroy {
         tap((user) => {
           this.userDetails = {
             id: user.id,
-            accountId: user.accountId,
             joined: user.joined,
             isArchived: user.isArchived,
             profilePic: user.profilePic,
@@ -188,7 +186,7 @@ export class EditMenteeDetailsPageComponent implements OnInit, OnDestroy {
 
         }),
         map((user) => {
-          if(this._userService.$userDetails().id === this.userDetailsId())
+          if(this._userService.$userAccount().id === this.userDetailsId())
           {
             this._userService.updateData({
               id: user.id,

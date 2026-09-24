@@ -12,11 +12,11 @@ class CustomUserSerializer(serializers.ModelSerializer):
     is_active = serializers.BooleanField(required=False, default=True)
     is_staff = serializers.BooleanField(required=False, default=False)
 
-    roles = serializers.MultipleChoiceField(choices=['MENTOR', 'MENTEE', 'ADMIN'], allow_blank=False, required=True, size=3)
+    roles = serializers.MultipleChoiceField(choices=['mentor', 'mentee', 'admin'], allow_blank=False, required=True)
     first_name = serializers.CharField(required=True, allow_blank=False, trim_whitespace=True, min_length=2, max_length=50)
     last_name = serializers.CharField(required=True, allow_blank=False, trim_whitespace=True, min_length=2, max_length=50)
     occupation = serializers.CharField(required=False, allow_blank=True, allow_null=True, max_length=100, min_length=2)
-    occupation_start_date = serializers.DateTimeField(allow_blank=True, allow_null=True, required=False)
+    occupation_start_date = serializers.DateTimeField(allow_null=True, required=False)
     profile_pic = serializers.ImageField(allow_null=True, required=False)
 
     class Meta:

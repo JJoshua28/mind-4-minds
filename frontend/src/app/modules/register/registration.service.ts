@@ -10,7 +10,7 @@
   import {HttpService} from "../../shared/services/http.service";
   import {mapUserFormToApiPayload} from "../../shared/mapper/userDetailsToApi.mapper";
   import mapMenteeDetailsToApiPayload from "../../shared/mapper/menteeDetailsToApi.mapper";
-  import {UserDetails} from "../../types/user.interface";
+  import {User, UserDetails} from "../../types/user.interface";
   import {mapMentorDetailsToApiPayload} from "../../shared/mapper/mentorDetailsToApi.mapper";
   import {AuthServiceService, AuthToken} from "../../shared/services/auth-service.service";
   import {UserService} from "../../shared/services/user/user-service.service";
@@ -54,7 +54,6 @@
         occupation: '',
         occupationStartDate: '',
         roles: [],
-        accountId: '',
         joined: '',
         isArchived: false,
         newPassword: '',
@@ -169,73 +168,53 @@
       return this.apiService.post<AuthToken>(endpoint, {email, password})
     }
 
-    createUserRequest(details: RegistrationUserDetails): {email: string, password: string} {
-      const {email, newPassword: password} = details
+    createUserRequest(details: RegistrationUserDetails, roles: UserType[]):  Omit<UserAccount, 'id' | "is_active" | "is_staff"> | {password:string} {
+      const {email, newPassword: password, ...info} = details;
+
+     const userRegistration = mapUserFormToApiPayload(info, roles);
+
       return {
+        ...userRegistration,
         email,
         password: password as string,
       }
     }
 
-    createUserDetailsRequest(details: RegistrationUserDetails, roles: UserType[], userId: string): FormData {
-      const { storageProfilePic, email, newPassword,...registration } = details;
-      const userRegistration = mapUserFormToApiPayload(registration, roles)
-      const formData = new FormData();
 
-      for (const key in userRegistration) {
-        if (Object.prototype.hasOwnProperty.call(userRegistration, key)) {
-          const value = userRegistration[key as keyof typeof userRegistration];
-
-          if (value !== undefined && value !== null) {
-            formData.append(key, value);
-          }
-        }
-      }
-
-      formData.append('user', userId);
-
-      return formData;
-    }
-
-
-    createUser (): Observable<UserDetails> {
+    createUser (): Observable<User> {
       const usersEndpoint = 'users/accounts/';
       const userDetailsEndpoint = 'users/details/';
       const menteeDetailsEndpoint = 'users/mentee/';
       const mentorDetailsEndpoint = 'users/mentor-details/';
 
-      const userRequest = this.createUserRequest(this.userDetails());
+      const userRequest = this.createUserRequest(this.userDetails(), this.roles);
 
       return this.apiService.post<UserAccount>(usersEndpoint, userRequest).pipe(
-        switchMap((user) => {
-          const formData = this.createUserDetailsRequest(this.userDetails(), this.roles, user.id);
-          return this.apiService.post<ApiUserDetails>(userDetailsEndpoint, formData);
-        }),
 
-        switchMap((userDetails) => {
+        switchMap((userAccount) => {
           if (this.roles.includes(UserType.MENTEE)) {
-            const menteePayload = mapMenteeDetailsToApiPayload(this.menteeDetails(), userDetails.id) as MenteeDetailsApi;
+            const menteePayload = mapMenteeDetailsToApiPayload(this.menteeDetails(), userAccount.id) as MenteeDetailsApi;
             return this._menteeRepository.createMentee(menteePayload).pipe(
-              map(() => userDetails)
+              map(() => userAccount)
             );
           }
-          return of(userDetails);
+          return of(userAccount);
         }),
 
-        switchMap((userDetails) => {
+        switchMap((userAccount) => {
           if (this.roles.includes(UserType.MENTOR)) {
-            const mentorPayload = mapMentorDetailsToApiPayload(this.mentorDetails(), userDetails.id) as MentorDetailsApi;
+            const mentorPayload = mapMentorDetailsToApiPayload(this.mentorDetails(), userAccount.id) as MentorDetailsApi;
             return this._mentorRepository.createMentor(mentorPayload).pipe(
-              map(() => userDetails)
+              map(() => userAccount)
             );
           }
-          return of(userDetails);
+          return of(userAccount);
         }),
 
-        switchMap((userDetails) => {
+        switchMap((user) => {
           if(this.roles.includes(UserType.ADMIN)) {
             const mentorRequestData = {
-              sender: userDetails.id,
+              sender: user.id,
               recipients: [],
               body: "I would like to request admin permissions on the system.",
               subject: "Admin Request",
@@ -246,12 +225,12 @@
               take(1),
             ).subscribe()
           }
-          return of(userDetails);
+          return of(user);
         }),
 
         switchMap((userDetails) => {
           return this.getAuthenticationToken().pipe(
-            map((authToken) => ({ userDetails, authToken }))
+            map((authToken) => ({ user: userDetails, authToken }))
           );
         }),
 
@@ -262,8 +241,8 @@
           this._authService.setRefreshToken(refresh);
           this._localStorageService.setItem('user_id', user_id);
         }),
-        switchMap(({ userDetails }) => {
-          return this._userService.initialiseData(userDetails);
+        switchMap(({ user }) => {
+          return this._userService.initialiseData(user);
         }),
         tap(() => {
           this._registrationComplete.next(this.roles);

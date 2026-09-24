@@ -3,7 +3,7 @@ import {Component, computed, inject, input, OnInit, Signal, signal, ViewChild, W
 import {Router} from "@angular/router";
 
 import {MentorDetailsComponent} from "../../../../shared/component/mentor-details/mentor-details.component";
-import {MentorUser, UserDetails} from "../../../../types/user.interface";
+import {MentorUser} from "../../../../types/user.interface";
 import {MentorInfo, UserInfo} from "../../../../types/user details/user-info.interface";
 import {UserType} from "../../../../types/user-type.enum";
 
@@ -98,10 +98,10 @@ export class MentorComponent implements OnInit {
     const {mentorDetails, profilePic, ...userDetails} = this.$user();
     const newRoles = userDetails.roles.filter(role => role !== UserType.MENTOR);
 
-    this._userRepository.updateUserDetails({...userDetails, roles: newRoles}, userDetails.id).pipe(
+    this._userRepository.updateUserAccount({...userDetails, roles: newRoles}, userDetails.id).pipe(
       take(1),
       map((user) => {
-        if(this.userDetailsId() === this._userService.$userDetails().id) {
+        if(this.userDetailsId() === this._userService.$userAccount().id) {
           const updatedUserDetails = {
             id: user.id,
             profilePic: user.profilePic,

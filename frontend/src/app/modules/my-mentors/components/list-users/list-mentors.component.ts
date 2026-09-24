@@ -54,6 +54,12 @@ export class ListMentorsComponent implements OnChanges {
       lastName,
       profilePic,
       occupation,
+      isAdmin,
+      isArchived,
+      roles,
+      email,
+      id,
+      joined,
       occupationStartDate,
       mentorDetails: {description,
       neurodivergentConditions,}
@@ -66,6 +72,12 @@ export class ListMentorsComponent implements OnChanges {
       profilePic,
       description,
       occupation,
+      isAdmin,
+      isArchived,
+      roles,
+      email,
+      id,
+      joined,
       neurodivergentConditions,
       occupationStartDate,
     }
@@ -91,25 +103,7 @@ export class ListMentorsComponent implements OnChanges {
     }
   })
 
-  $userInfo: Signal<UserInfo> = computed(() => {
-    const {
-      firstName,
-      lastName,
-      email,
-      profilePic,
-      occupation,
-      occupationStartDate,
-    } = this.$selectedUser();
-
-    return {
-      firstName,
-      lastName,
-      email,
-      profilePic,
-      occupation,
-      occupationStartDate,
-    }
-  })
+  $userInfo: Signal<UserInfo> = computed(() => this.$selectedUser())
 
   protected readonly actionType =  ActionTypes.DELETE
   protected readonly modalMessageTopic = "end the mentorship"

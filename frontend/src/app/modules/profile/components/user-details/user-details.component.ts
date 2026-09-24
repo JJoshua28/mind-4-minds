@@ -11,7 +11,7 @@ import {experienceDuration} from "../../../../shared/helpers/experienceDurations
 
 import {UserInfo} from "../../../../types/user details/user-info.interface";
 import {UserService} from "../../../../shared/services/user/user-service.service";
-import {map, take, tap} from "rxjs";
+import { take, tap} from "rxjs";
 
 import {AuthServiceService} from "../../../../shared/services/auth-service.service";
 import {UserRepository} from "../../../../shared/repositories/user.repository";
@@ -40,7 +40,7 @@ export class UserDetailsComponent {
   private readonly defaultProfilePic = environment.defaultProfilePic;
 
 
-  $accountId = computed(() => this.$userDetails().accountId);
+  $accountId = computed(() => this.$userDetails().id);
 
   $isAdmin = computed(() => this.$userDetails().isAdmin);
 
@@ -50,11 +50,16 @@ export class UserDetailsComponent {
 
   $user: Signal<UserInfo> = computed(() => {
     return {
+      id: this.$userDetails().id,
       firstName: this.$userDetails().firstName,
       lastName: this.$userDetails().lastName,
       email: this.$userDetails().email,
       profilePic: this.$userDetails().profilePic,
       occupation: this.$userDetails().occupation,
+      roles: this.$userDetails().roles,
+      isAdmin: this.$userDetails().isAdmin,
+      isArchived: this.$userDetails().isArchived,
+      joined: this.$userDetails().joined,
       occupationStartDate: this.$userDetails().occupationStartDate,
     };
   });
@@ -74,7 +79,7 @@ export class UserDetailsComponent {
   }
 
   editDetails() {
-    const changeType = this._userService.$userDetails().id === this.$userDetails().id ? "user" : "admin";
+    const changeType = this._userService.$userAccount().id === this.$userDetails().id ? "user" : "admin";
     this._router.navigate([`/user-details/edit/${changeType}/${this.$userDetails().id}`]);
   }
 
@@ -88,9 +93,15 @@ export class UserDetailsComponent {
     this._userRepository.updateUserAccount(accountUpdates, this.$accountId()).pipe(
       take(1),
       tap((user) => {
-        if(this._userService.$userDetails().id === this.$userDetails().id)
+        if(this._userService.$userAccount().id === this.$userDetails().id)
         {
-          this._userService.updateData(user);
+          const {email, isAdmin, isArchived} = user;
+
+          this._userService.updateData({
+            email,
+            isAdmin,
+            isArchived: isArchived
+          });
         }
       }),
       take(1),

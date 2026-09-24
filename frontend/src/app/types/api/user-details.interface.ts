@@ -14,11 +14,11 @@ export interface ApiUserDetails {
 }
 
 
-export interface UserDetailsUpdateRequest {
-  profilePic?: File
-  firstName: string
-  roles: UserType[]
-  lastName: string
-  occupation: string | null
-  occupationStartDate: string | null
-}
+// export interface UserDetailsUpdateRequest {
+//   profilePic?: File
+//   firstName: string
+//   roles: UserType[]
+//   lastName: string
+//   occupation: string | null
+//   occupationStartDate: string | null
+// }

@@ -64,7 +64,7 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
 
   private readonly subscriptions: Subscription = new Subscription();
 
-  userDetailsId = input.required<string>();
+  userAccountID = input.required<string>();
 
   meetingPreferenceOptions = Object.values(MeetingPreferences);
   neurodivergentConditionOptions = Object.values(NeurodivergenceConditions);
@@ -72,7 +72,7 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
   mentorInfo: MentorInfo = {} as MentorInfo;
   mentorDetails: MentorDetails = {} as MentorDetails;
 
-  userDetails: UserDetails = {} as UserDetails;
+  userAccount: UserDetails = {} as UserInfo;
 
   $dataIsReady = signal(false);
 
@@ -82,7 +82,7 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.add(
-      this._mentorRepository.mentorUser(this.userDetailsId()).pipe(
+      this._mentorRepository.mentorUser(this.userAccountID()).pipe(
         take(1),
         map((mentorUser) => {
           const { mentorDetails, ...userDetails } = mentorUser;
@@ -94,7 +94,7 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
             meetingPreferences: mentorDetails?.meetingPreferences,
             neurodivergentConditions: mentorDetails?.neurodivergentConditions
           };
-          this.userDetails = userDetails;
+          this.userAccount = userDetails;
           this.mentorDetails = mentorDetails;
           return mentorUser;
         })
@@ -104,10 +104,10 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
       })
     );
 
-    if (!this.userDetails.id) {
+    if (!this.userAccount.id) {
       this.subscriptions.add(
-        this._userRepository.getUserDetailsById(this.userDetailsId()).subscribe((userDetails) => {
-          this.userDetails = userDetails;
+        this._userRepository.getUserById(this.userAccountID()).subscribe((userDetails) => {
+          this.userAccount = userDetails;
           this.buildForm();
           this.$dataIsReady.set(true);
         })
@@ -130,12 +130,12 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
       } as MentorInfo;
 
       const userInfo = {
-        firstName: this.userDetails?.firstName,
-        lastName: this.userDetails?.lastName,
-        email: this.userDetails?.email,
-        occupation: this.userDetails?.occupation || null,
-        occupationStartDate: this.userDetails?.occupationStartDate || null,
-        profilePic: this.userDetails?.profilePic || null
+        firstName: this.userAccount?.firstName,
+        lastName: this.userAccount?.lastName,
+        email: this.userAccount?.email,
+        occupation: this.userAccount?.occupation || null,
+        occupationStartDate: this.userAccount?.occupationStartDate || null,
+        profilePic: this.userAccount?.profilePic || null
       } as UserInfo;
 
       return {
@@ -187,11 +187,11 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
         neurodivergentConditions: neurodivergentConditions,
       }
 
-      const {profilePic, ...userDetailsToUpdate} = this.userDetails;
+      const {profilePic, ...accountDetailsToUpdate} = this.userAccount;
 
 
       this.subscriptions.add(
-        this.userDetails.roles.includes(UserType.MENTOR) ?
+        this.userAccount.roles.includes(UserType.MENTOR) ?
           this._mentorRepository.updateMentorDetails(
             {
               ...this.mentorDetails,
@@ -200,14 +200,13 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
             take(1),
           ).subscribe(() => this.navigateToDetails()) :
 
-          this._userRepository.updateUserDetails({
-              ...userDetailsToUpdate,
-              roles: [...userDetailsToUpdate.roles, UserType.MENTOR]
+          this._userRepository.updateUserAccount({
+              ...accountDetailsToUpdate,
+              roles: [...accountDetailsToUpdate.roles, UserType.MENTOR]
             },
-            this.userDetails.id
           ).pipe(
             map((user) => {
-              if(this._userService.$userDetails().id === this.userDetailsId())
+              if(this._userService.$userAccount().id === this.userAccountID())
               {
                 this._userService.updateData({
                   id: user.id,
@@ -222,12 +221,12 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
               }
             }),
             switchMap(() => {
-              const mentorDetailsPayload = mapMentorDetailsToApiPayload(formData, this.userDetails.id) as MentorDetailsApi;
+              const mentorDetailsPayload = mapMentorDetailsToApiPayload(formData, this.userAccount.id) as MentorDetailsApi;
               return this._mentorRepository.createMentor(mentorDetailsPayload)
             }),
             take(1),
-          ).subscribe(() => this.navigateToDetails())
-      );
+          ).subscribe(() => this.navigateToDetails()))
+
     }
   }
 
@@ -236,8 +235,8 @@ export class EditMentorDetailsPageComponent implements OnInit, OnDestroy {
   }
 
   navigateToDetails() {
-    const route = this.userDetails.roles.includes(UserType.MENTOR) ?
-      `/mentor-details/${this.userDetails.id}` : `/user-details/${this.userDetails.id}`;
+    const route = this.userAccount.roles.includes(UserType.MENTOR) ?
+      `/mentor-details/${this.userAccount.id}` : `/user-details/${this.userAccount.id}`;
 
     this._router.navigate([route]);
   }

@@ -82,12 +82,22 @@ export class ListMenteesComponent implements OnChanges {
       occupation,
       occupationStartDate,
       profilePic,
+      isAdmin,
+      isArchived,
+      joined,
+      roles,
+      id,
       firstName,
       lastName,
       email
     } = menteeDetails;
 
     return {
+      isAdmin,
+      isArchived,
+      joined,
+      roles,
+      id,
       description,
       goals,
       learningPreferences,

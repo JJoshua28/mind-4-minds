@@ -47,10 +47,10 @@ export class ManageUsersComponent implements OnInit {
   protected readonly modalActionType = ActionTypes.DELETE;
 
   ngOnInit() {
-    if(this.userService.$userDetails().isAdmin) {
-      this._userRepository.getAllUserDetails(this.userService.$userDetails().id).pipe(
+    if(this.userService.$userAccount().isAdmin) {
+      this._userRepository.getAllUserDetails(this.userService.$userAccount().id).pipe(
         take(1),
-        map((users) => users.filter((user) => user.id !== this.userService.$userDetails().id))
+        map((users) => users.filter((user) => user.id !== this.userService.$userAccount().id))
       ).subscribe((users) => {
         this.$snippets.set(users);
       });
@@ -73,7 +73,7 @@ export class ManageUsersComponent implements OnInit {
 
     if(shouldUpdateAllUsers) this.$checkedUsers.set([]);
     else this.$checkedUsers.set(
-        this.$snippets().map((snippet) => snippet.accountId)
+        this.$snippets().map((snippet) => snippet.id)
       )
   }
 

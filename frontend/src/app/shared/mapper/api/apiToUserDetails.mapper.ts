@@ -3,16 +3,15 @@ import {UserAccount} from "../../../types/api/user-account .interface";
 import {ApiUserDetails} from "../../../types/api/user-details.interface";
 import {UserType} from "../../../types/user-type.enum";
 
-export function mapApiToUserDetails (account: UserAccount, details: ApiUserDetails): UserDetails {
+export function mapApiToUserDetails (account: UserAccount, details?: ApiUserDetails): UserDetails {
   return {
-    id: details.id,
-    accountId: account.id,
-    firstName: details.first_name,
-    lastName: details.last_name,
-    occupation: details.occupation,
-    occupationStartDate: details.occupation_start_date,
-    profilePic: details.profilePic,
-    roles: details.roles as UserType[],
+    id: account.id,
+    firstName: account.first_name,
+    lastName: account.last_name,
+    occupation: account.occupation,
+    occupationStartDate: account.occupation_start_date,
+    profilePic: account.profilePic,
+    roles: account.roles as UserType[],
     joined: account.joined,
     isArchived: !account.is_active,
     isAdmin: account.is_staff,

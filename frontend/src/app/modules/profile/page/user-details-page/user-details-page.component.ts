@@ -70,7 +70,7 @@ export class UserDetailsPageComponent implements OnInit, OnChanges, OnDestroy {
       take(1),
     ).subscribe((userDetails) => {
       this.userDetails.set(userDetails);
-      if(this._userService.$userDetails().id === this.userDetailsId()) {
+      if(this._userService.$userAccount().id === this.userDetailsId()) {
         this._userService.updateData(userDetails);
       }
     })

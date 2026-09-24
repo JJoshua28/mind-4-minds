@@ -8,9 +8,9 @@ from .helpers.random_profile_pic_name import profile_pic_upload_to
 
 
 class UserType(models.TextChoices):
-    MENTOR = 'MENTOR'
-    MENTEE = 'MENTEE'
-    ADMIN = 'ADMIN'
+    MENTOR = 'mentor'
+    MENTEE = 'mentee'
+    ADMIN = 'admin'
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):

@@ -18,14 +18,13 @@ import {
 } from "../../../../types/user details/user-form.interface";
 
 import {UserService} from "../../../../shared/services/user/user-service.service";
-import {UserDetails} from "../../../../types/user.interface";
 
 import {HttpService} from "../../../../shared/services/http.service";
 import {catchError, delay, map, Observable, of, take, tap} from "rxjs";
 import {UserAccountDetails} from "../../../../types/api/user-account .interface";
-import {UserDetailsUpdateRequest} from "../../../../types/api/user-details.interface";
 import {UserRepository} from "../../../../shared/repositories/user.repository";
 import {environment} from "../../../../../environments/environment";
+import {UserInfo} from "../../../../types/user details/user-info.interface";
 
 
 @Component({
@@ -48,44 +47,44 @@ export class EditUserDetailsPageComponent implements OnInit {
 
   private readonly defaultProfilePic = environment.defaultProfilePic;
 
-  userDetailsId = input.required<string>();
+  accountID = input.required<string>();
   changeType = input<"admin" | "user">("user");
 
-  $userDetails!: WritableSignal<UserDetails>;
+  $accountInfo!: WritableSignal<UserInfo>;
 
   $isReady = signal(false);
 
-  $profilePic = computed(() => { return this.$userDetails()?.profilePic || this.defaultProfilePic})
+  $profilePic = computed(() => { return this.$accountInfo()?.profilePic || this.defaultProfilePic})
 
   passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/;
 
   userDetailsForm!: FormGroup<UserFormControls>;
 
   ngOnInit() {
-    this._userRepository.getUserDetailsById(this.userDetailsId() as string).pipe(
+    this._userRepository.getUserDetailsById(this.accountID() as string).pipe(
       take(1)
     ).subscribe(
       userDetails => {
-        this.$userDetails = signal(userDetails);
+        this.$accountInfo = signal(userDetails);
 
         this.userDetailsForm = this._formBuilder.group({
           firstName: this._formBuilder.nonNullable.control(
-            this.$userDetails()?.firstName || '', [Validators.required, Validators.minLength(2)]
+            this.$accountInfo()?.firstName || '', [Validators.required, Validators.minLength(2)]
           ),
           lastName: this._formBuilder.nonNullable.control(
-            this.$userDetails()?.lastName || '', [Validators.required, Validators.minLength(2)]
+            this.$accountInfo()?.lastName || '', [Validators.required, Validators.minLength(2)]
           ),
           occupation: this._formBuilder.control(
-            this.$userDetails()?.occupation ||'', Validators.minLength(2)
+            this.$accountInfo()?.occupation ||'', Validators.minLength(2)
           ),
           occupationStartDate: this._formBuilder.control(
-            this.$userDetails()?.occupationStartDate || ''
+            this.$accountInfo()?.occupationStartDate || ''
           ),
           profilePic: this._formBuilder.control<File | null>(null,
           ),
 
           email: this._formBuilder.nonNullable.control(
-            this.$userDetails()?.email || '', [Validators.required, Validators.email]
+            this.$accountInfo()?.email || '', [Validators.required, Validators.email]
           ),
           currentPassword: this._formBuilder.control<string | null >('', {
             asyncValidators: this.isCorrectPassword(),
@@ -124,7 +123,7 @@ export class EditUserDetailsPageComponent implements OnInit {
 
       return this._httpService.post(tokenEndpoint, {
         password: currentPassword,
-        email: this.$userDetails().email
+        email: this.$accountInfo().email
       }).pipe(
         delay(500),
         take(1),
@@ -141,29 +140,29 @@ export class EditUserDetailsPageComponent implements OnInit {
 
       if(email || password) {
         const updates:UserAccountDetails = {
-          email: email || this.$userDetails().email,
-          isAdmin: this.$userDetails().isAdmin,
-          isArchived: this.$userDetails().isArchived,
+          email: email || this.$accountInfo().email,
+          isAdmin: this.$accountInfo().isAdmin,
+          isArchived: this.$accountInfo().isArchived,
         }
         if(password) updates.password = password;
 
-        this._userRepository.updateUserAccount(updates,this.$userDetails().accountId).pipe(
+        this._userRepository.updateUserAccount(updates,this.$accountInfo().id).pipe(
           take(1)
         ).subscribe();
       }
 
       if(rest) {
-        const roles = this.$userDetails().roles
+        const roles = this.$accountInfo().roles
 
         const request = {
           ...rest,
           roles: roles
-        } as UserDetailsUpdateRequest;
+        } as Partial<UserInfo>;
 
-        this._userRepository.updateUserDetails(request, this.$userDetails().id).pipe(
+        this._userRepository.updateUserAccount(request, this.$accountInfo().id).pipe(
           take(1),
           tap((user) => {
-            if(this._userService.$userDetails().id === this.userDetailsId())
+            if(this._userService.$userAccount().id === this.accountID())
             {
               this._userService.updateData(user);
             }
@@ -176,7 +175,7 @@ export class EditUserDetailsPageComponent implements OnInit {
   }
 
   navigateToDetails () {
-    this._router.navigate([`/user-details/${this.userDetailsId()}`]);
+    this._router.navigate([`/user-details/${this.accountID()}`]);
   }
 
 }

@@ -2,15 +2,16 @@ import {inject, Injectable} from "@angular/core";
 import {map, Observable, switchMap, take} from "rxjs";
 
 import {User, UserDetails} from "../../types/user.interface";
-import {UserType} from "../../types/user-type.enum";
-import {ApiUserDetails, UserDetailsUpdateRequest} from "../../types/api/user-details.interface";
-import {UserAccount, UserAccountDetails} from "../../types/api/user-account .interface";
+import {ApiUserDetails} from "../../types/api/user-details.interface";
+import {UserAccount} from "../../types/api/user-account .interface";
 
 import {mapApiToUserDetails} from "../mapper/api/apiToUserDetails.mapper";
 import {mapUserAccountToApiPayload} from "../mapper/userAccountToApi.mapper";
 import {mapUserFormToApiPayload} from "../mapper/userDetailsToApi.mapper";
-import {mapApiUserDetailsToUserDetails} from "../mapper/api/apiToUser.mapper";
+import {mapApiUserInfo} from "../mapper/api/apiToUser.mapper";
 import {HttpService} from "../services/http.service";
+import {environment} from "../../../environments/environment";
+import {UserInfo} from "../../types/user details/user-info.interface";
 
 @Injectable({
   providedIn: "root",
@@ -19,6 +20,8 @@ import {HttpService} from "../services/http.service";
 export class UserRepository {
 
   private readonly apiService = inject(HttpService)
+
+  private readonly baseUrl = "users/accounts";
 
   getAllUserDetails(currentUserAccountId: string) {
     const detailsEndpoint = `users/details/`;
@@ -49,55 +52,60 @@ export class UserRepository {
     )
   }
 
-  getUserById(userDetailsId: string): Observable<User> {
-    const detailsEndpoint = `users/details/${userDetailsId}`;
+  getUserById(userId: string): Observable<User> {
+    const detailsEndpoint = `${this.baseUrl}/${userId}`;
 
-    return this.apiService.get<ApiUserDetails>(detailsEndpoint).pipe(
-      map((details) => mapApiUserDetailsToUserDetails(details))
+    return this.apiService.get<UserAccount>(detailsEndpoint).pipe(
+      map((details) => mapApiUserInfo(details))
     )
   }
 
 
 
-  updateUserAccount(account: UserAccountDetails, userAccountId: string) {
-    const updateAccountEndpoint = `users/accounts/${userAccountId}/`;
+  updateUserAccount(account: Partial<UserInfo>, userAccountId?: string) {
+    const updateAccountEndpoint = `${this.baseUrl}/${userAccountId || account?.id}/`;
 
     const mappedAccountDetails = mapUserAccountToApiPayload(account);
 
-    return this.apiService.put<UserAccount>(updateAccountEndpoint, mappedAccountDetails)
-  }
-
-  createUserDetailsRequest(details: UserDetailsUpdateRequest, roles: UserType[]): FormData {
-    const userRegistration = mapUserFormToApiPayload(details, roles)
-    const formData = new FormData();
-
-    for (const key in userRegistration) {
-      if (Object.prototype.hasOwnProperty.call(userRegistration, key)) {
-        const value = userRegistration[key as keyof typeof userRegistration];
-
-        if (value !== undefined && value !== null) {
-          formData.append(key, value);
-        }
-      }
-    }
-    return formData;
-  }
-
-  updateUserDetails(updateRequest: Partial<UserDetailsUpdateRequest>, userDetailsId: string) {
-    const updateDetailsEndpoint = `users/details/${userDetailsId}/`;
-    const mappedDetails = this.createUserDetailsRequest(updateRequest as UserDetailsUpdateRequest, updateRequest.roles as UserType[])
-
-    return this.apiService.put<ApiUserDetails>(updateDetailsEndpoint, mappedDetails).pipe(
+    return this.apiService.put<UserAccount>(updateAccountEndpoint, mappedAccountDetails).pipe(
       map((details) => {
-          const detail = details as ApiUserDetails;
-          return mapApiUserDetailsToUserDetails(detail);
+          const detail = details as UserAccount;
+          return mapApiUserInfo(detail);
         }
-      )
-    );
+      ))
   }
+
+  // createUserDetailsRequest(details: UserDetailsUpdateRequest, roles: UserType[]): FormData {
+  //   const userRegistration = mapUserFormToApiPayload(details, roles)
+  //   const formData = new FormData();
+  //
+  //   for (const key in userRegistration) {
+  //     if (Object.prototype.hasOwnProperty.call(userRegistration, key)) {
+  //       const value = userRegistration[key as keyof typeof userRegistration];
+  //
+  //       if (value !== undefined && value !== null) {
+  //         formData.append(key, value);
+  //       }
+  //     }
+  //   }
+  //   return formData;
+  // }
+
+  // updateUserDetails(updateRequest: Partial<UserAccount>, accountID: string) {
+  //   const updateDetailsEndpoint = `users/account/${accountID}/`;
+  //   const mappedDetails = this.updateUserAccount(updateRequest, accountID);
+  //
+  //   return this.apiService.put<UserAccount>(updateDetailsEndpoint, mappedDetails).pipe(
+  //     map((details) => {
+  //         const detail = details as UserAccount;
+  //         return mapApiUserInfo(detail);
+  //       }
+  //     )
+  //   );
+  // }
 
   deleteMultipleUsers(userIds: string[]) {
-    const endpoint = `users/accounts/delete-all/`;
+    const endpoint = `${this.baseUrl}/delete-all/`;
     const body = { ids: userIds };
 
     return this.apiService.post<{ deleted: number }>(endpoint, body).pipe(

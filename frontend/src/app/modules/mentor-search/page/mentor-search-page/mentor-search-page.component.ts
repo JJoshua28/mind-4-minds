@@ -43,7 +43,7 @@ private readonly _requestsRepository = inject(RequestsRepositoryService);
   })
 
   ngOnInit() {
-    this._mentorRepository.getActiveMentors(this._userService.$userDetails().id).subscribe(
+    this._mentorRepository.getActiveMentors(this._userService.$userAccount().id).subscribe(
       {
         next: result => {
           this.$mentors.set(result);
@@ -66,7 +66,7 @@ private readonly _requestsRepository = inject(RequestsRepositoryService);
 
   sendMentorRequest(mentor: MentorUser) {
     const mentorRequestData = {
-      sender: this._userService.$userDetails().id,
+      sender: this._userService.$userAccount().id,
       recipients: [mentor.id],
       body: "I would like to connect with you as a mentee. Please see my details below and get in touch.",
       subject: "Mentorship Request",
@@ -85,6 +85,7 @@ private readonly _requestsRepository = inject(RequestsRepositoryService);
     const { mentorDetails, menteeDetails, isArchived, roles, joined, id, email, ...userInfo } = user;
 
     return {
+      isArchived, roles, joined, id, email,
       ...userInfo,
       description: mentorDetails.description,
       neurodivergentConditions: mentorDetails.neurodivergentConditions,

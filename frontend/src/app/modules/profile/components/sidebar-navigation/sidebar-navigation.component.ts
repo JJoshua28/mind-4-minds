@@ -4,26 +4,22 @@ import {
   EventEmitter,
   inject,
   input,
-  OnDestroy,
-  OnInit, Output,
-  signal,
+  Output,
   ViewChild,
-  WritableSignal
+
 } from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../../../shared/services/user/user-service.service";
 import {UserType} from "../../../../types/user-type.enum";
-import {filter, forkJoin, map, of, Subscription, take, tap} from "rxjs";
-import {UserDetails} from "../../../../types/user.interface";
+import { forkJoin, map, of, take} from "rxjs";
 import {
   ActionTypes,
   ConfirmActionModalComponent
 } from "../../../../shared/component/confirm-action-modal/confirm-action-modal.component";
 import {UserRepository} from "../../../../shared/repositories/user.repository";
-import {combineLatest} from "rxjs/internal/operators/combineLatest";
 import {RequestsRepositoryService} from "../../../../shared/repositories/requests.repository.service";
 import {ActionType} from "../../../../types/action-type.enum";
-import {subscribe} from "node:diagnostics_channel";
+import {UserInfo} from "../../../../types/user details/user-info.interface";
 
 export enum NavigationItems {
   USER_DETAILS = "user-details",
@@ -58,7 +54,7 @@ export class SidebarNavigationComponent {
   protected readonly NavigationItems = NavigationItems;
   protected readonly UserType = UserType
 
-  $userDetails = input.required<UserDetails>();
+  $userDetails = input.required<UserInfo>();
 
   $roles = computed(() => this.$userDetails().roles);
 
@@ -76,10 +72,10 @@ export class SidebarNavigationComponent {
         isArchived,
         isAdmin: false,
       },
-      details.accountId
+      details.id
     );
 
-    const updateDetails$ = this.userRepository.updateUserDetails(
+    const updateDetails$ = this.userRepository.updateUserAccount(
       {
         ...details,
         roles: roles,
@@ -92,7 +88,7 @@ export class SidebarNavigationComponent {
       .pipe(
         take(1),
         map(([userAccount, userDetail]) => {
-          if(this._userService.$userDetails().id === this.$userDetails().id) {
+          if(this._userService.$userAccount().id === this.$userDetails().id) {
             const {mentorDetails, menteeDetails, ...userDetailsUpdate} = userDetail;
             this._userService.updateData(userDetailsUpdate);
           }
@@ -120,12 +116,12 @@ export class SidebarNavigationComponent {
     }
 
     forkJoin([
-      this.userRepository.updateUserDetails({...details, roles}, this.$userDetails().id),
+      this.userRepository.updateUserAccount({...details, roles}),
       this.requestRepository.createAdminRequest(adminRequest)
     ]).pipe(
       take(1),
       map(([userDetail, request]) => {
-        if(this._userService.$userDetails().id === this.$userDetails().id) {
+        if(this._userService.$userAccount().id === this.$userDetails().id) {
           const {mentorDetails, menteeDetails, ...userDetailsUpdate} = userDetail;
           this._userService.updateData(userDetailsUpdate);
         }

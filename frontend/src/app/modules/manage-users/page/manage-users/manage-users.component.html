@@ -21,7 +21,7 @@
       <div class="mt-4">
         @for (user of $snippets(); track user.id) {
           <app-user-snippet
-            [$isChecked]="$checkedUsers().includes(user.accountId)"
+            [$isChecked]="$checkedUsers().includes(user.id)"
             [$userDetails]="user"
             (userSnippetClicked)="navigateToUserDetails(user.id)"
             (userCheckboxClicked)="handleUserCheckboxClicked($event)"
@@ -36,7 +36,7 @@
       />
     } @else {
       <div class="mt-4">
-        <h4>{{!userService.$userDetails().isAdmin? 'Admin approval required' : "No users found" }}</h4>
+        <h4>{{!userService.$userAccount().isAdmin? 'Admin approval required' : "No users found" }}</h4>
       </div>
     }
   </div>

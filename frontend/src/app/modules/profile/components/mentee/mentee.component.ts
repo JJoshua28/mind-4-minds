@@ -18,7 +18,7 @@ import {
   ConfirmActionModalComponent
 } from "../../../../shared/component/confirm-action-modal/confirm-action-modal.component";
 import {MenteeDetailsComponent} from "../../../../shared/component/mentee-details/mentee-details.component";
-import {MenteeInfo} from "../../../../types/user details/user-info.interface";
+import {MenteeInfo, UserInfo} from "../../../../types/user details/user-info.interface";
 
 import {UserService} from "../../../../shared/services/user/user-service.service";
 
@@ -50,7 +50,7 @@ export class MenteeComponent implements OnInit, OnDestroy {
 
   $isReady = signal(false);
   userDetailsId = input.required<string>();
-  $userDetails!: Signal<UserDetails>;
+  $userAccount!: Signal<UserInfo>;
 
   $menteeDetails!: WritableSignal<MenteeDetails>;
 
@@ -66,7 +66,7 @@ export class MenteeComponent implements OnInit, OnDestroy {
         take(1)
       ).subscribe((menteeUser) => {
         this.$menteeDetails = signal(menteeUser.menteeDetails);
-        this.$userDetails = signal({
+        this.$userAccount = signal({
           id: menteeUser.id,
           firstName: menteeUser.firstName,
           lastName: menteeUser.lastName,
@@ -78,7 +78,6 @@ export class MenteeComponent implements OnInit, OnDestroy {
           joined: menteeUser.joined,
           isArchived: menteeUser.isArchived,
           isAdmin: menteeUser.isAdmin,
-          accountId: menteeUser.accountId
         });
 
         this.$mentee = computed((): MenteeInfo => {
@@ -109,17 +108,17 @@ export class MenteeComponent implements OnInit, OnDestroy {
   }
 
   relinquishMenteeDuties() {
-    const {profilePic, ...userDetails} = this.$userDetails();
+    const {profilePic, ...userDetails} = this.$userAccount();
     this.subscriptions.add(
-      this.userRepository.updateUserDetails(
+      this.userRepository.updateUserAccount(
         {
           ...userDetails,
-          roles: this.$userDetails().roles.filter((role) => role !== UserType.MENTEE)
+          roles: this.$userAccount().roles.filter((role) => role !== UserType.MENTEE)
         },
-        this.$userDetails().id
+        this.$userAccount().id
       ).pipe(
         map((user) => {
-          if(this.userDetailsId() === this._userService.$userDetails().id)
+          if(this.userDetailsId() === this._userService.$userAccount().id)
           {
             this._userService.updateData({
               id: user.id,

@@ -6,7 +6,7 @@ import { UserType } from "../../../types/user-type.enum";
 import {UserInfo} from "../../../types/user details/user-info.interface";
 import {environment} from "../../../../environments/environment";
 
-export interface CardInfo extends Omit<UserInfo, 'email'> {
+export interface CardInfo extends UserInfo {
   description: string;
   neurodivergentConditions: string[];
 }

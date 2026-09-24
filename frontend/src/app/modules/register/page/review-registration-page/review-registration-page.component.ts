@@ -39,6 +39,11 @@ export class ReviewRegistrationPageComponent {
     occupation: this.registrationService.userDetails()?.occupation,
     occupationStartDate: this.registrationService.userDetails()?.occupationStartDate || null,
     profilePic: this.registrationService.userDetails()?.storageProfilePic || "",
+    joined: this.registrationService.userDetails()?.joined,
+    isAdmin: this.registrationService.userDetails()?.isAdmin,
+    isArchived: this.registrationService.userDetails()?.isArchived,
+    id: this.registrationService.userDetails()?.id,
+    roles: this.registrationService.userDetails()?.roles
   })
 
   shouldLoadMenteeDetail = this.registrationService.roles.includes(UserType.MENTEE)

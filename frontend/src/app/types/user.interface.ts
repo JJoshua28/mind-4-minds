@@ -5,14 +5,13 @@ import {UserType} from "./user-type.enum";
 
 export interface UserDetails extends UserInfo {
   id: string;
-  accountId: string;
   isAdmin: boolean;
   joined: string;
   roles: UserType[]
   isArchived: boolean;
 }
 
-export interface User extends UserDetails {
+export interface User extends UserInfo {
   menteeDetails?: MenteeDetails
   mentorDetails?: MentorDetails
 }

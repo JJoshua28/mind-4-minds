@@ -33,7 +33,7 @@ export class MyMenteesPageComponent implements  OnInit {
   $mentees: WritableSignal<Array<MenteeUser>> = signal([])
 
   ngOnInit(): void {
-    this._menteeMentorLinkRepository.getMentorsMenteesByUserId(this._userService.$userDetails().id).pipe(
+    this._menteeMentorLinkRepository.getMentorsMenteesByUserId(this._userService.$userAccount().id).pipe(
       take(1)
     ).subscribe(mentees => {
       this.$mentees.set(mentees)
@@ -41,10 +41,10 @@ export class MyMenteesPageComponent implements  OnInit {
   }
 
   endMentorship(menteeUserDetailsId: string) {
-    this._menteeMentorLinkRepository.deleteMentorsMenteeLink(this._userService.$userDetails().id, menteeUserDetailsId).pipe(
+    this._menteeMentorLinkRepository.deleteMentorsMenteeLink(this._userService.$userAccount().id, menteeUserDetailsId).pipe(
       take(1),
       switchMap(() => {
-        return this._menteeMentorLinkRepository.getMentorsMenteesByUserId(this._userService.$userDetails().id)
+        return this._menteeMentorLinkRepository.getMentorsMenteesByUserId(this._userService.$userAccount().id)
       }),
       take(1)
     ).subscribe(mentees => {

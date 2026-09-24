@@ -5,6 +5,12 @@ export interface UserAccount {
   is_staff: boolean;
   details: string;
   joined: string;
+  first_name: string
+  last_name: string
+  occupation: string | null;
+  occupation_start_date: string | null;
+  profilePic: string
+  roles: string[]
 }
 
 export interface UserAccountPayload {

@@ -1,18 +1,18 @@
 import {ApiUserDetails} from "../../../types/api/user-details.interface";
 import {UserType} from "../../../types/user-type.enum";
 import {User} from "../../../types/user.interface";
+import {UserAccount} from "../../../types/api/user-account .interface";
 
-  export function mapApiUserDetailsToUserDetails(api: ApiUserDetails): User {
+  export function mapApiUserInfo(api: UserAccount): User {
   return {
     id: api.id,
-    joined: api.user_account.joined,
+    joined: api.joined,
     roles: api.roles as UserType[],
-    accountId: api.user_account.id,
-    isArchived: !api.user_account.is_active,
+    isArchived: !api.is_active,
     firstName: api.first_name,
     lastName: api.last_name,
-    email: api.user_account.email,
-    isAdmin: api.user_account.is_staff,
+    email: api.email,
+    isAdmin: api.is_staff,
     occupation: api.occupation || null,
     occupationStartDate: api.occupation_start_date || null,
     profilePic: api.profilePic,

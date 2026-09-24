@@ -8,7 +8,7 @@ import {environment} from "../../../../environments/environment";
 
 export function mapMentorUserApiToUser(mentorApi: MentorUserApi): MentorUser {
   const user = mentorApi.user_details_record;
-  const userAccount = mentorApi.user_details_record.user_account;
+  const userAccount = mentorApi.user_details_record;
 
   const defaultImage = environment.defaultProfilePic;
 
@@ -22,7 +22,6 @@ export function mapMentorUserApiToUser(mentorApi: MentorUserApi): MentorUser {
     isArchived: !userAccount.is_active || false,
     email: userAccount.email,
     joined: userAccount.joined,
-    accountId: userAccount.id,
     roles: [UserType.MENTOR],
     occupationStartDate: user.occupation_start_date || null,
     profilePic: user.profilePic || defaultImage,

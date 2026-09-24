@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
-from ..models import MenteeDetails, UserDetails
+from ..models import MenteeDetails, CustomUser
 from .user_details import UserDetailsSerializer
 
 class MenteeDetailsSerializer(serializers.ModelSerializer):
-    user_details = serializers.PrimaryKeyRelatedField(queryset=UserDetails.objects.all(), required=False)
+    user_details = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), required=False)
     description = serializers.CharField()
     goals = serializers.ListField(child=serializers.CharField())
     learning_preferences = serializers.ListField(child=serializers.CharField())

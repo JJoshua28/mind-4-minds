@@ -2,9 +2,8 @@ import {Component, computed, ElementRef, input, signal, ViewChild, WritableSigna
 import {NgClass} from "@angular/common";
 
 import {UserType} from "../../../../types/user-type.enum";
-import { MentorInfo, UserInfo} from "../../../../types/user details/user-info.interface";
+import { MentorInfo, UserInfo} from "../../../../types/user details/user-info.interface"
 
-import {MentorDetailsComponent} from "../../../../shared/component/mentor-details/mentor-details.component";
 import {UserCardComponent} from "../../../../shared/component/user-card/user-card.component";
 
 
@@ -12,7 +11,6 @@ import {UserCardComponent} from "../../../../shared/component/user-card/user-car
   selector: 'app-preview-mentor-card',
   standalone: true,
   imports: [
-    MentorDetailsComponent,
     UserCardComponent,
     NgClass
   ],
@@ -28,22 +26,32 @@ export class PreviewMentorCardComponent {
 
   $cardInfo = computed(() => {
     const {
+      id,
       firstName,
       lastName,
       email,
       profilePic,
       occupation,
+      joined,
+      roles,
+      isAdmin,
+      isArchived,
       occupationStartDate,
 
     } = this.$user();
 
     return {
+      id,
       firstName,
       lastName,
       email,
       profilePic,
       occupation,
       occupationStartDate,
+      joined,
+      roles,
+      isAdmin,
+      isArchived,
       description: this.$user().description,
       neurodivergentConditions: this.$user().neurodivergentConditions
     }

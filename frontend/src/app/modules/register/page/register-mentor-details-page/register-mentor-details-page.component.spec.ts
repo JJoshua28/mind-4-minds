@@ -43,7 +43,7 @@ describe('RegisterMentorDetailsPageComponent (Jest)', () => {
   beforeEach(async () => {
     mockRegistrationService = {
       mentorDetails: jest.fn(() => mockMentorDetails),
-      userDetails: jest.fn(() => mockUserDetails),
+      user: jest.fn(() => mockUserDetails),
       addMentorDetails: jest.fn(),
       navigateToNextSection: jest.fn(),
     };

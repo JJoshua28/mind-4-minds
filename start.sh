@@ -34,7 +34,7 @@ pipenv run python manage.py migrate
 # Create default admin
 # ==============================
 echo "👤 Ensuring local admin exists..."
-pipenv run python manage.py create_local_admin --roles ADMIN \
+pipenv run python manage.py create_local_admin --roles admin \
   --email admin@admin.com \
   --password admin@123 \
   --first-name admin \

@@ -5,7 +5,7 @@
   <input
     type="checkbox"
     class="checkbox"
-    (click)="$event.stopPropagation(); userCheckboxClicked.emit($userDetails().accountId)"
+    (click)="$event.stopPropagation(); userCheckboxClicked.emit($userDetails().id)"
     [checked]="$isChecked()"
   />
   <div

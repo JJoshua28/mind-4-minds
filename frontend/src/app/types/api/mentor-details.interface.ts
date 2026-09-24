@@ -1,4 +1,3 @@
-import {ApiUserDetails} from "./user-details.interface";
 import {UserAccount} from "./user-account .interface";
 
 export interface MentorDetailsApi {
@@ -24,5 +23,5 @@ export interface MentorUserApi {
   neurodivergent_conditions: string[];
   is_available?: boolean;
   mentee_ids: string[];
-  user_details_record: ApiUserDetails;
+  user_details_record: UserAccount;
 }

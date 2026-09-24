@@ -32,16 +32,16 @@ export class MyMentorsPageComponent implements OnInit {
   $mentors: WritableSignal<MentorUser[]> = signal([])
 
   ngOnInit(): void {
-    this._menteeMentorLinkRepository.getMenteesMentorsByUserId(this._userService.$userDetails().id).subscribe(mentors => {
+    this._menteeMentorLinkRepository.getMenteesMentorsByUserId(this._userService.$userAccount().id).subscribe(mentors => {
       this.$mentors.set(mentors)
     })
   }
 
   endMentorship(mentorUserDetailsId: string) {
-    this._menteeMentorLinkRepository.deleteMentorsMenteeLink(mentorUserDetailsId, this._userService.$userDetails().id).pipe(
+    this._menteeMentorLinkRepository.deleteMentorsMenteeLink(mentorUserDetailsId, this._userService.$userAccount().id).pipe(
       take(1),
       switchMap(() => {
-        return this._menteeMentorLinkRepository.getMenteesMentors(this._userService.$userDetails().id)
+        return this._menteeMentorLinkRepository.getMenteesMentors(this._userService.$userAccount().id)
       }),
       take(1)
     ).subscribe(mentees => {

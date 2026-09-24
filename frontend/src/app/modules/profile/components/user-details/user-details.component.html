@@ -34,7 +34,7 @@
           <h6 class="mb-0">Edit Details</h6>
         </div>
         <div
-          [style.visibility]="this._userService.$userDetails().id === this.$userDetails().id? 'visible' : 'hidden'"
+          [style.visibility]="this._userService.$userAccount().id === this.$userDetails().id? 'visible' : 'hidden'"
           (click)="logout()"
           class="d-flex gap-2 edit-button mt-1  align-items-center">
           <i class="bi bi-box-arrow-right"></i>

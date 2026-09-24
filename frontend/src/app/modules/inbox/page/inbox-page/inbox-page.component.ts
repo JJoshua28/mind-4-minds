@@ -59,7 +59,7 @@ export class InboxPageComponent implements OnInit, OnDestroy {
       this._subscriptions.add(
         interval(30000).pipe(
           startWith(0),
-          switchMap(() => this._requestsRepository.getAllRequestForUser(this._userService.$userDetails().id))
+          switchMap(() => this._requestsRepository.getAllRequestForUser(this._userService.$userAccount().id))
         ).subscribe((requests) => {
           this._updateSnippets(requests);
         })
@@ -101,7 +101,7 @@ export class InboxPageComponent implements OnInit, OnDestroy {
   addMentorToMentee() {
     combineLatest([
       this._menteeRepository.menteeDetails(this.selectedMessage.senderId),
-      this._mentorRepository.mentorDetails(this._userService.$userDetails().id),
+      this._mentorRepository.mentorDetails(this._userService.$userAccount().id),
     ]).pipe(
       take(1),
       switchMap(([menteeDetails, mentorDetails]) => {
@@ -120,7 +120,7 @@ export class InboxPageComponent implements OnInit, OnDestroy {
           isAdmin: true,
           email: userDetails.email
         };
-        return this._userRepository.updateUserAccount(accountUpdates, userDetails.accountId).pipe(
+        return this._userRepository.updateUserAccount(accountUpdates, userDetails.id).pipe(
           take(1),
         )
       })
@@ -135,7 +135,7 @@ export class InboxPageComponent implements OnInit, OnDestroy {
     }).pipe(
       take(1),
       switchMap(() => {
-        return this._requestsRepository.getAllRequestForUser(this._userService.$userDetails().id)
+        return this._requestsRepository.getAllRequestForUser(this._userService.$userAccount().id)
       }),
       take(1)
     ).subscribe((requests) => {
@@ -156,7 +156,7 @@ export class InboxPageComponent implements OnInit, OnDestroy {
     }).pipe(
       take(1),
       switchMap(() => {
-        return this._requestsRepository.getAllRequestForUser(this._userService.$userDetails().id)
+        return this._requestsRepository.getAllRequestForUser(this._userService.$userAccount().id)
       }),
       take(1)
     ).subscribe((requests) => {
@@ -169,7 +169,7 @@ export class InboxPageComponent implements OnInit, OnDestroy {
     this._requestsRepository.deleteRequest(messageId).pipe(
       take(1),
       switchMap(() => {
-        return this._requestsRepository.getAllRequestForUser(this._userService.$userDetails().id)
+        return this._requestsRepository.getAllRequestForUser(this._userService.$userAccount().id)
       }),
       take(1)
     ).subscribe((requests) => {
@@ -181,7 +181,7 @@ export class InboxPageComponent implements OnInit, OnDestroy {
     this._requestsRepository.deleteMultipleRequests(this.$checkedMessages()).pipe(
       take(1),
       switchMap(() => {
-        return this._requestsRepository.getAllRequestForUser(this._userService.$userDetails().id)
+        return this._requestsRepository.getAllRequestForUser(this._userService.$userAccount().id)
       }),
       take(1)
     ).subscribe((requests) => {
