@@ -1,3 +1,4 @@
+
 from django.test import TestCase
 from uuid import uuid4
 from users.models import MentorDetails, UserDetails, MenteeMentorLink, MenteeDetails
@@ -9,43 +10,55 @@ User = get_user_model()
 class MentorDetailsSerializerTest(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create(email='test@example.com')
-        self.user_details = UserDetails.objects.create(user=self.user)
+        self.user = User.objects.create(
+            email='test@example.com',
+            first_name="test",
+            last_name="example",
+            roles=["mentor"],
+            occupation="physicist",
+        )
         self.mentor = MentorDetails.objects.create(
-            user_details=self.user_details,
+            user_details=self.user,
             description="Experienced mentor",
             qualifications="PhD in Testing",
             is_available=True,
             meeting_preferences=["email", "video"]
         )
 
-        # Create mentee UUIDs
         self.mentee_id_1 = uuid4()
         self.mentee_id_2 = uuid4()
 
-        # create actual mentee records
-        self.mentee1_user = User.objects.create(email="mentee1@example.com")
-        self.mentee1_user_details = UserDetails.objects.create(user=self.mentee1_user)
+        self.mentee1_user = User.objects.create(
+            email="mentee1@example.com",
+            first_name="test",
+            last_name="example",
+            roles=["mentee"],
+            occupation="physicist",
+        )
         self.mentee1 = MenteeDetails.objects.create(
             id=self.mentee_id_1,
-            user_details=self.mentee1_user_details
+            user_details=self.mentee1_user
         )
 
-        self.mentee2_user = User.objects.create(email="mentee2@example.com")
-        self.mentee2_user_details = UserDetails.objects.create(user=self.mentee2_user)
+        self.mentee2_user = User.objects.create(
+            email="mentee2@example.com",
+            first_name="test",
+            last_name="example",
+            roles=["mentee"],
+            occupation="physicist",
+        )
         self.mentee2 = MenteeDetails.objects.create(
             id=self.mentee_id_2,
-            user_details=self.mentee2_user_details
+            user_details=self.mentee2_user
         )
 
-        # Create the initial link to mentee1
         MenteeMentorLink.objects.create(mentors=self.mentor, mentees=self.mentee1)
 
     def test_update_with_mentee_ids_creates_links(self):
         # Prepare data with new mentee_ids
         update_data = {
             "description": "Updated mentor description",
-            "mentee_ids": [str(self.mentee_id_1), str(self.mentee_id_2)],  # List of UUID strings
+            "mentee_ids": [str(self.mentee_id_1), str(self.mentee_id_2)],
         }
 
         serializer = MentorDetailsSerializer(instance=self.mentor, data=update_data, partial=True)

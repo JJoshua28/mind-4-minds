@@ -8,11 +8,31 @@ User = get_user_model()
 class CustomUserViewSetTest(APITestCase):
     def setUp(self):
         # normal user
-        self.user = User.objects.create_user(email="user@example.com", password="testpass123")
+        self.user = User.objects.create_user(
+            email="user@example.com", password="testpass123",
+            first_name="user",
+            last_name="example",
+            roles=["mentor"],
+            occupation="tester",
+            is_staff=False,
+
+        )
         # admin user
-        self.admin = User.objects.create_user(email="admin@example.com", password="adminpass123", is_staff=True)
+        self.admin = User.objects.create_user(
+            email="admin@example.com", password="adminpass123", is_staff=True,
+            first_name="admin",
+            last_name="example",
+            roles=["admin"],
+            occupation="administrator",
+        )
         # create a second user to later delete
-        self.to_delete = User.objects.create_user(email="delete@example.com", password="deletepass123")
+        self.to_delete = User.objects.create_user(
+            email="delete@example.com", password="deletepass123",
+            first_name="delete",
+            last_name="example",
+            roles=["mentee"],
+            occupation="temp",
+        )
 
     def test_list_requires_authentication(self):
         url = reverse("custom-user-list")
@@ -28,7 +48,11 @@ class CustomUserViewSetTest(APITestCase):
         url = reverse("custom-user-list")
         data = {
             "email": "new@example.com",
-            "password": "securepass123"
+            "password": "securepass123",
+            "first_name" : "new",
+            "last_name" : "example",
+            "roles" : ["mentee"],
+            "occupation" : "tester",
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

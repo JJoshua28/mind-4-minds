@@ -25,7 +25,6 @@ class MentorDetailsSerializer(serializers.ModelSerializer):
             'id',
             'user_details',
             'user_details_record',
-            'user_account',
             'description',
             'qualifications',
             'experience',

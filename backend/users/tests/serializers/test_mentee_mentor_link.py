@@ -16,10 +16,15 @@ User = get_user_model()
 class MenteeMentorLinkSerializerTest(TestCase):
     def setUp(self):
         # Mentor side
-        self.mentor_user = User.objects.create(email="mentor@example.com")
-        self.mentor_user_details = UserDetails.objects.create(user=self.mentor_user)
+        self.mentor_user = User.objects.create(
+            email="mentor@example.com",
+            first_name="mentor",
+            last_name="one",
+            roles=["mentor"],
+            occupation="Developer",
+        )
         self.mentor = MentorDetails.objects.create(
-            user_details=self.mentor_user_details,
+            user_details=self.mentor_user,
             description="Testing mentor",
             qualifications="Some degree",
             experience="5 years",
@@ -29,11 +34,16 @@ class MenteeMentorLinkSerializerTest(TestCase):
         )
 
         # Mentee side
-        self.mentee_user = User.objects.create(email="mentee@example.com")
-        self.mentee_user_details = UserDetails.objects.create(user=self.mentee_user)
+        self.mentee_user = User.objects.create(
+            email="mentee@example.com",
+            first_name="mentee",
+            last_name="example",
+            roles=["mentee"],
+            occupation="Developer",
+        )
         self.mentee = MenteeDetails.objects.create(
             id=uuid4(),
-            user_details=self.mentee_user_details,
+            user_details=self.mentee_user,
             goals=["Learn Python"],
             expectations="Weekly meetings",
         )

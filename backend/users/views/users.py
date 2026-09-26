@@ -16,7 +16,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action == 'create':
             permission_classes = [AllowAny]
-        elif self.action == 'destroy':
+        elif self.action in ['destroy', 'delete_all']:
             permission_classes = [IsAdminUser]
         else:
             permission_classes = [IsAuthenticated]

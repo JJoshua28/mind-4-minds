@@ -11,17 +11,18 @@ from users.serializers.mentee_details import MenteeDetailsSerializer
 
 class MenteeDetailsSerializerTest(TestCase):
     def setUp(self):
-        self.custom_user = CustomUser.objects.create_user(email="test@example.com", password="pass123")
-        self.user_details = UserDetails.objects.create(
-            user=self.custom_user,
-            first_name="John",
-            last_name="Doe",
-            roles=["MENTEE"]
+        self.custom_user = CustomUser.objects.create_user(
+            email="test@example.com",
+            password="pass123",
+            first_name="test",
+            last_name="example",
+            roles=["mentee"],
+            occupation="Developer",
         )
 
     def test_serialization(self):
         mentee = MenteeDetails.objects.create(
-            user_details=self.user_details,
+            user_details=self.custom_user,
             description="I want to learn Python",
             goals=["Learn basics", "Do projects"],
             learning_preferences=["Visual", "Hands-on"],
@@ -35,15 +36,14 @@ class MenteeDetailsSerializerTest(TestCase):
         data = serializer.data
 
         self.assertEqual(data["description"], "I want to learn Python")
-        self.assertEqual(str(data["user_details"]), str(self.user_details.id))
-        self.assertEqual(data["user_details_record"]["user_account"]["email"], "test@example.com")
+        self.assertEqual(str(data["user_details"]), str(self.custom_user.id))
         self.assertEqual(data["goals"], ["Learn basics", "Do projects"])
         self.assertEqual(data["commitment"], "2 hours a week")
         self.assertEqual(data["expectations"], "Flexible scheduling")
 
     def test_deserialization_and_update_with_mentor_ids(self):
         mentee = MenteeDetails.objects.create(
-            user_details=self.user_details,
+            user_details=self.custom_user,
             description="Initial desc",
             goals=["Goal1"],
             learning_preferences=["Visual"],
@@ -54,15 +54,17 @@ class MenteeDetailsSerializerTest(TestCase):
         )
 
         # Create separate CustomUsers and UserDetails for each mentor
-        custom_user1 = CustomUser.objects.create_user(email="mentor1@example.com", password="pass123")
-        user_details1 = UserDetails.objects.create(
-            user=custom_user1,
-            first_name="Mentor",
-            last_name="One",
-            roles=["MENTOR"]
+        custom_user1 = CustomUser.objects.create_user(
+            email="mentor1@example.com",
+            password="pass123",
+            first_name="test",
+            last_name="mentor",
+            roles=["mentor"],
+            occupation="Developer",
         )
+
         mentor1 = MentorDetails.objects.create(
-            user_details=user_details1,
+            user_details=custom_user1,
             description="mentor1",
             qualifications="qual1",
             experience="exp1",
@@ -71,15 +73,16 @@ class MenteeDetailsSerializerTest(TestCase):
             neurodivergent_conditions=[]
         )
 
-        custom_user2 = CustomUser.objects.create_user(email="mentor2@example.com", password="pass123")
-        user_details2 = UserDetails.objects.create(
-            user=custom_user2,
-            first_name="Mentor",
-            last_name="Two",
-            roles=["MENTOR"]
+        custom_user2 = CustomUser.objects.create_user(
+            email="mentor2@example.com", password="pass123",
+            first_name="mentor",
+            last_name="two",
+            roles=["mentor"],
+            occupation="Developer",
         )
+
         mentor2 = MentorDetails.objects.create(
-            user_details=user_details2,
+            user_details=custom_user2,
             description="mentor2",
             qualifications="qual2",
             experience="exp2",
