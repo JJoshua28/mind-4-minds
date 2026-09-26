@@ -8,10 +8,15 @@ User = get_user_model()
 
 class MenteeDetailsViewSetTest(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email="user@example.com", password="testpass123")
-        self.user_details = UserDetails.objects.create(user=self.user, first_name="Test", last_name="User")
+        self.user = User.objects.create_user(
+            email="user@example.com", password="testpass123",
+            first_name="mentee",
+            last_name="example",
+            roles=["mentee"],
+            occupation="tester",
+        )
         self.mentee = MenteeDetails.objects.create(
-            user_details=self.user_details,
+            user_details=self.user,
             description="A mentee",
             goals=["Learn Python"],
             learning_preferences=[],
@@ -21,10 +26,15 @@ class MenteeDetailsViewSetTest(APITestCase):
             commitment="Medium",
         )
 
-        self.mentor_user = User.objects.create_user(email="mentor@example.com", password="mentorpass")
-        self.mentor_user_details = UserDetails.objects.create(user=self.mentor_user, first_name="Mentor", last_name="User")
+        self.mentor_user = User.objects.create_user(
+            email="mentor@example.com", password="mentorpass",
+            first_name="mentor",
+            last_name="example",
+            roles=["mentor"],
+            occupation="coach",
+        )
         self.mentor = MentorDetails.objects.create(
-            user_details=self.mentor_user_details,
+            user_details=self.mentor_user,
             description="A mentor",
             qualifications="PhD",
             experience="5 years",

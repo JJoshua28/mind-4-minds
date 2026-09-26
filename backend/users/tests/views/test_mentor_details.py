@@ -10,10 +10,15 @@ User = get_user_model()
 class TestMentorDetailsViewSet(APITestCase):
     def setUp(self):
         # Create mentor user and details
-        self.mentor_user = User.objects.create_user(email="mentor@example.com", password="mentorpass")
-        self.mentor_user_details = UserDetails.objects.create(user=self.mentor_user, first_name="Mentor", last_name="User")
+        self.mentor_user = User.objects.create_user(
+            email="mentor@example.com", password="mentorpass",
+            first_name="mentor",
+            last_name="example",
+            roles=["mentor"],
+            occupation="coach",
+        )
         self.mentor = MentorDetails.objects.create(
-            user_details=self.mentor_user_details,
+            user_details=self.mentor_user,
             description="Mentor Bio",
             qualifications="MSc",
             experience="2 years",
@@ -23,10 +28,16 @@ class TestMentorDetailsViewSet(APITestCase):
             neurodivergent_conditions=[],
         )
 
-        self.mentee_user = User.objects.create_user(email="mentee@example.com", password="menteepass")
-        self.mentee_user_details = UserDetails.objects.create(user=self.mentee_user, first_name="Mentee", last_name="User")
+        self.mentee_user = User.objects.create_user(
+            email="mentee@example.com", password="menteepass",
+            first_name="mentee",
+            last_name="example",
+            roles=["mentee"],
+            occupation="developer",
+        )
+
         self.mentee = MenteeDetails.objects.create(
-            user_details=self.mentee_user_details,
+            user_details=self.mentee_user,
             description="Mentee Bio",
             goals=["Learn Django"],
             learning_preferences=[],
