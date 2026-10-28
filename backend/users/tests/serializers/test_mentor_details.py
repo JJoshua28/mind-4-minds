@@ -22,7 +22,8 @@ class MentorDetailsSerializerTest(TestCase):
             description="Experienced mentor",
             qualifications="PhD in Testing",
             is_available=True,
-            meeting_preferences=["email", "video"]
+
+            meeting_preferences=["online messaging", "video"]
         )
 
         self.mentee_id_1 = uuid4()
@@ -37,7 +38,15 @@ class MentorDetailsSerializerTest(TestCase):
         )
         self.mentee1 = MenteeDetails.objects.create(
             id=self.mentee_id_1,
-            user_details=self.mentee1_user
+            user_details=self.mentee1_user,
+            description="Initial desc",
+            goals=["Goal1"],
+            learning_preferences=["Visual"],
+            meeting_preferences=["online messaging"],
+            neurodivergent_conditions=[],
+            commitment="1 hour a week",
+            expectations="Flexible"
+
         )
 
         self.mentee2_user = User.objects.create(
@@ -49,13 +58,19 @@ class MentorDetailsSerializerTest(TestCase):
         )
         self.mentee2 = MenteeDetails.objects.create(
             id=self.mentee_id_2,
-            user_details=self.mentee2_user
+            user_details=self.mentee2_user,
+            description="Initial desc",
+            goals=["Goal1"],
+            learning_preferences=["Visual"],
+            meeting_preferences=["online messaging"],
+            neurodivergent_conditions=[],
+            commitment="1 hour a week",
+            expectations="Flexible"
         )
 
         MenteeMentorLink.objects.create(mentors=self.mentor, mentees=self.mentee1)
 
     def test_update_with_mentee_ids_creates_links(self):
-        # Prepare data with new mentee_ids
         update_data = {
             "description": "Updated mentor description",
             "mentee_ids": [str(self.mentee_id_1), str(self.mentee_id_2)],

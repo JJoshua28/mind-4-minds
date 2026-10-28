@@ -26,8 +26,8 @@ class MenteeDetailsSerializerTest(TestCase):
             description="I want to learn Python",
             goals=["Learn basics", "Do projects"],
             learning_preferences=["Visual", "Hands-on"],
-            meeting_preferences=["Online"],
-            neurodivergent_conditions=["ADHD"],
+            meeting_preferences=["online messaging"],
+            neurodivergent_conditions=["adhd"],
             commitment="2 hours a week",
             expectations="Flexible scheduling"
         )
@@ -47,7 +47,7 @@ class MenteeDetailsSerializerTest(TestCase):
             description="Initial desc",
             goals=["Goal1"],
             learning_preferences=["Visual"],
-            meeting_preferences=["Online"],
+            meeting_preferences=["online messaging"],
             neurodivergent_conditions=[],
             commitment="1 hour a week",
             expectations="Flexible"
@@ -69,7 +69,7 @@ class MenteeDetailsSerializerTest(TestCase):
             qualifications="qual1",
             experience="exp1",
             commitment="2 hours",
-            meeting_preferences=[],
+            meeting_preferences=["face to face"],
             neurodivergent_conditions=[]
         )
 
@@ -87,7 +87,7 @@ class MenteeDetailsSerializerTest(TestCase):
             qualifications="qual2",
             experience="exp2",
             commitment="3 hours",
-            meeting_preferences=[],
+            meeting_preferences=["face to face"],
             neurodivergent_conditions=[]
         )
 
@@ -95,7 +95,7 @@ class MenteeDetailsSerializerTest(TestCase):
             "description": "Updated desc",
             "goals": ["New goal"],
             "learning_preferences": ["Auditory"],
-            "meeting_preferences": ["In-person"],
+            "meeting_preferences": ["face to face"],
             "commitment": "3 hours a week",
             "mentor_ids": [str(mentor1.id), str(mentor2.id)],
         }
@@ -120,7 +120,7 @@ class MenteeDetailsSerializerTest(TestCase):
             "description": "",  # required but cannot be blank
             "goals": [],
             "learning_preferences": [],
-            "meeting_preferences": [],
+            "meeting_preferences": ["face to face"],
             "commitment": "",
         }
         serializer = MenteeDetailsSerializer(data=data)

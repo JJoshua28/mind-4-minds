@@ -44,7 +44,12 @@ class MenteeMentorLinkSerializerTest(TestCase):
         self.mentee = MenteeDetails.objects.create(
             id=uuid4(),
             user_details=self.mentee_user,
+            description="Initial desc",
             goals=["Learn Python"],
+            learning_preferences=["Visual"],
+            meeting_preferences=["online messaging"],
+            neurodivergent_conditions=[],
+            commitment="1 hour a week",
             expectations="Weekly meetings",
         )
 

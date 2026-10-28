@@ -1,10 +1,15 @@
 import uuid
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.db import models#
+from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
 from .helpers.random_profile_pic_name import profile_pic_upload_to
+
+class MeetingPreferences(models.TextChoices):
+    ONLINE_MESSAGING = "online messaging"
+    FACE_2_FACE = "face to face"
+    VIDEO = "video"
 
 
 class UserType(models.TextChoices):
@@ -82,24 +87,24 @@ class MenteeDetails(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user_details = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='mentee_details')
     description = models.TextField()
-    goals = models.JSONField(default=list)
+    goals = models.JSONField()
     learning_preferences = models.JSONField(default=list)
     expectations = models.TextField()
-    meeting_preferences = models.JSONField(default=list)
-    neurodivergent_conditions = models.JSONField(default=list)
+    meeting_preferences = ArrayField(models.CharField(choices=MeetingPreferences), size=3)
+    neurodivergent_conditions = models.JSONField(default=[])
     commitment = models.CharField(max_length=255)
-    mentors = models.ManyToManyField("MentorDetails", through='MenteeMentorLink')
+    mentors = models.ManyToManyField("MentorDetails", through='MenteeMentorLink', default=[])
 
 class MentorDetails(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
         user_details = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='mentor_details')
         description = models.TextField()
-        qualifications = models.TextField()
-        experience = models.TextField(default="")
+        qualifications = models.TextField(default="", null=True, blank=True)
+        experience = models.TextField(default="", null=True, blank=True)
         commitment = models.CharField(max_length=255)
         is_available = models.BooleanField(default=True)
-        meeting_preferences = models.JSONField(default=list)
-        neurodivergent_conditions = models.JSONField(default=list)
+        meeting_preferences = ArrayField(models.CharField(choices=MeetingPreferences), size=3)
+        neurodivergent_conditions = models.JSONField(default=[])
 
 
 class MenteeMentorLink(models.Model):

@@ -1,23 +1,19 @@
 from rest_framework import serializers
-from ..models import MentorDetails, CustomUser
-from .user_details import UserDetailsSerializer
+from ..models import MentorDetails
+from .users import CustomUserSerializer
 
 class MentorDetailsSerializer(serializers.ModelSerializer):
-    id = serializers.UUIDField(read_only=True)
-    meeting_preferences = serializers.ListField(child=serializers.CharField())
-    neurodivergent_conditions = serializers.ListField(child=serializers.CharField(), default=[], required=False)
-    is_available = serializers.BooleanField(required=False)
-    experience = serializers.CharField(required=False, allow_blank=True)
-    user_details = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), required=False)
-    user_details_record = UserDetailsSerializer(
+    user_details_record = CustomUserSerializer(
         read_only=True,
         source='user_details'
     )
+
     mentee_ids = serializers.ListField(
         child=serializers.UUIDField(),
         write_only=True,
         required=False
     )
+    meeting_preferences = serializers.MultipleChoiceField(choices=['online messaging', 'face to face', 'video'], allow_empty=False)
 
     class Meta:
         model = MentorDetails

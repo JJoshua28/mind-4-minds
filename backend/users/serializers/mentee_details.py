@@ -1,21 +1,13 @@
 from rest_framework import serializers
 
+from .users import CustomUserSerializer
 from ..models import MenteeDetails, CustomUser
-from .user_details import UserDetailsSerializer
 
 class MenteeDetailsSerializer(serializers.ModelSerializer):
-    user_details = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), required=False)
-    description = serializers.CharField()
-    goals = serializers.ListField(child=serializers.CharField())
-    learning_preferences = serializers.ListField(child=serializers.CharField())
-    meeting_preferences = serializers.ListField(child=serializers.CharField())
-    neurodivergent_conditions = serializers.ListField(child=serializers.CharField(), allow_empty=True, required=False)
-    commitment = serializers.CharField()
-    user_details_record = UserDetailsSerializer(
+    user_details_record = CustomUserSerializer(
         read_only=True,
         source='user_details'
     )
-    expectations = serializers.CharField(required=False, allow_blank=True)
     mentor_ids = serializers.ListField(
         child=serializers.UUIDField(),
         write_only=True,
