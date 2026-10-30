@@ -168,6 +168,21 @@
       return this.apiService.post<AuthToken>(endpoint, {email, password})
     }
 
+    testCreateUserRequest(accountDetails: RegistrationUserDetails, roles: UserType[], menteeDetails?: Partial<MenteeDetailsApi>, mentorDetails?: Partial<MentorDetailsApi>) {
+      const {email, newPassword: password, ...info} = accountDetails;
+
+      const userRegistration = mapUserFormToApiPayload(info, roles);
+
+      return  {
+        ...userRegistration,
+        email,
+        mentee_details: menteeDetails || undefined,
+        mentor_details: mentorDetails || undefined,
+        password: password as string,
+      }
+
+    }
+
     createUserRequest(details: RegistrationUserDetails, roles: UserType[]):  Omit<UserAccount, 'id' | "is_active" | "is_staff"> | {password:string} {
       const {email, newPassword: password, ...info} = details;
 
@@ -182,6 +197,7 @@
 
 
     createUser (): Observable<User> {
+      const registerUserEndpoint = "users/create/";
       const usersEndpoint = 'users/accounts/';
       const userDetailsEndpoint = 'users/details/';
       const menteeDetailsEndpoint = 'users/mentee/';
@@ -189,26 +205,38 @@
 
       const userRequest = this.createUserRequest(this.userDetails(), this.roles);
 
-      return this.apiService.post<UserAccount>(usersEndpoint, userRequest).pipe(
+      const menteePayload = this.roles.includes(UserType.MENTEE)?
+       mapMenteeDetailsToApiPayload(this.menteeDetails()) as MenteeDetailsApi : undefined;
+
+      const mentorPayload = this.roles.includes(UserType.MENTOR)?
+        mapMentorDetailsToApiPayload(this.mentorDetails()) as MentorDetailsApi : undefined;
+
+
+
+      const userRegistrationData = this.testCreateUserRequest(this.userDetails(), this.roles, menteePayload, mentorPayload);
+
+      return this.apiService.post<UserAccount>(registerUserEndpoint, userRegistrationData).pipe(
 
         switchMap((userAccount) => {
-          if (this.roles.includes(UserType.MENTEE)) {
-            const menteePayload = mapMenteeDetailsToApiPayload(this.menteeDetails(), userAccount.id) as MenteeDetailsApi;
-            return this._menteeRepository.createMentee(menteePayload).pipe(
-              map(() => userAccount)
-            );
-          }
-          return of(userAccount);
-        }),
-
-        switchMap((userAccount) => {
-          if (this.roles.includes(UserType.MENTOR)) {
-            const mentorPayload = mapMentorDetailsToApiPayload(this.mentorDetails(), userAccount.id) as MentorDetailsApi;
-            return this._mentorRepository.createMentor(mentorPayload).pipe(
-              map(() => userAccount)
-            );
-          }
-          return of(userAccount);
+          console.log(userAccount)
+          return of(userAccount)
+        //   if (this.roles.includes(UserType.MENTEE)) {
+        //     const menteePayload = mapMenteeDetailsToApiPayload(this.menteeDetails(), userAccount.id) as MenteeDetailsApi;
+        //     return this._menteeRepository.createMentee(menteePayload).pipe(
+        //       map(() => userAccount)
+        //     );
+        //   }
+        //   return of(userAccount);
+        // }),
+        //
+        // switchMap((userAccount) => {
+        //   if (this.roles.includes(UserType.MENTOR)) {
+        //     const mentorPayload = mapMentorDetailsToApiPayload(this.mentorDetails(), userAccount.id) as MentorDetailsApi;
+        //     return this._mentorRepository.createMentor(mentorPayload).pipe(
+        //       map(() => userAccount)
+        //     );
+        //   }
+        //   return of(userAccount);
         }),
 
         switchMap((user) => {

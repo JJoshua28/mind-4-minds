@@ -54,10 +54,10 @@ class CreateAccountSerializer(serializers.Serializer):
         user = User.objects.create_user(**validated_data)
 
         if mentee_details:
-            MenteeDetails.objects.create({**mentee_details, 'user_details': user.id})
+            MenteeDetails.objects.create(**mentee_details, user_details= user)
 
         if mentor_details:
-            MentorDetails.objects.create({**mentor_details, 'user_details': user.id})
+            MentorDetails.objects.create(**mentor_details, user_details= user)
 
         return user
 
