@@ -1,7 +1,7 @@
 export enum MeetingPreferences {
   ONLINE_MESSAGING= "online messaging",
   FACE_2_FACE= "face to face",
-  VIDEO_CALLS= "video calls",
+  VIDEO= "video",
 }
 
 export enum Specialities {

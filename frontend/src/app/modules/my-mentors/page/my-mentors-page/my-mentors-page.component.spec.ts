@@ -64,7 +64,7 @@ describe('MyMentorsPageComponent', () => {
         qualifications: "BSc Computer Science",
         experience: "5 years mentoring experience",
         commitment: "2 hours per week",
-        meetingPreferences: [MeetingPreferences.VIDEO_CALLS, MeetingPreferences.ONLINE_MESSAGING],
+        meetingPreferences: [MeetingPreferences.VIDEO, MeetingPreferences.ONLINE_MESSAGING],
         neurodivergentConditions: [NeurodivergenceConditions.ADHD, NeurodivergenceConditions.DYSLEXIA],
       },
     }];
@@ -99,7 +99,7 @@ describe('MyMentorsPageComponent', () => {
         qualifications: "BSc Computer Science",
         experience: "5 years mentoring experience",
         commitment: "2 hours per week",
-        meetingPreferences: [MeetingPreferences.VIDEO_CALLS, MeetingPreferences.ONLINE_MESSAGING],
+        meetingPreferences: [MeetingPreferences.VIDEO, MeetingPreferences.ONLINE_MESSAGING],
         neurodivergentConditions: [NeurodivergenceConditions.ADHD, NeurodivergenceConditions.DYSLEXIA],
       },
     }];
