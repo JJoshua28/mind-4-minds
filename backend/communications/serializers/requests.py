@@ -1,17 +1,17 @@
 from rest_framework import serializers
 from ..models import Requests
-from users.serializers.user_details import UserDetailsSerializer
-from users.models import UserDetails
+from users.serializers.users import CustomUserSerializer
+from users.models import CustomUser
 
 class RequestsSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
 
     sender = serializers.PrimaryKeyRelatedField(
-        queryset=UserDetails.objects.filter(user__is_active=True),
+        queryset=CustomUser.objects.filter(is_active=True),
         required=False
     )
     recipients = serializers.PrimaryKeyRelatedField(
-        queryset=UserDetails.objects.filter(user__is_active=True),
+        queryset=CustomUser.objects.filter(is_active=True),
         many=True,
         required=False
     )
@@ -22,8 +22,8 @@ class RequestsSerializer(serializers.ModelSerializer):
     is_complete = serializers.BooleanField(default=False)
     created_at = serializers.DateTimeField(read_only=True)
 
-    sender_record = UserDetailsSerializer(source="sender", read_only=True)
-    recipients_record = UserDetailsSerializer(source="recipients", many=True, read_only=True)
+    sender_record = CustomUserSerializer(source="sender", read_only=True)
+    recipients_record = CustomUserSerializer(source="recipients", many=True, read_only=True)
 
     class Meta:
         model = Requests

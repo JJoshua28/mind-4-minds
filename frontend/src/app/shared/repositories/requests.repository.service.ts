@@ -17,7 +17,7 @@ export class RequestsRepositoryService {
   private readonly apiService = inject(HttpService)
 
   getAllRequestForUser(userDetailsId: string): Observable<Requests[]> {
-    const requestsEndpoint = `communications/requests/?user_details_id=${userDetailsId}`;
+    const requestsEndpoint = `communications/requests/?user_id=${userDetailsId}`;
 
     return this.apiService.get<ApiRequestResponse[]>(requestsEndpoint).pipe(
       map((details) => details.map(request => mapApiToRequest(request))),
@@ -71,7 +71,7 @@ export class RequestsRepositoryService {
     return interval(30000).pipe(
       startWith(0),
       switchMap(() =>
-        this.apiService.get<ApiRequestResponse[]>(`communications/requests/?is_new=True&user_details_id=${userDetailsId}`)
+        this.apiService.get<ApiRequestResponse[]>(`communications/requests/?is_new=True&user_id=${userDetailsId}`)
       ),
       map((requests) => requests.length > 0)
     );

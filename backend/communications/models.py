@@ -5,18 +5,18 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 
-from users.models import UserDetails
+from users.models import CustomUser
 
 
 class Requests(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     sender = models.ForeignKey(
-        UserDetails,
+        CustomUser,
         related_name="sent_requests",
         on_delete=models.CASCADE
     )
     recipients = models.ManyToManyField(
-        UserDetails,
+        CustomUser,
         related_name="received_requests"
     )
     subject = models.CharField(max_length=255)

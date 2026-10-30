@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from ..models import Requests
 from ..serializers.requests import RequestsSerializer
 from ..filters.requests import RequestsFilter
-from users.models import UserDetails
+from users.models import CustomUser
 
 
 class RequestsViewSet(viewsets.ModelViewSet):
@@ -29,7 +29,7 @@ class RequestsViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["POST"], url_path="create-admin-request", permission_classes=[AllowAny])
     def create_admin_request(self, request):
-        staff_users = UserDetails.objects.filter(user__is_staff=True, user__is_active=True)
+        staff_users = CustomUser.objects.filter(is_staff=True, is_active=True)
 
         data = request.data.copy()
         data['recipients'] = []
