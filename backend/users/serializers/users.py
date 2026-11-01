@@ -30,6 +30,17 @@ class CustomUserSerializer(serializers.ModelSerializer):
         validated_data.pop('details', None)
         return User.objects.create_user(**validated_data)
 
+    def partial_update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        if password:
+            instance.set_password(password)  # 🔐 Ensure hashing
+
+        instance.save()
+        return instance
     def update(self, instance, validated_data):
         password = validated_data.pop('password', None)
 
