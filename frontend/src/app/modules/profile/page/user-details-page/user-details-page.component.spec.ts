@@ -74,12 +74,12 @@ describe('UserDetailsPageComponent', () => {
   });
 
   it('should subscribe to route params and load user details on init', () => {
-    paramsSubject.next({ userDetailsId: 'user1' });
+    paramsSubject.next({ accountId: 'user1' });
     expect(userRepositoryMock.getUserDetailsById).toHaveBeenCalledWith('user1');
   });
 
   it('should refresh user details on refreshDetails', () => {
-    (component as any).userDetailsId = signal('user1');
+    (component as any).accountId = signal('user1');
 
     (component as any).userDetails = signal({
       id: 'user1',

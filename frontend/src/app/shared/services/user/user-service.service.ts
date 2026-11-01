@@ -2,15 +2,11 @@ import {inject, Injectable, PLATFORM_ID, signal, WritableSignal} from '@angular/
 import {LocalStorageService} from "../local-storage.service";
 
 import {
-  combineLatestWith,
+  BehaviorSubject,
   filter,
-  interval,
-  map,
-  Observable,
   of,
-  startWith, Subject,
+  Subject,
   Subscription,
-  switchMap,
   take,
   tap
 } from "rxjs";
@@ -18,12 +14,10 @@ import {
 import {UserInfo} from "../../../types/user details/user-info.interface";
 
 import {UserRepository} from "../../repositories/user.repository";
-import {ApiUserDetails} from "../../../types/api/user-details.interface";
-import {mapApiUserInfo} from "../../mapper/api/apiToUser.mapper";
 import {Router} from "@angular/router";
-import {toObservable} from "@angular/core/rxjs-interop";
 import {isPlatformBrowser} from "@angular/common";
 import {UserAccount} from "../../../types/api/user-account .interface";
+import {mapApiToUserInfo} from "../../mapper/api/apiToUserInfo.mapper";
 
 
 @Injectable({
@@ -56,6 +50,8 @@ export class UserService {
     isAdmin: false
   });
 
+  readonly userAccount$: BehaviorSubject<UserInfo> = new BehaviorSubject(this.$userAccount())
+
   private platformId = inject(PLATFORM_ID);
   private isBrowser: boolean;
 
@@ -64,21 +60,24 @@ export class UserService {
 
      if(this.$userAccountId() !== "")
      {
-       this.subscriptions.add(interval(30000).pipe(
-         startWith(0),
-         switchMap(() => this._userRepository.getUserDetailsByAccountId(this.$userAccountId())),
+       this.subscriptions.add(this._userRepository.getUserInfoById(this.$userAccountId()).pipe(
+         take(1),
        ).subscribe(
-         ( userDetails) => {
-           this.$userAccount.set(userDetails);
+         (userInfo) => {
+           this.userAccount$.next(userInfo);
          }
        ))
+    }
+     this.subscriptions.add(this.userAccount$.subscribe((userInfo) =>{
+       this.$userAccount.set(userInfo)
      }
-     this.unauthorizedRedirect$.subscribe(() => {
+     ))
+     this.subscriptions.add(this.unauthorizedRedirect$.subscribe(() => {
        this._router.navigate(['/login']);
-     })
+     }))
    }
 
-
+// look into this later
   initUserFromStorage(){
     if (!this.isBrowser) {
       // Running on server: skip localStorage access
@@ -92,47 +91,39 @@ export class UserService {
   }
 
 
-  initialiseData (userDetails?: UserAccount){
-     if(userDetails)
+  initialiseData (userInfo?: UserAccount){
+     if(userInfo)
      {
-       const mappedUserDetails = mapApiUserInfo(userDetails);
-       this.$userAccount.set(mappedUserDetails);
+       const mappedUserInfo = mapApiToUserInfo(userInfo);
+       this.userAccount$.next(mappedUserInfo);
 
-       return of(mappedUserDetails)
+       return of(mappedUserInfo)
      }
      else
      {
        this.$userAccountId.set(this._localStorageService.getItem("user_id") || "");
-
-       return interval(30000).pipe(
-         startWith(0),
-         switchMap(() => this._userRepository.getUserById(this.$userAccountId())),
-         tap((userDetails) => {
-           this.$userAccount.set(userDetails);
-         }),
+       return this._userRepository.getUserInfoById(this.$userAccountId()).pipe(
+         take(1),
+         tap(userInfo => {
+           this.userAccount$.next(userInfo);
+         })
        )
-
      }
 
    }
 
-  updateData (userDetailsToUpdate?: Partial<UserInfo>) {
-    if(userDetailsToUpdate)
+  updateData (userInfoUpdate?: Partial<UserInfo>) {
+    if(userInfoUpdate)
     {
-      this.$userAccount.update(userDetails => {
-        return {...userDetails, ...userDetailsToUpdate};
-      });
-
-      return;
+      this.userAccount$.next({...this.$userAccount(), ...userInfoUpdate});
+      return of(this.$userAccount());
     }
 
-     this._userRepository.getUserDetailsByAccountId(this.$userAccountId()).pipe(
-      take(1)
-    ).subscribe(
-      (userDetails) => {
-        this.$userAccount.set(userDetails);
-    })
-
+     return this._userRepository.getUserInfoById(this.$userAccountId()).pipe(
+      take(1),
+      tap(userInfo => {
+        this.userAccount$.next(userInfo);
+      }))
   }
 
 }

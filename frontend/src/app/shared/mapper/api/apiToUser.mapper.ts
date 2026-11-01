@@ -1,9 +1,10 @@
-import {ApiUserDetails} from "../../../types/api/user-details.interface";
 import {UserType} from "../../../types/user-type.enum";
 import {User} from "../../../types/user.interface";
 import {UserAccount} from "../../../types/api/user-account .interface";
+import {mapMenteeDetails} from "./apiToMenteeDetails.mapper";
+import {mapMentorDetails} from "./apiToMentorDetails.mapper";
 
-  export function mapApiUserInfo(api: UserAccount): User {
+  export function mapApiToUser(api: UserAccount): User {
   return {
     id: api.id,
     joined: api.joined,
@@ -16,5 +17,7 @@ import {UserAccount} from "../../../types/api/user-account .interface";
     occupation: api.occupation || null,
     occupationStartDate: api.occupation_start_date || null,
     profilePic: api.profilePic,
+    menteeDetails: api?.menteeDetails? mapMenteeDetails(api.menteeDetails) : undefined,
+    mentorDetails: api?.mentorDetails? mapMentorDetails(api?.mentorDetails) : undefined,
   };
 }

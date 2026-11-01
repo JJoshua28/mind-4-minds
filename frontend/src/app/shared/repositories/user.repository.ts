@@ -8,10 +8,11 @@ import {UserAccount} from "../../types/api/user-account .interface";
 import {mapApiToUserDetails} from "../mapper/api/apiToUserDetails.mapper";
 import {mapUserAccountToApiPayload} from "../mapper/userAccountToApi.mapper";
 import {mapUserFormToApiPayload} from "../mapper/userDetailsToApi.mapper";
-import {mapApiUserInfo} from "../mapper/api/apiToUser.mapper";
+import {mapApiToUser} from "../mapper/api/apiToUser.mapper";
 import {HttpService} from "../services/http.service";
 import {environment} from "../../../environments/environment";
 import {UserInfo} from "../../types/user details/user-info.interface";
+import {mapApiToUserInfo} from "../mapper/api/apiToUserInfo.mapper";
 
 @Injectable({
   providedIn: "root",
@@ -52,11 +53,19 @@ export class UserRepository {
     )
   }
 
+  getUserInfoById(userId: string): Observable<UserInfo> {
+    const detailsEndpoint = `${this.baseUrl}/${userId}`;
+
+    return this.apiService.get<UserAccount>(detailsEndpoint).pipe(
+      map((details) => mapApiToUserInfo(details))
+    )
+  }
+
   getUserById(userId: string): Observable<User> {
     const detailsEndpoint = `${this.baseUrl}/${userId}`;
 
     return this.apiService.get<UserAccount>(detailsEndpoint).pipe(
-      map((details) => mapApiUserInfo(details))
+      map((details) => mapApiToUser(details))
     )
   }
 
@@ -70,7 +79,7 @@ export class UserRepository {
     return this.apiService.put<UserAccount>(updateAccountEndpoint, mappedAccountDetails).pipe(
       map((details) => {
           const detail = details as UserAccount;
-          return mapApiUserInfo(detail);
+          return mapApiToUser(detail);
         }
       ))
   }

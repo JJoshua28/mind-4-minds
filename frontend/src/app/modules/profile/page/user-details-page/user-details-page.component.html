@@ -1,4 +1,4 @@
-@defer (when userDetails) {
+@defer (when userAccount) {
   <main
     class="w-100 h-100 d-flex"
   >
@@ -10,12 +10,12 @@
       >
         <app-user-details
           (refreshData)="refreshDetails()"
-          [$userDetails]="userDetails()"
+          [$userAccount]="userAccount()"
         />
       </div>
       <app-sidebar-navigation
         (updateData)="refreshDetails()"
-        [$userDetails]="userDetails()"
+        [$user]="userAccount()"
       />
     </div>
   </main>

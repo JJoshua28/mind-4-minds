@@ -29,14 +29,14 @@
         (click)="handleNavigateTo(menteeDetails)"
       ><h5>become a mentee</h5></li>
     }
-    @if(!$userDetails().roles.includes(UserType.ADMIN)) {
+    @if(!$user().roles.includes(UserType.ADMIN)) {
       <li
         class="list-item text-capitalize"
         (click)="requestAdminPrivileges()"
       ><h5>request admin permissions</h5></li>
     }
 
-    @if($userDetails().isAdmin) {
+    @if($user().isAdmin) {
       <li
         class="list-item text-capitalize"
         (click)="confirmActionModal.show()"

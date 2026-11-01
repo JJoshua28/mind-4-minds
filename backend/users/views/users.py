@@ -9,7 +9,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 User = get_user_model()
 
 class CustomUserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.exclude(is_superuser=True).exclude(is_active=False)
+    queryset = User.objects.exclude(is_active=False)
     serializer_class = CustomUserSerializer
     lookup_field = 'id'
 

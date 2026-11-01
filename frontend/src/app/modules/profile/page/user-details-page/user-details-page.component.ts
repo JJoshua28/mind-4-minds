@@ -6,18 +6,17 @@ import {
   OnDestroy,
   OnInit,
   signal,
-  Signal,
   SimpleChanges,
   WritableSignal
 } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserRepository} from "../../../../shared/repositories/user.repository";
 
-import {UserDetails} from "../../../../types/user.interface";
-import {map, Subscription, switchMap, take} from "rxjs";
+import {Subscription, switchMap, take} from "rxjs";
 import {SidebarNavigationComponent} from "../../components/sidebar-navigation/sidebar-navigation.component";
 import {UserDetailsComponent} from "../../components/user-details/user-details.component";
 import {UserService} from "../../../../shared/services/user/user-service.service";
+import {UserInfo} from "../../../../types/user details/user-info.interface";
 
 @Component({
   selector: 'app-user-details-page',
@@ -36,42 +35,42 @@ export class UserDetailsPageComponent implements OnInit, OnChanges, OnDestroy {
 
   private readonly subscriptions: Subscription = new Subscription()
 
-  protected userDetails!: WritableSignal<UserDetails>;
+  protected userAccount!: WritableSignal<UserInfo>;
 
-  userDetailsId = input.required<string>()
+  accountId = input.required<string>()
 
   ngOnInit(): void {
     this.subscriptions.add(
       this._route.params.pipe(
         switchMap(params => {
-          const userId = params['userDetailsId'];
-          return this._userRepository.getUserDetailsById(userId);
+          const userId = params['accountId'];
+          return this._userRepository.getUserInfoById(userId);
         }),
         take(1),
-      ).subscribe((userDetails) => {
-        this.userDetails = signal(userDetails);
+      ).subscribe((accountDetails) => {
+        this.userAccount = signal(accountDetails);
       })
     );
   }
 
   ngOnChanges(changes:SimpleChanges): void {
-    const newUserDetailsId = changes['userDetailsId']?.currentValue
-    if(!changes?.['userDetailsId']?.firstChange && newUserDetailsId) {
-      this._userRepository.getUserDetailsById(newUserDetailsId).pipe(
+    const newAccountId = changes['accountId']?.currentValue
+    if(!changes?.['accountId']?.firstChange && newAccountId) {
+      this._userRepository.getUserById(newAccountId).pipe(
         take(1),
-      ).subscribe((userDetails) => {
-        this.userDetails.set(userDetails);
+      ).subscribe((user) => {
+        this.userAccount.set(user);
       })
     }
   }
 
   refreshDetails() {
-    this._userRepository.getUserDetailsById(this.userDetailsId()).pipe(
+    this._userRepository.getUserById(this.accountId()).pipe(
       take(1),
-    ).subscribe((userDetails) => {
-      this.userDetails.set(userDetails);
-      if(this._userService.$userAccount().id === this.userDetailsId()) {
-        this._userService.updateData(userDetails);
+    ).subscribe((user) => {
+      this.userAccount.set(user);
+      if(this._userService.$userAccount().id === this.accountId()) {
+        this._userService.updateData(user);
       }
     })
   }

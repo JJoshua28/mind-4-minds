@@ -16,7 +16,6 @@ import { take, tap} from "rxjs";
 import {AuthServiceService} from "../../../../shared/services/auth-service.service";
 import {UserRepository} from "../../../../shared/repositories/user.repository";
 import {NgClass} from "@angular/common";
-import {UserDetails} from "../../../../types/user.interface";
 import {environment} from "../../../../../environments/environment";
 
 @Component({
@@ -40,36 +39,19 @@ export class UserDetailsComponent {
   private readonly defaultProfilePic = environment.defaultProfilePic;
 
 
-  $accountId = computed(() => this.$userDetails().id);
+  $accountId = computed(() => this.$userAccount().id);
 
-  $isAdmin = computed(() => this.$userDetails().isAdmin);
+  $isAdmin = computed(() => this.$userAccount().isAdmin);
 
-  $userDetails = input.required<UserDetails>();
+  $userAccount = input.required<UserInfo>();
 
-  $isArchived = computed(() => this.$userDetails().isArchived);
+  $isArchived = computed(() => this.$userAccount().isArchived);
 
-  $user: Signal<UserInfo> = computed(() => {
-    return {
-      id: this.$userDetails().id,
-      firstName: this.$userDetails().firstName,
-      lastName: this.$userDetails().lastName,
-      email: this.$userDetails().email,
-      profilePic: this.$userDetails().profilePic,
-      occupation: this.$userDetails().occupation,
-      roles: this.$userDetails().roles,
-      isAdmin: this.$userDetails().isAdmin,
-      isArchived: this.$userDetails().isArchived,
-      joined: this.$userDetails().joined,
-      occupationStartDate: this.$userDetails().occupationStartDate,
-    };
-  });
-
-
-  $profilePic = computed(() => { return this.$user()?.profilePic || this.defaultProfilePic
+  $profilePic = computed(() => { return this.$userAccount()?.profilePic || this.defaultProfilePic
   })
 
   $occupationStartDate: Signal<Date> = computed(() => {
-      return new Date(this.$user()?.occupationStartDate as string);
+      return new Date(this.$userAccount()?.occupationStartDate as string);
   })
 
 
@@ -79,21 +61,21 @@ export class UserDetailsComponent {
   }
 
   editDetails() {
-    const changeType = this._userService.$userAccount().id === this.$userDetails().id ? "user" : "admin";
-    this._router.navigate([`/user-details/edit/${changeType}/${this.$userDetails().id}`]);
+    const changeType = this._userService.$userAccount().id === this.$userAccount().id ? "user" : "admin";
+    this._router.navigate([`/user-details/edit/${changeType}/${this.$userAccount().id}`]);
   }
 
   toggleAccountStatus() {
     const accountUpdates = {
       isArchived: !this.$isArchived(),
       isAdmin: this.$isAdmin(),
-      email: this.$user()?.email
+      email: this.$userAccount()?.email
     };
 
     this._userRepository.updateUserAccount(accountUpdates, this.$accountId()).pipe(
       take(1),
       tap((user) => {
-        if(this._userService.$userAccount().id === this.$userDetails().id)
+        if(this._userService.$userAccount().id === this.$userAccount().id)
         {
           const {email, isAdmin, isArchived} = user;
 

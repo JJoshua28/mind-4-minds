@@ -20,6 +20,7 @@ import {UserRepository} from "../../../../shared/repositories/user.repository";
 import {RequestsRepositoryService} from "../../../../shared/repositories/requests.repository.service";
 import {ActionType} from "../../../../types/action-type.enum";
 import {UserInfo} from "../../../../types/user details/user-info.interface";
+import {User} from "../../../../types/user.interface";
 
 export enum NavigationItems {
   USER_DETAILS = "user-details",
@@ -54,17 +55,17 @@ export class SidebarNavigationComponent {
   protected readonly NavigationItems = NavigationItems;
   protected readonly UserType = UserType
 
-  $userDetails = input.required<UserInfo>();
+  $user = input.required<UserInfo>();
 
-  $roles = computed(() => this.$userDetails().roles);
+  $roles = computed(() => this.$user().roles);
 
   handleNavigateTo(navigationItemPath: string) {
-    this._router.navigate([`/${navigationItemPath}/${this.$userDetails().id}`], { relativeTo: this._route });
+    this._router.navigate([`/${navigationItemPath}/${this.$user().id}`], { relativeTo: this._route });
   }
 
   removeAdminPrivileges() {
-    const { email, isArchived, isAdmin, profilePic, ...details } = this.$userDetails();
-    const roles: UserType[] = this.$userDetails().roles.filter(role => role !== UserType.ADMIN);
+    const { email, isArchived, isAdmin, profilePic, ...details } = this.$user();
+    const roles: UserType[] = this.$user().roles.filter(role => role !== UserType.ADMIN);
 
     const updateAccount$ = this.userRepository.updateUserAccount(
       {
@@ -80,7 +81,7 @@ export class SidebarNavigationComponent {
         ...details,
         roles: roles,
       },
-      this.$userDetails().id
+      this.$user().id
     );
 
 
@@ -88,7 +89,7 @@ export class SidebarNavigationComponent {
       .pipe(
         take(1),
         map(([userAccount, userDetail]) => {
-          if(this._userService.$userAccount().id === this.$userDetails().id) {
+          if(this._userService.$userAccount().id === this.$user().id) {
             const {mentorDetails, menteeDetails, ...userDetailsUpdate} = userDetail;
             this._userService.updateData(userDetailsUpdate);
           }
@@ -101,14 +102,14 @@ export class SidebarNavigationComponent {
   }
 
   requestAdminPrivileges() {
-    const { profilePic, ...details } = this.$userDetails();
+    const { profilePic, ...details } = this.$user();
     const roles: UserType[] = [
-      ...this.$userDetails().roles,
+      ...this.$user().roles,
       UserType.ADMIN
     ];
 
     const adminRequest = {
-      sender: this.$userDetails().id,
+      sender: this.$user().id,
       recipients: [],
       body: "I would like to request admin permissions on the system.",
       subject: "Admin Request",
@@ -121,7 +122,7 @@ export class SidebarNavigationComponent {
     ]).pipe(
       take(1),
       map(([userDetail, request]) => {
-        if(this._userService.$userAccount().id === this.$userDetails().id) {
+        if(this._userService.$userAccount().id === this.$user().id) {
           const {mentorDetails, menteeDetails, ...userDetailsUpdate} = userDetail;
           this._userService.updateData(userDetailsUpdate);
         }

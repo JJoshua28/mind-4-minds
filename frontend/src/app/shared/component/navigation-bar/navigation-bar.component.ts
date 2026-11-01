@@ -75,7 +75,7 @@ export class NavigationBarComponent implements OnInit, OnDestroy {
         navigationRoute = 'find-a-mentor';
         break;
       case NavigationItems.profile:
-        navigationRoute = `user-details/${this.userService.$userAccount().id}`;
+        navigationRoute = `user-details/${this.userService.$userAccountId()}`;
         break;
       case NavigationItems.MY_MENTORS:
         navigationRoute = 'my-mentors';
@@ -103,7 +103,7 @@ export class NavigationBarComponent implements OnInit, OnDestroy {
         landingPage = "users"
       }
       else {
-        landingPage = `/user-details/${this.userService.$userAccount().id}`
+        landingPage = `/user-details/${this.userService.$userAccountId()}`
       }
       this._router.navigate([`/${landingPage}`]);
   }

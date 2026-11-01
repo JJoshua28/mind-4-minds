@@ -3,9 +3,9 @@ import { UserService } from './user-service.service';
 import { LocalStorageService } from '../local-storage.service';
 import { Router } from '@angular/router';
 import { UserRepository } from '../../repositories/user.repository';
-import { of, Subject } from 'rxjs';
-import { UserDetails } from '../../../types/user.interface';
-import { ApiUserDetails } from '../../../types/api/user-details.interface';
+import { of } from 'rxjs';
+import {UserAccount} from "../../../types/api/user-account .interface";
+import {UserInfo} from "../../../types/user details/user-info.interface";
 
 jest.mock('@angular/router');
 
@@ -34,7 +34,7 @@ describe('UserService', () => {
   });
 
   it('should initialise user from local storage if no userDetails is provided', (done) => {
-    const userDetails: UserDetails = {
+    const userDetails: UserInfo = {
       id: '1',
       firstName: 'Test',
       lastName: 'User',
@@ -43,13 +43,12 @@ describe('UserService', () => {
       occupation: '',
       occupationStartDate: '',
       roles: [],
-      accountId: 'test-user-id',
       joined: '',
       isArchived: false,
       isAdmin: false
     };
 
-    userRepository.getUserDetailsByAccountId.mockReturnValue(of(userDetails));
+    userRepository.getUserInfoById.mockReturnValue(of(userDetails));
 
     const observable = service.initialiseData();
 
@@ -61,7 +60,7 @@ describe('UserService', () => {
   });
 
   it('should set mapped userDetails immediately if provided', (done) => {
-    const mockApiUserDetails: ApiUserDetails = {
+    const mockApiUserDetails: UserAccount = {
       id: 'user-123',
       first_name: 'John',
       last_name: 'Doe',
@@ -69,14 +68,11 @@ describe('UserService', () => {
       occupation_start_date: '2020-01-01',
       profilePic: 'https://example.com/profile.jpg',
       roles: ['MENTOR', 'ADMIN'],
-      user_account: {
-        id: 'account-456',
-        details: 'some-details',
-        email: 'T4t2d@example.com',
-        joined: '2022-01-01',
-        is_active: true,
-        is_staff: false,
-      }
+      email: 'T4t2d@example.com',
+      joined: '2022-01-01',
+      is_active: true,
+      is_staff: false,
+
     };
 
 
@@ -88,7 +84,7 @@ describe('UserService', () => {
   });
 
   it('should update data with partial fields', () => {
-    const partial: Partial<UserDetails> = { firstName: 'NewName' };
+    const partial: Partial<UserInfo> = { firstName: 'NewName' };
 
     service.$userAccount.set({
       id: '1',
@@ -99,7 +95,6 @@ describe('UserService', () => {
       occupation: '',
       occupationStartDate: '',
       roles: [],
-      accountId: '',
       joined: '',
       isArchived: false,
       isAdmin: false
@@ -111,7 +106,7 @@ describe('UserService', () => {
   });
 
   it('should reload data if no partial update is provided', (done) => {
-    const userDetails: UserDetails = {
+    const userDetails: UserInfo = {
       id: '1',
       firstName: 'Reload',
       lastName: 'Test',
@@ -120,13 +115,12 @@ describe('UserService', () => {
       occupation: '',
       occupationStartDate: '',
       roles: [],
-      accountId: 'test-user-id',
       joined: '',
       isArchived: false,
       isAdmin: false
     };
 
-    userRepository.getUserDetailsByAccountId.mockReturnValue(of(userDetails));
+    userRepository.getUserInfoById.mockReturnValue(of(userDetails));
 
     service.updateData();
 

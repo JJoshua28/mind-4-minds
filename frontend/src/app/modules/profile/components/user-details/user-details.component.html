@@ -1,4 +1,4 @@
-@defer (when $user()) {
+@defer (when $userAccount()) {
   <div class="detail-container m-auto">
     <h1 class="">User Details</h1>
     <div class="mt-2 border border-light rounded px-4 pt-4 pb-2">
@@ -6,22 +6,22 @@
         class="personal-details-container"
       >
         <div class="d-flex flex-column gap-2 align-items-center">
-          @if ($user()) {
+          @if ($userAccount()) {
             <img
-              alt="{{$user().firstName}} {{ $user().lastName }} profile picture"
+              alt="{{$userAccount().firstName}} {{ $userAccount().lastName }} profile picture"
               [src]=$profilePic()
               class="profile-picture rounded"
             />
           }
           <div class="d-flex flex-column align-items-center">
-            @if ($user().occupation) {<h6 class="text-capitalize pb-0 lh-1" >{{$user().occupation}}</h6>}
-            @if ($user().occupationStartDate) {<h6 class="text-capitalize email lh-1">{{ experienceDuration($occupationStartDate()) }}</h6>}
+            @if ($userAccount().occupation) {<h6 class="text-capitalize pb-0 lh-1" >{{$userAccount().occupation}}</h6>}
+            @if ($userAccount().occupationStartDate) {<h6 class="text-capitalize email lh-1">{{ experienceDuration($occupationStartDate()) }}</h6>}
           </div>
 
         </div>
         <div class="text-truncate d-inline-block">
-          <h4>{{$user().firstName}} {{$user().lastName}}</h4>
-          <h6 class="email mt-2 mb-2">{{$user().email}}</h6>
+          <h4>{{$userAccount().firstName}} {{$userAccount().lastName}}</h4>
+          <h6 class="email mt-2 mb-2">{{$userAccount().email}}</h6>
           <h6>Password:</h6>
         </div>
       </div>
@@ -34,7 +34,7 @@
           <h6 class="mb-0">Edit Details</h6>
         </div>
         <div
-          [style.visibility]="this._userService.$userAccount().id === this.$userDetails().id? 'visible' : 'hidden'"
+          [style.visibility]="this._userService.$userAccount().id === this.$userAccount().id? 'visible' : 'hidden'"
           (click)="logout()"
           class="d-flex gap-2 edit-button mt-1  align-items-center">
           <i class="bi bi-box-arrow-right"></i>

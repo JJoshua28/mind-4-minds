@@ -212,9 +212,9 @@
           return of(user);
         }),
 
-        switchMap((userDetails) => {
+        switchMap((user) => {
           return this.getAuthenticationToken().pipe(
-            map((authToken) => ({ user: userDetails, authToken }))
+            map((authToken) => ({ user: user, authToken }))
           );
         }),
 
@@ -233,7 +233,6 @@
         })
       );
     }
-
 
     navigateToNextSection() {
       this._navigateToNextSection.next();
