@@ -52,7 +52,7 @@ export const routes: Routes = [
         canMatch: [AuthGuard]
       },
       {
-        path: 'user-details/edit/:changeType/:userDetailsId',
+        path: 'user-details/edit/:changeType/:accountId',
         title: "Edit: User Details",
         loadComponent: () => import('./modules/profile/page/edit-user-details/edit-user-details-page.component').then(m => m.EditUserDetailsPageComponent),
         canMatch: [AuthGuard]

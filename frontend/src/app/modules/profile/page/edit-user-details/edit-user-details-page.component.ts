@@ -47,7 +47,7 @@ export class EditUserDetailsPageComponent implements OnInit {
 
   private readonly defaultProfilePic = environment.defaultProfilePic;
 
-  accountID = input.required<string>();
+  accountId = input.required<string>();
   changeType = input<"admin" | "user">("user");
 
   $accountInfo!: WritableSignal<UserInfo>;
@@ -61,7 +61,7 @@ export class EditUserDetailsPageComponent implements OnInit {
   userDetailsForm!: FormGroup<UserFormControls>;
 
   ngOnInit() {
-    this._userRepository.getUserDetailsById(this.accountID() as string).pipe(
+    this._userRepository.getUserInfoById(this.accountId() as string).pipe(
       take(1)
     ).subscribe(
       userDetails => {
@@ -136,46 +136,21 @@ export class EditUserDetailsPageComponent implements OnInit {
 
   submitUpdate() {
     if(this.userDetailsForm.valid) {
-      const { email, newPassword: password, currentPassword, ...rest } = this.userDetailsForm.value;
+      const { profilePic, newPassword: password, currentPassword, ...rest } = this.userDetailsForm.value;
 
-      if(email || password) {
-        const updates:UserAccountDetails = {
-          email: email || this.$accountInfo().email,
-          isAdmin: this.$accountInfo().isAdmin,
-          isArchived: this.$accountInfo().isArchived,
-        }
-        if(password) updates.password = password;
+      const updates:UserAccountDetails = {
+        ...rest
+      }
+      if(password) updates.password = password;
 
         this._userRepository.updateUserAccount(updates,this.$accountInfo().id).pipe(
           take(1)
         ).subscribe();
-      }
-
-      if(rest) {
-        const roles = this.$accountInfo().roles
-
-        const request = {
-          ...rest,
-          roles: roles
-        } as Partial<UserInfo>;
-
-        this._userRepository.updateUserAccount(request, this.$accountInfo().id).pipe(
-          take(1),
-          tap((user) => {
-            if(this._userService.$userAccount().id === this.accountID())
-            {
-              this._userService.updateData(user);
-            }
-          })
-        ).subscribe(() => {
-          this.navigateToDetails();
-        });
-      }
     }
   }
 
   navigateToDetails () {
-    this._router.navigate([`/user-details/${this.accountID()}`]);
+    this._router.navigate([`/user-details/${this.accountId()}`]);
   }
 
 }

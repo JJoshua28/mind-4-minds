@@ -37,14 +37,6 @@ export class UserRepository {
     );
   }
 
-  getUserDetailsByAccountId(userAccountId?: string): Observable<UserDetails> {
-    const detailsEndpoint = `users/details/?user_account_id=${userAccountId}`;
-
-    return this.apiService.get<ApiUserDetails[]>(detailsEndpoint).pipe(
-      map(([details]) => mapApiToUserDetails(details.user_account, details)),
-    );
-  }
-
   getUserDetailsById(userDetailsId: string): Observable<UserDetails> {
     const detailsEndpoint = `users/details/${userDetailsId}/`;
 
@@ -76,7 +68,7 @@ export class UserRepository {
 
     const mappedAccountDetails = mapUserAccountToApiPayload(account);
 
-    return this.apiService.put<UserAccount>(updateAccountEndpoint, mappedAccountDetails).pipe(
+    return this.apiService.patch<UserAccount>(updateAccountEndpoint, mappedAccountDetails).pipe(
       map((details) => {
           const detail = details as UserAccount;
           return mapApiToUser(detail);

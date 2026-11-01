@@ -28,6 +28,12 @@ export class HttpService {
     }) as Observable<T>;
   }
 
+  patch<T>(url: string, data: any, config = {}) {
+    return this.httpClient.patch(this.baseUrl + url, data, {
+      ...config,
+    }) as Observable<T>;
+  }
+
   delete<T>(url: string, data?: any, config: any = {}): Observable<T> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json', ...(config.headers || {}) });
 

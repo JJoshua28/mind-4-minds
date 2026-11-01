@@ -1,5 +1,6 @@
 import {MenteeDetailsApi} from "./mentee-details-interface";
 import {MentorDetailsApi} from "./mentor-details.interface";
+import {UserType} from "../user-type.enum";
 
 export interface UserAccount {
   id: string;
@@ -25,8 +26,15 @@ export interface UserAccountPayload {
 }
 
 export interface UserAccountDetails {
-  email: string;
-  isArchived: boolean;
-  isAdmin: boolean;
+  firstName?: string
+  lastName?: string
+  occupation?: string | null
+  occupationStartDate?: string | null
+  profilePic?: string;
+  joined?: string;
+  roles?: UserType[]
+  email?: string;
+  isArchived?: boolean;
+  isAdmin?: boolean;
   password?: string;
 }

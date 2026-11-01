@@ -3,7 +3,7 @@ import {UserInfo} from "../../types/user details/user-info.interface";
 
 
 export function mapUserAccountToApiPayload(account: Partial<UserInfo>): Partial<UserAccount> {
-  const {isArchived, isAdmin, email, ...accountDetails} = account
+  const {isArchived, isAdmin, ...accountDetails} = account
   return {
     ...accountDetails,
     is_active: !isArchived,
