@@ -53,7 +53,9 @@ class Command(BaseCommand):
                 "is_staff": True,
                 "is_superuser": True,
                 "is_active": True,
-                "roles":roles
+                "roles":roles,
+                "first_name": first_name,
+                "last_name": last_name,
             },
         )
 
@@ -63,19 +65,4 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f"✅ Created admin user: {email}"))
         else:
             self.stdout.write(self.style.WARNING(f"⚠️ User already exists: {email}"))
-
-        # Link with UserDetails
-        details, details_created = UserDetails.objects.get_or_create(
-            user=user,
-            defaults={
-                "first_name": first_name,
-                "last_name": last_name,
-                "roles": roles,
-            }
-        )
-
-        if details_created:
-            self.stdout.write(self.style.SUCCESS("✅ Linked UserDetails created"))
-        else:
-            self.stdout.write(self.style.WARNING("⚠️ UserDetails already exists"))
 
